@@ -1,6 +1,6 @@
 # 📊 Data Mart Biro Akademik Umum - Institut Teknologi Sumatera
 
-![ITERA Logo](https://itera.ac.id/wp-content/uploads/2020/03/logo-itera-1.png)
+![Logo Tugas Besar Data Warehouse Gasal 2025](https://github.com/sains-data/Data-Warehouse-2025-Gasal/blob/main/Logo-DW-Gasal-2025.gif)
 
 **Tugas Besar Pergudangan Data (SD25-31007)**  
 **Program Studi Sains Data - Fakultas Sains**  
