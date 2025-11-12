@@ -43,7 +43,6 @@
 `-- Generate date dimension 2019-2030
 DECLARE @StartDate DATE = '2019-01-01';
 DECLARE @EndDate DATE = '2030-12-31';
-
 WHILE @StartDate <= @EndDate
 BEGIN
 INSERT INTO dim_waktu (tanggal_key, tanggal, hari, bulan, tahun, quarter, hari_kerja, bulan_tahun, minggu_tahun, hari_dalam_bulan)
