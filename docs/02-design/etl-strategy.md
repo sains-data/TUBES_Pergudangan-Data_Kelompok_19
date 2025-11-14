@@ -474,11 +474,11 @@ BEGIN
         @importance = 'High';
 END;
 ```
-Error Handling & Recovery
-5.1 Retry Logic
-Transient Error Handling:
+## Error Handling & Recovery
+### 5.1 Retry Logic
+**Transient Error Handling:**
 
-sql
+```sql
 CREATE PROCEDURE etl.execute_with_retry
     @procedure_name VARCHAR(100),
     @max_retries INT = 3,
@@ -516,10 +516,12 @@ BEGIN
         RAISERROR('Procedure failed after %d attempts', 16, 1, @max_retries);
     END
 END;
-5.2 Rollback Procedures
-Transaction-based Rollback:
+```
 
-sql
+### 5.2 Rollback Procedures
+**Transaction-based Rollback:**
+
+```sql
 CREATE PROCEDURE etl.load_fact_surat_with_rollback
 AS
 BEGIN
@@ -556,36 +558,32 @@ BEGIN
         THROW;
     END CATCH
 END;
-5.3 Data Recovery Plan
-Scenario 1: Partial Load Failure
+```
 
-Action: Identify last successful batch, truncate partial data, re-run from last checkpoint
+### 5.3 Data Recovery Plan
+**Scenario 1: Partial Load Failure**
+- **Action:** Identify last successful batch, truncate partial data, re-run from last checkpoint
+- **Recovery Time:** < 1 hour
 
-Recovery Time: < 1 hour
+**Scenario 2: Data Corruption**
+- **Action:** Restore from last known good backup, replay transaction logs
+- **Recovery Time:** < 4 hours
 
-Scenario 2: Data Corruption
+**Scenario 3: Full ETL Failure**
+- **Action:** Restore entire database from nightly backup, manual data validation
+- **Recovery Time:** < 8 hours
 
-Action: Restore from last known good backup, replay transaction logs
+**Backup Strategy:**
 
-Recovery Time: < 4 hours
+- **Full backup:** Daily at 2 AM (retention: 30 days)
+- **Differential backup:** Every 6 hours (retention: 7 days)
+- **Transaction log backup:** Every 15 minutes (retention: 24 hours)
+- **Differential backup:** Every 6 hours (retention: 7 days)
+- **Transaction log backup:** Every 15 minutes (retention: 24 hours)
 
-Scenario 3: Full ETL Failure
+## Testing Strategy
+### 6.1 Testing Pyramid
 
-Action: Restore entire database from nightly backup, manual data validation
-
-Recovery Time: < 8 hours
-
-Backup Strategy:
-
-Full backup: Daily at 2 AM (retention: 30 days)
-
-Differential backup: Every 6 hours (retention: 7 days)
-
-Transaction log backup: Every 15 minutes (retention: 24 hours)
-
-Testing Strategy
-6.1 Testing Pyramid
-text
            ┌─────────────────┐
           /  End-to-End (5%) /
          /───────────────────/
@@ -593,10 +591,11 @@ text
        /────────────────────/
       /   Unit Tests (70%)  /
      /─────────────────────/
-6.2 Unit Testing
-Test Transformation Logic:
 
-sql
+### 6.2 Unit Testing
+**Test Transformation Logic:**
+
+```sql  
 -- Test: Deduplikasi nomor_surat
 CREATE PROCEDURE test.test_deduplicate_surat
 AS
@@ -624,10 +623,12 @@ BEGIN
     -- Cleanup
     DELETE FROM stg.surat_masuk WHERE nomor_surat = '001/BAU/2024';
 END;
-6.3 Integration Testing
-Test End-to-End Data Flow:
+```
 
-sql
+### 6.3 Integration Testing
+**Test End-to-End Data Flow:**
+
+```sql
 -- Test: Full ETL pipeline for fact_surat
 CREATE PROCEDURE test.test_etl_fact_surat_integration
 AS
@@ -657,258 +658,187 @@ BEGIN
     -- Cleanup
     EXEC test.cleanup_test_data;
 END;
-6.4 UAT (User Acceptance Testing)
-Test Cases:
-
-Data Accuracy Test
-
-Compare dashboard metrics with source system reports
-
-Validate KPI calculations
-
-Acceptance Criteria: <1% variance
-
-Performance Test
-
-Query response time for standard reports
-
-Acceptance Criteria: <5 seconds for all dashboard queries
-
-Data Freshness Test
-
-Verify latest data availability after ETL run
-
-Acceptance Criteria: Data updated by 6 AM daily
-
-Historical Trending Test
-
-Validate month-over-month and year-over-year calculations
-
-Acceptance Criteria: Matches manual calculation
-
-Operational Procedures
-7.1 ETL Schedule
-Job Name	Frequency	Start Time	Duration (Est.)	Dependencies
-extract_all_sources	Daily	1:00 AM	10 min	None
-load_dim_waktu	Weekly	1:15 AM	2 min	extract_all_sources
-load_dim_jenis_surat	Weekly	1:17 AM	1 min	extract_all_sources
-load_dim_jenis_layanan	Weekly	1:18 AM	1 min	extract_all_sources
-load_dim_lokasi	Monthly	1:19 AM	1 min	extract_all_sources
-load_dim_unit_kerja	Weekly	1:20 AM	2 min	extract_all_sources
-load_dim_pegawai	Daily	1:22 AM	3 min	load_dim_unit_kerja
-load_dim_barang	Weekly	1:25 AM	2 min	extract_all_sources
-load_fact_surat	Daily	1:30 AM	5 min	All dimensions loaded
-load_fact_layanan	Daily	1:35 AM	3 min	All dimensions loaded
-load_fact_aset	Monthly (last day)	1:40 AM	10 min	All dimensions loaded
-rebuild_indexes	Daily	2:00 AM	15 min	All loads complete
-update_statistics	Daily	2:15 AM	10 min	rebuild_indexes
-backup_database	Daily	2:30 AM	20 min	update_statistics
-Total ETL Window: 1:00 AM - 3:00 AM (2 hours)
-
-7.2 Change Management Process
-Code Changes:
-
-Developer creates feature branch from main
-
-Develop and test locally in DEV environment
-
-Create Pull Request (PR) on GitHub
-
-Code review by team lead (Aldi)
-
-Merge to main after approval
-
-Deploy to TEST environment
-
-Integration testing in TEST
-
-Stakeholder UAT
-
-Deploy to PROD (schedule on weekend/low-traffic period)
-
-Documentation Updates:
-
-Update relevant .md files in /docs
-
-Update data dictionary if schema changes
-
-Update operations manual for new procedures
-
-7.3 Incident Response Workflow
-Severity Levels:
-
-Level	Description	Response Time	Escalation
-P1 - Critical	ETL completely failed, no data available	Immediate	Team lead + stakeholders
-P2 - High	Partial failure, some data missing	Within 2 hours	Team lead
-P3 - Medium	Data quality issues, warnings	Within 24 hours	ETL developer
-P4 - Low	Minor issues, informational	Next business day	ETL developer
-Response Steps:
-
-Detect: Automated alert or user report
-
-Assess: Check logs, determine severity
-
-Contain: Stop affected jobs, prevent cascade
-
-Investigate: Root cause analysis
-
-Resolve: Apply fix, test in DEV/TEST
-
-Deploy: Push to PROD if validated
-
-Verify: Confirm resolution
-
-Document: Update incident log, post-mortem if P1/P2
-
-Risk Management
-8.1 Risk Register
-Risk ID	Risk Description	Probability	Impact	Mitigation Strategy	Owner
-R-01	Source system unavailable during ETL window	Medium	High	Implement retry logic, shift ETL window if needed	Zahra
-R-02	Data volume exceeds capacity estimates	Low	High	Monitor growth, implement archival strategy	Aldi
-R-03	ETL job timeout due to performance	Medium	Medium	Optimize queries, implement parallel processing	Zahra
-R-04	Data quality degradation in source	Medium	High	Implement robust validation, alert on anomalies	Zahra
-R-05	Team member unavailability	Low	Medium	Cross-training, comprehensive documentation	Aldi
-R-06	Infrastructure failure (Azure VM)	Low	Critical	Automated backups, documented recovery procedures	Aldi
-R-07	Schema changes in source systems	Medium	High	Version control, change notification process	Zahra
-8.2 Contingency Plans
-Plan A: Primary ETL Failure
-
-Trigger: ETL job fails 3 consecutive times
-
-Action:
-
-Alert team lead immediately
-
-Switch to manual data extraction if critical
-
-Investigate root cause in parallel
-
-Deploy hotfix if identified
-
-Run catch-up load after resolution
-
-Plan B: Azure VM Unavailable
-
-Trigger: Cannot connect to database for >15 minutes
-
-Action:
-
-Check Azure portal for outage/maintenance
-
-Contact Azure support if unplanned
-
-Communicate downtime to stakeholders
-
-Restore from backup to alternate VM if extended outage
-
-Update DNS/connection strings if needed
-
-Plan C: Data Corruption Detected
-
-Trigger: Data quality checks fail beyond threshold
-
-Action:
-
-Immediately stop all ETL jobs
-
-Identify corruption scope (which tables/dates)
-
-Restore affected tables from last known good backup
-
-Validate restored data
-
-Re-run ETL for affected period
-
-Root cause analysis and preventive measures
-
-Success Metrics
-9.1 KPIs for ETL Operations
-Metric	Target	Measurement Frequency	Current Status
-ETL Success Rate	>99%	Daily	TBD
-Data Quality Score	>95%	Daily	TBD
-ETL Duration	<30 minutes	Daily	TBD
-Query Response Time	<5 seconds	Weekly	TBD
-Data Freshness	<6 hours	Daily	TBD
-Incident Resolution Time	P1: <2 hours, P2: <24 hours	Per incident	TBD
-Documentation Coverage	100%	Monthly	100%
-9.2 Reporting & Review Cadence
-Daily:
-
-ETL job status review (automated dashboard)
-
-Data quality metrics check
-
-Error log review (if any failures)
-
-Weekly:
-
-Performance trend analysis
-
-Capacity utilization review
-
-Outstanding issues triage
-
-Monthly:
-
-Comprehensive ETL health report
-
-Stakeholder review meeting
-
-KPI dashboard presentation
-
-Documentation updates
-
-Quarterly:
-
-Architecture review (scalability, optimization opportunities)
-
-Risk register update
-
-Team training & knowledge sharing
-
-Appendix
-A.1 ETL Procedure Naming Convention
-Pattern	Example	Purpose
-etl.extract_<source>	etl.extract_simaster	Data extraction
-etl.load_dim_<dimension>	etl.load_dim_waktu	Dimension load
-etl.load_fact_<fact>	etl.load_fact_surat	Fact load
-etl.transform_<entity>	etl.transform_surat	Data transformation
-etl.validate_<entity>	etl.validate_surat	Data validation
-test.test_<procedure>	test.test_deduplicate_surat	Unit test
-A.2 Related Documents
-Source-to-Target Mapping: source-to-target-mapping.md
-
-Data Sources: ../01-requirements/data-sources.md
-
-ERD: ERD.svg
-
-Data Dictionary: data-dictionary.xlsx
-
-Operations Manual: ../03-implementation/operations-manual.pdf
-
-A.3 Contact & Escalation
-ETL Development Team:
-
-Zahra Putri Salsabilla - ETL Developer Lead
-
-Email: zahra.123450026@student.itera.ac.id
-
-Role: ETL development, troubleshooting, performance optimization
-
-Syahrialdi Rachim Akbar - Project Lead & Database Designer
-
-Email: syahrialdi.123450093@student.itera.ac.id
-
-Role: Architecture decisions, escalation point, stakeholder communication
-
-Escalation Path:
-
-ETL Developer (Zahra) - First line
-
-Project Lead (Aldi) - Second line
-
-Dosen Pembimbing - Final escalation
+```
+
+### 6.4 UAT (User Acceptance Testing)
+**Test Cases:**
+1. **Data Accuracy Test**
+- Compare dashboard metrics with source system reports
+- Validate KPI calculations
+- Acceptance Criteria: <1% variance
+
+2. **Performance Test**
+- Query response time for standard reports
+- Acceptance Criteria: <5 seconds for all dashboard queries
+
+3. **Data Freshness Test**
+- Verify latest data availability after ETL run
+- Acceptance Criteria: Data updated by 6 AM daily
+
+4. **Historical Trending Test**
+- Validate month-over-month and year-over-year calculations
+- Acceptance Criteria: Matches manual calculation
+
+## Operational Procedures
+### 7.1 ETL Schedule
+|Job Name|Frequency|Start Time|Duration (Est.)|Dependencies|
+|-|-|-|-|-|
+|extract_all_sources|Daily|1:00 AM|10 min|None|
+|load_dim_waktu|Weekly|1:15 AM|2 min|extract_all_sources|
+|load_dim_jenis_surat|Weekly|1:17 AM|1 min|extract_all_sources|
+|load_dim_jenis_layanan|Weekly|1:18 AM|1 min|extract_all_sources|
+|load_dim_lokasi|Monthly|1:19 AM|1 min|extract_all_sources|
+|load_dim_unit_kerja|Weekly|1:20 AM|2 min|extract_all_sources|
+|load_dim_pegawai|Daily|1:22 AM|3 min|load_dim_unit_kerja|
+|load_dim_barang|Weekly|1:25 AM|2 min|extract_all_sources|
+|load_fact_surat|Daily|1:30 AM|5 min|All dimensions loaded|
+|load_fact_layanan|Daily|1:35 AM|3 min|All dimensions loaded|
+|load_fact_aset|Monthly (last day)|1:40 AM|10 min|All dimensions loaded|
+|rebuild_indexes|Daily|2:00 AM|15 min|All loads complete|
+|update_statistics|Daily|2:15 AM|10 min|rebuild_indexes|
+|backup_database|Daily|2:30 AM|20 min|update_statistics|
+**Total ETL Window: 1:00 AM - 3:00 AM (2 hours)**
+
+### 7.2 Change Management Process
+**Code Changes:**
+1. Developer creates feature branch from main
+2. Develop and test locally in DEV environment
+3. Create Pull Request (PR) on GitHub
+4. Code review by team lead (Aldi)
+5. Merge to main after approval
+6. Deploy to TEST environment
+7. Integration testing in TEST
+8. Stakeholder UAT
+9. Deploy to PROD (schedule on weekend/low-traffic period)
+
+**Documentation Updates:**
+1. Update relevant .md files in /docs
+2. Update data dictionary if schema changes
+3. Update operations manual for new procedures
+
+### 7.3 Incident Response Workflow
+**Severity Levels:**
+
+|Level|Description|Response Time|Escalation|
+|-|-|-|-|
+|P1 - Critical|ETL completely failed, no data available|Immediate|Team lead + stakeholders|
+|P2 - High|Partial failure, some data missing|Within 2 hours|Team lead|
+|P3 - Medium|Data quality issues, warnings|Within 24 hours|ETL developer|
+|P4 - Low|Minor issues, informational|Next business day|ETL developer|
+**Response Steps:**
+1. **Detect:** Automated alert or user report
+2. **Assess:** Check logs, determine severity
+3. **Contain:** Stop affected jobs, prevent cascade
+4. **Investigate:** Root cause analysis
+5. **Resolve:** Apply fix, test in DEV/TEST environment
+6. **Deploy:** Push to PROD if validated
+7. **Verify:** Confirm resolution
+8. **Document:** Update incident log, post-mortem if P1/P2
+
+## Risk Management
+### 8.1 Risk Register
+|Risk ID|Risk Description|Probability|Impact|Mitigation Strategy|Owner|
+|-|-|-|-|-|-|
+|R-01|Source system unavailable during ETL window|Medium|High|Implement retry logic, shift ETL window if needed|Zahra|
+|R-02|Data volume exceeds capacity estimates|Low|High|Monitor growth, implement archival strategy|Aldi|
+|R-03|ETL job timeout due to performance|Medium|Medium|Optimize queries, implement parallel processing|Zahra|
+|R-04|Data quality degradation in source|Medium|High|Implement robust validation, alert on anomalies|Zahra|
+|R-05|Team member unavailability|Low|Medium|Cross-training, comprehensive documentation|Aldi|
+|R-06|Infrastructure failure (Azure VM)|Low|Critical|Automated backups, documented recovery procedures|Aldi|
+|R-07|Schema changes in source systems|Medium|High|Version control, change notification process|Zahra|
+
+### 8.2 Contingency Plans
+**Plan A: Primary ETL Failure**
+- **Trigger:** ETL job fails 3 consecutive times
+- **Action:**
+    1. Alert team lead immediately
+    2. Switch to manual data extraction if critical
+    3. Investigate root cause in parallel
+    4. Deploy hotfix if identified
+    5. Run catch-up load after resolution
+
+**Plan B: Azure VM Unavailable**
+- **Trigger:** Cannot connect to database for >15 minutes
+- **Action:**
+    1. Check Azure portal for outage/maintenance
+    2. Contact Azure support if unplanned
+    3. Communicate downtime to stakeholders
+    4. Restore from backup to alternate VM if extended outage
+    5. Update DNS/connection strings if needed
+
+**Plan C: Data Corruption Detected**
+- **Trigger:** Data quality checks fail beyond threshold
+- **Action:**
+    1. Immediately stop all ETL jobs
+    2. Identify corruption scope (which tables/dates)
+    3. Restore affected tables from last known good backup
+    4. Validate restored data
+    5. Re-run ETL for affected period
+    6. Root cause analysis and preventive measures
+
+
+## Success Metrics
+### 9.1 KPIs for ETL Operations
+|Metric|Target|Measurement Frequency|Current Status|
+|-|-|-|-|
+|ETL Success Rate|>99%|Daily|TBD|
+|Data Quality Score|>95%|Daily|TBD|
+|ETL Duration|<30 minutes|Daily|TBD|
+|Query Response Time|<5 seconds|Weekly|TBD|
+|Data Freshness|<6 hours|Daily|TBD|
+|Incident Resolution Time|P1: <2 hours, P2: <24 hours|Per incident|TBD|
+|Documentation Coverage|100%|Monthly|100%|
+### 9.2 Reporting & Review Cadence
+**Daily:**
+- ETL job status review (automated dashboard)
+- Data quality metrics check
+- Error log review (if any failures)
+**Weekly:**
+- Performance trend analysis
+- Capacity utilization review
+- Outstanding issues triage
+**Monthly:**
+- Comprehensive ETL health report
+- Stakeholder review meeting
+- KPI dashboard presentation
+- Documentation updates
+**Quarterly:**
+- Architecture review (scalability, optimization opportunities)
+- Risk register update
+- Team training & knowledge sharing
+## Appendix
+#### A.1 ETL Procedure Naming Convention
+|Pattern|Example|Purpose|
+|-|-|-|
+|etl.extract_<source>|etl.extract_simaster|Data extraction|
+|etl.load_dim_<dimension>|etl.load_dim_waktu|Dimension load|
+|etl.load_fact_<fact>|etl.load_fact_surat|Fact load|
+|etl.transform_<entity>|etl.transform_surat|Data transformation|
+|etl.validate_<entity>|etl.validate_surat|Data validation|
+|test.test_<procedure>|test.test_deduplicate_surat|Unit test|
+### A.2 Related Documents
+- Source-to-Target Mapping: source-to-target-mapping.md
+- Data Sources: ../01-requirements/data-sources.md
+- ERD: ERD.svg
+- Data Dictionary: data-dictionary.xlsx
+- Operations Manual: ../03-implementation/operations-manual.pdf
+
+### A.3 Contact & Escalation
+**ETL Development Team:**
+- **Zahra Putri Salsabilla** - ETL Developer Lead
+    - **Email:** zahra.123450026@student.itera.ac.id
+    - **Role:** ETL development, troubleshooting, performance optimization
+
+**Syahrialdi Rachim Akbar** - Project Lead & Database Designer
+    - **Email:** syahrialdi.123450093@student.itera.ac.id
+    - **Role:** Architecture decisions, escalation point, stakeholder communication
+
+**Escalation Path:**
+
+1. **ETL Developer (Zahra)** - First line
+2. **Project Lead (Aldi)** - Second line
+3. **Dosen Pembimbing** - Final escalation
 
 Prepared by: Kelompok 19 - Tugas Besar Pergudangan Data
-Last Updated: 12 November 2025, 16:04 WIB
+Last Updated: 17 November 2025, 16:04 WIB
 Next Review: 19 November 2025
