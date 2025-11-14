@@ -828,10 +828,10 @@ END;
 - **Zahra Putri Salsabilla** - ETL Developer Lead
     - **Email:** zahra.123450026@student.itera.ac.id
     - **Role:** ETL development, troubleshooting, performance optimization
-
+ 
 - **Syahrialdi Rachim Akbar** - Project Lead & Database Designer
-      - **Email:** syahrialdi.123450093@student.itera.ac.id
-      - **Role:** Architecture decisions, escalation point, stakeholder communication
+    - **Email:** syahrialdi.123450093@student.itera.ac.id
+    - **Role:** Architecture decisions, escalation point, stakeholder communication
 
 
 Prepared by: Kelompok 19 - Tugas Besar Pergudangan Data
