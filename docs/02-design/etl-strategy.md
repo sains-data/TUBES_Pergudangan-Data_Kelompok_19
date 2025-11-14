@@ -1,9 +1,9 @@
 # ETL Strategy Document
-**Document Version:** 1.0
-**Created:** 12 November 2025
-**Owner:** Kelompok 19 - Zahra (ETL Developer Lead)
-**Project:** Data Mart Biro Akademik Umum ITERA
-**Purpose:** Comprehensive ETL strategy untuk development, deployment, dan operational management
+- **Document Version:** 1.0
+- **Created:** 12 November 2025
+- **Owner:** Kelompok 19 - Zahra (ETL Developer Lead)
+- **Project:** Data Mart Biro Akademik Umum ITERA
+- **Purpose:** Comprehensive ETL strategy untuk development, deployment, dan operational management
 ---
 ## Table of Contents
 1. [Executive Summary](#executive-summary)
@@ -828,16 +828,11 @@ END;
 - **Zahra Putri Salsabilla** - ETL Developer Lead
     - **Email:** zahra.123450026@student.itera.ac.id
     - **Role:** ETL development, troubleshooting, performance optimization
-
-**Syahrialdi Rachim Akbar** - Project Lead & Database Designer
+ 
+- **Syahrialdi Rachim Akbar** - Project Lead & Database Designer
     - **Email:** syahrialdi.123450093@student.itera.ac.id
     - **Role:** Architecture decisions, escalation point, stakeholder communication
 
-**Escalation Path:**
-
-1. **ETL Developer (Zahra)** - First line
-2. **Project Lead (Aldi)** - Second line
-3. **Dosen Pembimbing** - Final escalation
 
 Prepared by: Kelompok 19 - Tugas Besar Pergudangan Data
 Last Updated: 17 November 2025, 16:04 WIB
