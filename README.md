@@ -28,6 +28,41 @@ Data Mart ini dirancang untuk mendukung pengambilan keputusan berbasis data di *
 - Monitoring dan evaluasi kinerja administrasi
 
 ---
+## Misi 1 - Deliverables
+
+Paket artefak desain dan perencanaan data mart yang dikumpulkan untuk Misi 1.
+
+- Business Requirements
+    - docs/01-requirements/business-requirements.md
+    - Ringkasan tujuan, ruang lingkup, proses bisnis, KPI, dan use cases.
+
+- Data Sources Inventory
+    - docs/01-requirements/data-sources.md
+    - Daftar sistem sumber, tabel kunci, volume/refresh rate, risiko kualitas data, dan akses.
+
+- Dimensional Design
+    - ERD (Star Schema): docs/02-design/dimensional-model.svg
+    - Data Dictionary: docs/02-design/data-dictionary.md
+    - Catatan: tiap fact memiliki grain eksplisit, setiap dimensi memiliki kunci, tipe data, dan definisi kolom.
+
+- ETL Design
+  - Source-to-Target Mapping: docs/02-design/source-to-target-mapping.md
+  - ETL Strategy: docs/02-design/etl-strategy.md
+  - Memuat: urutan load, incremental vs snapshot, SCD policy, data quality checks, logging & alerting.
+
+- Database Bootstrap (PostgreSQL)
+  - sql/01_Create_Database_PostgreSQL.sql
+  - Membuat schemas (stg, dim, fact, etl_log, dw, analytics, reports), tabel metadata/logging, staging tables, serta indeks dasar; idempotent dan siap dieksekusi di pgAdmin4.
+
+- Cara Menjalankan (Quick Start – Misi 1)
+  1. Buat database PostgreSQL: datamart_bau_itera (via pgAdmin4).
+  2. Buka Query Tool pada DB tersebut, jalankan: sql/01_Create_Database_PostgreSQL.sql
+  3. Verifikasi schemas dan tabel: lihat catatan “VALIDATION QUERIES” di akhir skrip.
+ 
+- Status & Versi
+  - Status: Final untuk Misi 1
+  - Versi Dokumen: v1.0 (tanggal update terakhir di masing-masing file)
+
 
 ## 🎯 Business Domain: Biro Akademik Umum ITERA
 
