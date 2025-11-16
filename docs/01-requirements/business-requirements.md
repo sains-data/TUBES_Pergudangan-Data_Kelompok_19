@@ -2,7 +2,7 @@
 ## Data Mart Biro Akademik Umum ITERA
 
 **Version:** 1.0  
-**Date:** [TSelasa. 10 November 2025]  
+**Date:** [Selasa. 10 November 2025]  
 **Prepared by:** Tim Kelompok [19]  
 **Status:** Draft
 
