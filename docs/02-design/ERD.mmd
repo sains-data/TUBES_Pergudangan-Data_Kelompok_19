@@ -1,111 +1,221 @@
----
-config:
-  layout: elk
-  theme: neutral
-  look: classic
----
 erDiagram
-    FACT_SURAT {
-        int surat_key PK
-        int tanggal_key FK
-        int jenis_surat_key FK
-        int unit_pengirim_key FK
-        int unit_penerima_key FK
-        int pegawai_disposisi_key FK
-        int jumlah_surat
-        int waktu_proses_hari
-        varchar nomor_surat
-    }
-    FACT_ASET {
-        int aset_snapshot_key PK
-        int tanggal_snapshot_key FK
-        int barang_key FK
-        int lokasi_key FK
-        int unit_kerja_key FK
-        int jumlah_unit
-        decimal nilai_buku
-        varchar kondisi_aset
-        varchar status
-    }
-    FACT_LAYANAN {
-        int layanan_key PK
-        int waktu_key FK
-        int jenis_layanan_key FK
-        int pegawai_pemohon_key FK
-        int unit_tujuan_key FK
-        int waktu_respon_jam
-        int is_on_time
-        int jumlah_permintaan
-        decimal rating_kepuasan
-    }
-    DIM_WAKTU {
-        int tanggal_key PK
-        date tanggal
-        varchar hari
-        int bulan
-        int tahun
-        int quarter
-        bool hari_kerja
-    }
-    DIM_JENIS_SURAT {
-        int jenis_surat_key PK
-        varchar kode_jenis
-        varchar nama_jenis
-        varchar kategori
-        int sla_hari
-    }
-    DIM_UNIT_KERJA {
-        int unit_key PK
-        varchar kode_unit
-        varchar nama_unit
-        int level
-        int parent_unit_key FK
-        varchar pic_nama
-    }
-    DIM_PEGAWAI {
-        int pegawai_key PK
-        varchar nip
-        varchar nama
-        varchar jabatan
-        int unit_key FK
-        date effective_date
-        date end_date
-        bool is_current
-    }
-    DIM_BARANG {
-        int barang_key PK
-        varchar kode_barang
-        varchar nama_barang
-        varchar kategori
-        varchar subkategori
-        varchar satuan
-    }
-    DIM_LOKASI {
-        int lokasi_key PK
-        varchar gedung
-        varchar lantai
-        varchar ruangan
-        int kapasitas
-    }
-    DIM_JENIS_LAYANAN {
-        int jenis_layanan_key PK
-        varchar nama_layanan
-        varchar kategori
-        bool is_komplain
-        int sla_jam
-    }
-    DIM_WAKTU ||--o{ FACT_SURAT : "tanggal_key"
-    DIM_JENIS_SURAT ||--o{ FACT_SURAT : "jenis_surat_key"
-    DIM_UNIT_KERJA ||--o{ FACT_SURAT : "unit_pengirim_key"
-    DIM_UNIT_KERJA ||--o{ FACT_SURAT : "unit_penerima_key"
-    DIM_PEGAWAI ||--o{ FACT_SURAT : "pegawai_disposisi_key"
-    DIM_WAKTU ||--o{ FACT_ASET : "tanggal_snapshot_key"
-    DIM_BARANG ||--o{ FACT_ASET : "barang_key"
-    DIM_LOKASI ||--o{ FACT_ASET : "lokasi_key"
-    DIM_UNIT_KERJA ||--o{ FACT_ASET : "unit_kerja_key"
-    DIM_WAKTU ||--o{ FACT_LAYANAN : "waktu_key"
-    DIM_JENIS_LAYANAN ||--o{ FACT_LAYANAN : "jenis_layanan_key"
-    DIM_PEGAWAI ||--o{ FACT_LAYANAN : "pegawai_pemohon_key"
-    DIM_UNIT_KERJA ||--o{ FACT_LAYANAN : "unit_tujuan_key"
-    DIM_UNIT_KERJA ||--o{ DIM_UNIT_KERJA : "parent_unit_key"
-    DIM_UNIT_KERJA ||--o{ DIM_PEGAWAI : "unit_key"
+
+  %% ========================
+  %% 1. SISTEM PERSURATAN
+  %% ========================
+
+  TBL_SURAT_MASUK {
+    VARCHAR id_surat PK
+    VARCHAR nomor_surat
+    DATE    tanggal_surat
+    DATE    tanggal_diterima
+    VARCHAR pengirim
+    TEXT    perihal
+    INT     jenis_surat_id FK
+    VARCHAR status
+    VARCHAR disposisi_ke
+    VARCHAR file_path
+  }
+
+  TBL_SURAT_KELUAR {
+    VARCHAR id_surat PK
+    VARCHAR nomor_surat
+    DATE    tanggal_surat
+    VARCHAR tujuan
+    TEXT    perihal
+    INT     jenis_surat_id FK
+    VARCHAR status
+    VARCHAR penandatangan
+    VARCHAR file_path
+  }
+
+  TBL_DISPOSISI {
+    VARCHAR id_disposisi PK
+    VARCHAR id_surat FK
+    DATETIME tanggal_disposisi
+    INT      dari_pegawai_id FK
+    INT      kepada_pegawai_id FK
+    TEXT     instruksi
+    VARCHAR  status
+    DATETIME tanggal_selesai
+    TEXT     catatan
+  }
+
+  REF_JENIS_SURAT {
+    INT     id PK
+    VARCHAR kode_jenis
+    VARCHAR nama_jenis
+    VARCHAR kategori
+    INT     sla_hari
+  }
+
+  %% ========================
+  %% 2. SISTEM LAYANAN
+  %% ========================
+
+  TBL_PERMINTAAN_LAYANAN {
+    INT      id_permintaan PK
+    VARCHAR  nomor_tiket
+    DATETIME timestamp_submit
+    VARCHAR  pemohon_nama
+    VARCHAR  pemohon_nip FK
+    INT      jenis_layanan_id FK
+    TEXT     deskripsi
+    INT      unit_tujuan_id FK
+    VARCHAR  status_penyelesaian
+    DATETIME tanggal_selesai
+    DECIMAL  rating_kepuasan
+    TEXT     feedback
+  }
+
+  REF_JENIS_LAYANAN {
+    INT     id PK
+    VARCHAR kode_layanan
+    VARCHAR nama_layanan
+    VARCHAR kategori
+    BIT     is_komplain
+    INT     sla_hari
+  }
+
+  %% ========================
+  %% 3. SISTEM INVENTARIS & ASET
+  %% ========================
+
+  TBL_INVENTARIS {
+    INT      id_barang PK
+    VARCHAR  kode_barang
+    VARCHAR  nama_barang
+    VARCHAR  kategori
+    DATE     tanggal_pengadaan
+    DECIMAL  nilai_perolehan
+    VARCHAR  kondisi
+    INT      lokasi_id FK
+    INT      unit_kerja_id FK
+    VARCHAR  status_label
+    DATE     tanggal_snapshot
+  }
+
+  TBL_PEMELIHARAAN {
+    INT      id_pemeliharaan PK
+    VARCHAR  kode_barang FK
+    DATE     tanggal_pemeliharaan
+    VARCHAR  jenis_pemeliharaan
+    DECIMAL  biaya
+    VARCHAR  vendor
+    VARCHAR  status
+  }
+
+  TBL_PENGADAAN {
+    INT      id_pengadaan PK
+    VARCHAR  nomor_pengadaan
+    DATE     tanggal_pengadaan
+    VARCHAR  vendor
+    INT      total_item
+    DECIMAL  total_nilai
+    INT      unit_kerja_id FK
+    VARCHAR  status
+  }
+
+  REF_LOKASI {
+    INT      id_lokasi PK
+    VARCHAR  gedung
+    INT      lantai
+    VARCHAR  ruangan
+    INT      kapasitas
+    VARCHAR  pic_nama
+  }
+
+  %% ========================
+  %% 4. SISTEM KEPEGAWAIAN
+  %% ========================
+
+  TBL_PEGAWAI {
+    INT      id_pegawai PK
+    VARCHAR  nip
+    VARCHAR  nama
+    VARCHAR  jabatan
+    INT      unit_kerja_id FK
+    VARCHAR  status_kepegawaian
+    DATE     tanggal_masuk
+    VARCHAR  email
+    VARCHAR  no_hp
+  }
+
+  TBL_ABSENSI {
+    INT      id_absensi PK
+    VARCHAR  nip FK
+    DATE     tanggal
+    TIME     waktu_masuk
+    TIME     waktu_keluar
+    VARCHAR  status_kehadiran
+    DECIMAL  jam_kerja
+  }
+
+  TBL_PELATIHAN {
+    INT      id_pelatihan PK
+    VARCHAR  nip FK
+    VARCHAR  nama_pelatihan
+    DATE     tanggal_pelatihan
+    INT      durasi_jam
+    VARCHAR  penyelenggara
+    VARCHAR  status
+  }
+
+  %% ========================
+  %% 5. UNIT ORGANISASI & MONITORING
+  %% ========================
+
+  TBL_UNIT_KERJA {
+    INT      id_unit PK
+    VARCHAR  kode_unit
+    VARCHAR  nama_unit
+    INT      level
+    INT      parent_unit_id FK
+    VARCHAR  kepala_unit_nip
+    VARCHAR  email_unit
+  }
+
+  TBL_LAPORAN_KINERJA {
+    INT      id_laporan PK
+    DATE     periode
+    INT      unit_kerja_id FK
+    INT      target_layanan
+    INT      realisasi_layanan
+    INT      target_surat
+    INT      realisasi_surat
+    DECIMAL  waktu_proses_rata2
+    DECIMAL  tingkat_kepuasan
+    DECIMAL  budget_allocated
+    DECIMAL  actual_spending
+    DECIMAL  efisiensi_persen
+    DATE     tanggal_submit
+    VARCHAR  status_approval
+    TEXT     catatan
+  }
+
+  %% ========================
+  %% RELATIONSHIPS
+  %% ========================
+
+  TBL_SURAT_MASUK      ||--o{ TBL_DISPOSISI        : "memiliki"
+  REF_JENIS_SURAT      ||--o{ TBL_SURAT_MASUK      : "tipe_surat"
+  REF_JENIS_SURAT      ||--o{ TBL_SURAT_KELUAR     : "tipe_surat"
+  TBL_PEGAWAI          ||--o{ TBL_DISPOSISI        : "dari_pegawai"
+  TBL_PEGAWAI          ||--o{ TBL_DISPOSISI        : "kepada_pegawai"
+
+  REF_JENIS_LAYANAN    ||--o{ TBL_PERMINTAAN_LAYANAN : "tipe_layanan"
+  TBL_UNIT_KERJA       ||--o{ TBL_PERMINTAAN_LAYANAN : "unit_tujuan"
+  TBL_PEGAWAI          ||--o{ TBL_PERMINTAAN_LAYANAN : "pemohon"
+
+  TBL_INVENTARIS       ||--o{ TBL_PEMELIHARAAN     : "dipelihara"
+  TBL_INVENTARIS       }o--o{ TBL_PENGADAAN        : "pengadaan_barang"
+  REF_LOKASI           ||--o{ TBL_INVENTARIS       : "berlokasi_di"
+  TBL_UNIT_KERJA       ||--o{ TBL_INVENTARIS       : "dimiliki_oleh"
+
+  TBL_UNIT_KERJA       ||--o{ TBL_PEGAWAI          : "memiliki_pegawai"
+  TBL_UNIT_KERJA       ||--o{ TBL_LAPORAN_KINERJA  : "dilaporkan_oleh"
+
+  TBL_PEGAWAI          ||--o{ TBL_ABSENSI          : "mencatat_absensi"
+  TBL_PEGAWAI          ||--o{ TBL_PELATIHAN        : "mengikuti_pelatihan"
+
+  TBL_UNIT_KERJA       ||--o{ TBL_UNIT_KERJA       : "parent_child"
