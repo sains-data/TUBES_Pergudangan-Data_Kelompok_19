@@ -1,0 +1,141 @@
+---
+config:
+  layout: elk
+  theme: neutral
+---
+erDiagram
+	direction BT
+	DIM_WAKTU {
+		INTEGER tanggal_key PK "YYYYMMDD"  
+		DATE tanggal  ""  
+		VARCHAR hari  ""  
+		INTEGER bulan  ""  
+		INTEGER tahun  ""  
+		INTEGER quarter  ""  
+		INTEGER minggu_tahun  ""  
+		INTEGER hari_dalam_bulan  ""  
+		BOOLEAN hari_kerja  ""  
+		VARCHAR bulan_tahun  ""  
+	}
+	DIM_UNIT_KERJA {
+		INTEGER unit_key PK ""  
+		VARCHAR kode_unit  ""  
+		VARCHAR nama_unit  ""  
+		INTEGER level  ""  
+		INTEGER parent_unit_key FK ""  
+		VARCHAR kepala_unit_nip  ""  
+		VARCHAR email_unit  ""  
+		VARCHAR path_hierarchy  ""  
+		INTEGER jumlah_sub_unit  ""  
+		BOOLEAN is_active  ""  
+	}
+	DIM_PEGAWAI {
+		INTEGER pegawai_key PK ""  
+		VARCHAR nip  ""  
+		VARCHAR nama  ""  
+		VARCHAR jabatan  ""  
+		INTEGER unit_key FK ""  
+		VARCHAR status_kepegawaian  ""  
+		DATE tanggal_masuk  ""  
+		VARCHAR email  ""  
+		VARCHAR no_hp  ""  
+		DATE effective_date  ""  
+		DATE end_date  ""  
+		BOOLEAN is_current  ""  
+	}
+	DIM_JENIS_SURAT {
+		INTEGER jenis_surat_key PK ""  
+		VARCHAR kode_jenis_surat  ""  
+		VARCHAR nama_jenis_surat  ""  
+		VARCHAR kategori  ""  
+		VARCHAR sifat  ""  
+		BOOLEAN is_active  ""  
+	}
+	DIM_JENIS_LAYANAN {
+		INTEGER jenis_layanan_key PK ""  
+		VARCHAR kode_jenis_layanan  ""  
+		VARCHAR nama_jenis_layanan  ""  
+		VARCHAR kategori_layanan  ""  
+		INTEGER sla_target_jam  ""  
+		BOOLEAN is_active  ""  
+	}
+	DIM_BARANG {
+		INTEGER barang_key PK ""  
+		VARCHAR kode_barang  ""  
+		VARCHAR nama_barang  ""  
+		VARCHAR kategori_barang  ""  
+		VARCHAR subkategori_barang  ""  
+		VARCHAR satuan  ""  
+		VARCHAR merk  ""  
+		VARCHAR spesifikasi  ""  
+		BOOLEAN is_bergerak  ""  
+		BOOLEAN is_tik  ""  
+	}
+	DIM_LOKASI {
+		INTEGER lokasi_key PK ""  
+		VARCHAR kode_lokasi  ""  
+		VARCHAR nama_lokasi  ""  
+		VARCHAR jenis_lokasi  ""  
+		VARCHAR gedung  ""  
+		VARCHAR lantai  ""  
+		VARCHAR keterangan  ""  
+	}
+	FACT_SURAT {
+		BIGINT surat_key PK ""  
+		INTEGER tanggal_key FK ""  
+		INTEGER unit_pengirim_key FK ""  
+		INTEGER unit_penerima_key FK ""  
+		INTEGER pegawai_penerima_key FK ""  
+		INTEGER jenis_surat_key FK ""  
+		VARCHAR nomor_surat  ""  
+		INTEGER jumlah_lampiran  ""  
+		INTEGER durasi_proses_hari  ""  
+		BOOLEAN melewati_sla_flag  ""  
+		VARCHAR status_akhir  ""  
+		VARCHAR channel  ""  
+	}
+	FACT_LAYANAN {
+		BIGINT layanan_key PK ""  
+		INTEGER tanggal_request_key FK ""  
+		INTEGER tanggal_selesai_key FK ""  
+		INTEGER unit_pemohon_key FK ""  
+		INTEGER unit_pelaksana_key FK ""  
+		INTEGER pegawai_pemohon_key FK ""  
+		INTEGER pegawai_penanggung_jawab_key FK ""  
+		INTEGER jenis_layanan_key FK ""  
+		VARCHAR nomor_tiket  ""  
+		INTEGER sla_target_jam  ""  
+		DECIMAL waktu_respon_jam  ""  
+		DECIMAL waktu_selesai_jam  ""  
+		BOOLEAN melewati_sla_flag  ""  
+		DECIMAL rating_kepuasan  ""  
+		DECIMAL biaya_layanan  ""  
+		VARCHAR status_akhir  ""  
+	}
+	FACT_ASET {
+		BIGINT aset_snapshot_key PK ""  
+		INTEGER tanggal_snapshot_key FK ""  
+		INTEGER barang_key FK ""  
+		INTEGER lokasi_key FK ""  
+		INTEGER unit_pemilik_key FK ""  
+		INTEGER jumlah_unit  ""  
+		DECIMAL nilai_perolehan  ""  
+		DECIMAL nilai_buku  ""  
+		DECIMAL umur_ekonomis_tahun  ""  
+		DECIMAL umur_tersisa_tahun  ""  
+		VARCHAR kondisi  ""  
+		VARCHAR status_pemanfaatan  ""  
+	}
+	DIM_WAKTU||--o{FACT_SURAT:"tanggal_key"
+	DIM_UNIT_KERJA||--o{FACT_SURAT:"unit_pengirim_key / unit_penerima_key"
+	DIM_PEGAWAI||--o{FACT_SURAT:"pegawai_penerima_key"
+	DIM_JENIS_SURAT||--o{FACT_SURAT:"jenis_surat_key"
+	DIM_WAKTU||--o{FACT_LAYANAN:"tanggal_request_key / tanggal_selesai_key"
+	DIM_UNIT_KERJA||--o{FACT_LAYANAN:"unit_pemohon_key / unit_pelaksana_key"
+	DIM_PEGAWAI||--o{FACT_LAYANAN:"pegawai_pemohon_key / pegawai_penanggung_jawab_key"
+	DIM_JENIS_LAYANAN||--o{FACT_LAYANAN:"jenis_layanan_key"
+	DIM_WAKTU||--o{FACT_ASET:"tanggal_snapshot_key"
+	DIM_BARANG||--o{FACT_ASET:"barang_key"
+	DIM_LOKASI||--o{FACT_ASET:"lokasi_key"
+	DIM_UNIT_KERJA||--o{FACT_ASET:"unit_pemilik_key"
+

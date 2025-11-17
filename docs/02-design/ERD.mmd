@@ -1,0 +1,111 @@
+---
+config:
+  layout: elk
+  theme: neutral
+  look: classic
+---
+erDiagram
+    FACT_SURAT {
+        int surat_key PK
+        int tanggal_key FK
+        int jenis_surat_key FK
+        int unit_pengirim_key FK
+        int unit_penerima_key FK
+        int pegawai_disposisi_key FK
+        int jumlah_surat
+        int waktu_proses_hari
+        varchar nomor_surat
+    }
+    FACT_ASET {
+        int aset_snapshot_key PK
+        int tanggal_snapshot_key FK
+        int barang_key FK
+        int lokasi_key FK
+        int unit_kerja_key FK
+        int jumlah_unit
+        decimal nilai_buku
+        varchar kondisi_aset
+        varchar status
+    }
+    FACT_LAYANAN {
+        int layanan_key PK
+        int waktu_key FK
+        int jenis_layanan_key FK
+        int pegawai_pemohon_key FK
+        int unit_tujuan_key FK
+        int waktu_respon_jam
+        int is_on_time
+        int jumlah_permintaan
+        decimal rating_kepuasan
+    }
+    DIM_WAKTU {
+        int tanggal_key PK
+        date tanggal
+        varchar hari
+        int bulan
+        int tahun
+        int quarter
+        bool hari_kerja
+    }
+    DIM_JENIS_SURAT {
+        int jenis_surat_key PK
+        varchar kode_jenis
+        varchar nama_jenis
+        varchar kategori
+        int sla_hari
+    }
+    DIM_UNIT_KERJA {
+        int unit_key PK
+        varchar kode_unit
+        varchar nama_unit
+        int level
+        int parent_unit_key FK
+        varchar pic_nama
+    }
+    DIM_PEGAWAI {
+        int pegawai_key PK
+        varchar nip
+        varchar nama
+        varchar jabatan
+        int unit_key FK
+        date effective_date
+        date end_date
+        bool is_current
+    }
+    DIM_BARANG {
+        int barang_key PK
+        varchar kode_barang
+        varchar nama_barang
+        varchar kategori
+        varchar subkategori
+        varchar satuan
+    }
+    DIM_LOKASI {
+        int lokasi_key PK
+        varchar gedung
+        varchar lantai
+        varchar ruangan
+        int kapasitas
+    }
+    DIM_JENIS_LAYANAN {
+        int jenis_layanan_key PK
+        varchar nama_layanan
+        varchar kategori
+        bool is_komplain
+        int sla_jam
+    }
+    DIM_WAKTU ||--o{ FACT_SURAT : "tanggal_key"
+    DIM_JENIS_SURAT ||--o{ FACT_SURAT : "jenis_surat_key"
+    DIM_UNIT_KERJA ||--o{ FACT_SURAT : "unit_pengirim_key"
+    DIM_UNIT_KERJA ||--o{ FACT_SURAT : "unit_penerima_key"
+    DIM_PEGAWAI ||--o{ FACT_SURAT : "pegawai_disposisi_key"
+    DIM_WAKTU ||--o{ FACT_ASET : "tanggal_snapshot_key"
+    DIM_BARANG ||--o{ FACT_ASET : "barang_key"
+    DIM_LOKASI ||--o{ FACT_ASET : "lokasi_key"
+    DIM_UNIT_KERJA ||--o{ FACT_ASET : "unit_kerja_key"
+    DIM_WAKTU ||--o{ FACT_LAYANAN : "waktu_key"
+    DIM_JENIS_LAYANAN ||--o{ FACT_LAYANAN : "jenis_layanan_key"
+    DIM_PEGAWAI ||--o{ FACT_LAYANAN : "pegawai_pemohon_key"
+    DIM_UNIT_KERJA ||--o{ FACT_LAYANAN : "unit_tujuan_key"
+    DIM_UNIT_KERJA ||--o{ DIM_UNIT_KERJA : "parent_unit_key"
+    DIM_UNIT_KERJA ||--o{ DIM_PEGAWAI : "unit_key"
