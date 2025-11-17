@@ -389,7 +389,6 @@ INNER JOIN dim_lokasi l ON i.lokasi_id = l.lokasi_key
 INNER JOIN dim_unit_kerja u ON i.unit_kerja_id = u.unit_key
 INNER JOIN dim_waktu dw ON dw.tanggal = @SnapshotDate
 WHERE i.tanggal_snapshot = @SnapshotDate;
-```
 ---
 
 ### 2.3 FACT_LAYANAN (Service Requests)
@@ -576,7 +575,7 @@ WHERE tanggal_snapshot = EOMONTH(GETDATE());
 | fact_surat | dim_waktu | tanggal_key | tanggal_key |
 | fact_surat | dim_jenis_surat | jenis_surat_key | jenis_surat_key |
 | fact_surat | dim_unit_kerja | unit_pengirim_key | unit_key |
-| fact_surat | dim_unit_kerja | unit_pemilik_key | unit_key |
+| fact_surat | dim_unit_kerja | unit_penerima_key | unit_key |
 | fact_surat | dim_pegawai | pegawai_penerima_key | pegawai_key |
 | fact_aset | dim_waktu | tanggal_snapshot_key | tanggal_key |
 | fact_aset | dim_barang | barang_key | barang_key |
