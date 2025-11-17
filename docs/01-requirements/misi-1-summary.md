@@ -26,41 +26,41 @@ Contoh KPI yang didukung:
 ### 3.1 Requirements & Sumber Data
 
 - **Business Requirements**  
-  - File: [Business Requirements](docs/01-requirements/business-requirements.md)  
+  - File: [Business Requirements](https://github.com/FebyAngelina/TUBES_Pergudangan-Data_Kelompok-19/blob/main/docs/01-requirements/business-requirements.md)  
   - Berisi tujuan bisnis, ruang lingkup, stakeholder, proses bisnis, dan KPI utama yang akan dianalisis.  
 
 - **Data Source Inventory**  
-  - File: [Data Sources](docs/01-requirements/data-sources.md)  
+  - File: [Data Sources](https://github.com/FebyAngelina/TUBES_Pergudangan-Data_Kelompok-19/blob/main/docs/01-requirements/data-sources.md)  
   - Berisi daftar sistem sumber (SIMASTER, Inventaris Aset, SIMPEG, Log Layanan, Monitoring, Master Unit), struktur tabel penting, volume data, frekuensi update, serta isu kualitas data.  
 
 ### 3.2 Dimensional Design
 
 - **ERD (Star Schema)**  
-  - File: [Dimensional Model](docs/02-design/dimensional-model.svg)  
+  - File: [Dimensional Model](https://github.com/FebyAngelina/TUBES_Pergudangan-Data_Kelompok-19/blob/main/docs/02-design/ERD.mmd)  
   - Menggambarkan tiga tabel fakta utama (Surat, Layanan, Aset) dan tabel dimensi terkait (Waktu, Unit Kerja, Pegawai, Jenis Surat, Jenis Layanan, Barang, Lokasi).  
 
 - **Bus Matrix**  
-  - File: [Bus Matrix](docs/02-design/bus-matrix.md)
+  - File: [Bus Matrix](https://github.com/FebyAngelina/TUBES_Pergudangan-Data_Kelompok-19/blob/main/docs/02-design/bus-matrix.md)
   - Matriks proses bisnis × dimensi yang menunjukkan dimensi mana saja yang digunakan oleh setiap fact serta grain per proses bisnis.  
 
 - **Data Dictionary**  
-  - File: [Data Dictionary](docs/02-design/data-dictionary.md)  
+  - File: [Data Dictionary](https://github.com/FebyAngelina/TUBES_Pergudangan-Data_Kelompok-19/blob/main/docs/02-design/data-dictionary.md)  
   - Menjelaskan definisi kolom untuk setiap fact dan dimensi, termasuk tipe data logis, makna bisnis, contoh nilai, serta aturan validasi dasar.  
 
 ### 3.3 ETL Design
 
 - **Source-to-Target Mapping (S2T)**  
-  - File: [Source-to-Target Mapping](docs/02-design/source-to-target-mapping.md)  
+  - File: [Source-to-Target Mapping](https://github.com/FebyAngelina/TUBES_Pergudangan-Data_Kelompok-19/blob/main/docs/02-design/source-to-target-mapping.md)  
   - Mendokumentasikan mapping field-level dari tabel sumber ke tabel dim/dimensi dan fact, termasuk: konversi tipe data, lookup keys, SCD policy, aturan pembersihan data, dan perhitungan measure.  
 
 - **ETL Strategy**  
-  - File: [ETL Strategy](docs/02-design/etl-strategy.md)  
+  - File: [ETL Strategy](https://github.com/FebyAngelina/TUBES_Pergudangan-Data_Kelompok-19/blob/main/docs/02-design/etl-strategy.md)  
   - Menjelaskan arsitektur ETL (staging → transform → DW), urutan load dimensi dan fakta, strategi incremental vs snapshot, mekanisme logging & error handling, serta rencana data quality checks.  
 
 ### 3.4 Database Bootstrap (PostgreSQL)
 
 - **Create Database & Schemas Script**  
-  - File: [Create Database PostgreSQL](sql/01_Create_Database_PostgreSQL.sql)  
+  - File: [Create Database PostgreSQL](https://github.com/FebyAngelina/TUBES_Pergudangan-Data_Kelompok-19/blob/main/sql/01_Create_Database.sql)  
   - Membuat schema utama (`stg`, `dim`, `fact`, `etl_log`, `dw`, `analytics`, `reports`), tabel metadata `dw.etl_metadata`, staging tables untuk setiap sumber data, tabel logging ETL (`etl_log.job_execution`, `etl_log.data_quality_checks`, `etl_log.error_details`), serta indeks dasar.  
   - Skrip bersifat idempotent dan telah diuji di PostgreSQL melalui pgAdmin4.  
 
