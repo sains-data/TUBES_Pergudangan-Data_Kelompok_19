@@ -314,12 +314,12 @@ Project dianggap sukses jika:
 
 ---
 
-## 11. Project Constraints
+## 11. Project constraints
 
 - **Time:** 7 hari working time
 - **Team:** 3 orang
 - **Budget:** Azure student subscription
-- **Technology:** SQL Server, SSIS, Power BI
+- **Technology:** PostgreSQL, Python, Power BI
 - **Data:** Limited to available sources
 
 ---
