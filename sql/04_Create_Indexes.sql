@@ -1,11 +1,3 @@
--- =====================================================
--- 04_Create_Indexes.sql
--- Project : Data Mart Biro Akademik Umum ITERA
--- Purpose : Create Performance Optimization Indexes
--- Engine  : PostgreSQL
--- Dependencies: 03_Create_Facts.sql must be executed first
--- Author  : Zahra (Kelompok 19)
--- =====================================================
 
 /*
     INDEXING STRATEGY:
