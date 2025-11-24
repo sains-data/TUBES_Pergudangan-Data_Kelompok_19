@@ -19,9 +19,9 @@
 
 | NIM | Nama | Role | Kontribusi | Email |
 |-----|------|------|------------|-------|
-| 123450093 | **Syahrialdi Rachim Akbar (Aldi)** | Project Lead & Database Designer | ERD, Schema Design, DDL Scripts | Syahrialdi.123450093@student.itera.ac.id |
+| 123450093 | **Syahrialdi Rachim Akbar** | Project Lead & Database Designer | ERD, Schema Design, DDL Scripts | Syahrialdi.123450093@student.itera.ac.id |
 | 123450026 | **Zahra Putri Salsabilla** | ETL Developer & Data Engineer | ETL Procedures, Data Quality | Zahra.123450026@student.itera.ac.id |
-| 123450039 | **Feby Angelina (Aya)** | BI Developer & Documentation | Documentation, Mapping, Sample Data | Feby.123450039@student.itera.ac.id |
+| 123450039 | **Feby Angelina** | BI Developer & Documentation | Documentation, Mapping, Sample Data | Feby.123450039@student.itera.ac.id |
 
 ---
 
