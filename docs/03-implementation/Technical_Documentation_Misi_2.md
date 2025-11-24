@@ -1342,7 +1342,7 @@ Refer to GitHub repository for complete SQL scripts:
 |------|------|---------|
 | Aldi | Project Lead & Database Designer | [email] |
 | Zahra | ETL Developer & Data Engineer | [email] |
-| Feby (Aya) | BI Developer & Documentation | [email] |
+| Feby | BI Developer & Documentation | [email] |
 
 ---
 
