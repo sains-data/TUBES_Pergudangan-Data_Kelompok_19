@@ -4,7 +4,6 @@
 
 **Document Version:** 1.0  
 **Created:** 24 November 2025  
-**Owner:** Kelompok 19 - Feby (ETL Developer & Documentation Specialist)  
 **Project:** Data Mart Biro Akademik Umum ITERA  
 **Course:** SD25-31007 - Pergudangan Data
 
