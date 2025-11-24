@@ -92,13 +92,14 @@ Paket artefak desain dan perencanaan data mart yang dikumpulkan untuk Misi 1.
 
 ---
 
-## 🏗️ Arsitektur Data Warehouse
+## 🏗 Arsitektur Data Warehouse
 
-- **Approach:** Kimball Dimensional Modeling (Star Schema)
-- **Database:** PostgreSQL 16 (Migrated from initial SQL server design)
-- **ETL:** Python (Pandas) & PL/pgSQL Stored Procedures
-- **Visualization:** Power BI Desktop / Metabase
-- **Version Control:** GitHub
+* **Approach:** Kimball Dimensional Modeling (Star Schema)
+* **Database:** Microsoft SQL Server 2019 / Azure SQL Database
+* **ETL:** Python (Pandas) & T-SQL Stored Procedures
+* **Management Tools:** SSMS & Azure Data Studio
+* **Visualization:** Power BI Desktop
+* **Version Control:** GitHub
 
 ### Data Model (Mission 1 Design)
 Berikut adalah tabel-tabel utama dalam desain Dimensional Model (Star Schema):
