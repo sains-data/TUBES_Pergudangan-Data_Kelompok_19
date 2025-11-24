@@ -1,88 +1,126 @@
 -- =====================================================
 -- 10_Security.sql
 -- Project : Data Mart Biro Akademik Umum ITERA
--- Purpose : Create Roles and Users for Data Mart Access
--- Engine  : PostgreSQL
+-- Purpose : Create Logins, Users, and Roles (RBAC)
+-- Engine  : Microsoft SQL Server 2019+
 -- Dependencies: 01_Create_Database.sql must be executed first
 -- =====================================================
 
--- 1. RESET ROLES & USERS (Idempotent)
--- Hati-hati: Drop user hanya dilakukan agar script bisa di-run ulang tanpa error
-DROP USER IF EXISTS user_bi;
-DROP USER IF EXISTS user_etl;
-DROP ROLE IF EXISTS role_analyst;
-DROP ROLE IF EXISTS role_etl_admin;
+/*
+    SECURITY MODEL (SQL SERVER):
+    1. Logins : Authentication at Server Level.
+    2. Users  : Authorization at Database Level (Mapped to Logins).
+    3. Roles  : Grouping permissions.
+*/
 
--- 2. CREATE ROLES
--- Role untuk Analis BI (Read Only Access)
+-- =====================================================
+-- 1. CLEANUP (Idempotent Logic)
+-- =====================================================
+
+-- Drop Users from Roles if they exist
+IF IS_ROLEMEMBER('role_analyst', 'user_bi') = 1 ALTER ROLE role_analyst DROP MEMBER user_bi;
+IF IS_ROLEMEMBER('role_etl_admin', 'user_etl') = 1 ALTER ROLE role_etl_admin DROP MEMBER user_etl;
+
+-- Drop Database Users
+IF USER_ID('user_bi') IS NOT NULL DROP USER user_bi;
+IF USER_ID('user_etl') IS NOT NULL DROP USER user_etl;
+
+-- Drop Database Roles
+IF DATABASE_PRINCIPAL_ID('role_analyst') IS NOT NULL DROP ROLE role_analyst;
+IF DATABASE_PRINCIPAL_ID('role_etl_admin') IS NOT NULL DROP ROLE role_etl_admin;
+
+-- Note: We do not drop Server Logins automatically to prevent locking out connections 
+-- if this script is run on a shared server. We create them if missing.
+
+-- =====================================================
+-- 2. CREATE DATABASE ROLES
+-- =====================================================
+
 CREATE ROLE role_analyst;
-
--- Role untuk ETL Process (Read/Write/Execute Access)
 CREATE ROLE role_etl_admin;
-
--- 3. GRANT USAGE ON SCHEMAS
--- Analyst perlu akses ke schema akhir (Dim, Fact, Analytics, Reports)
-GRANT USAGE ON SCHEMA dim, fact, analytics, reports TO role_analyst;
-
--- ETL perlu akses ke SEMUA schema termasuk Staging dan Log
-GRANT USAGE ON SCHEMA stg, dim, fact, etl_log, dw, analytics, reports TO role_etl_admin;
-
--- 4. GRANT PRIVILEGES FOR ANALYST (Read Only)
--- Hanya boleh SELECT data
-GRANT SELECT ON ALL TABLES IN SCHEMA dim TO role_analyst;
-GRANT SELECT ON ALL TABLES IN SCHEMA fact TO role_analyst;
-GRANT SELECT ON ALL TABLES IN SCHEMA analytics TO role_analyst;
-GRANT SELECT ON ALL TABLES IN SCHEMA reports TO role_analyst;
-
--- Pastikan tabel yang dibuat di masa depan juga otomatis bisa dibaca oleh Analyst
-ALTER DEFAULT PRIVILEGES IN SCHEMA dim GRANT SELECT ON TABLES TO role_analyst;
-ALTER DEFAULT PRIVILEGES IN SCHEMA fact GRANT SELECT ON TABLES TO role_analyst;
-ALTER DEFAULT PRIVILEGES IN SCHEMA analytics GRANT SELECT ON TABLES TO role_analyst;
-ALTER DEFAULT PRIVILEGES IN SCHEMA reports GRANT SELECT ON TABLES TO role_analyst;
-
--- 5. GRANT PRIVILEGES FOR ETL ADMIN (Full Access)
--- Boleh melakukan CRUD (Create, Read, Update, Delete)
-GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA stg TO role_etl_admin;
-GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA dim TO role_etl_admin;
-GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA fact TO role_etl_admin;
-GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA etl_log TO role_etl_admin;
-GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA dw TO role_etl_admin;
-GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA analytics TO role_etl_admin;
-GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA reports TO role_etl_admin;
-
--- Grant akses ke Sequence (agar ETL bisa insert data baru dengan auto-increment ID)
-GRANT USAGE, SELECT, UPDATE ON ALL SEQUENCES IN SCHEMA stg TO role_etl_admin;
-GRANT USAGE, SELECT, UPDATE ON ALL SEQUENCES IN SCHEMA dim TO role_etl_admin;
-GRANT USAGE, SELECT, UPDATE ON ALL SEQUENCES IN SCHEMA fact TO role_etl_admin;
-GRANT USAGE, SELECT, UPDATE ON ALL SEQUENCES IN SCHEMA etl_log TO role_etl_admin;
-GRANT USAGE, SELECT, UPDATE ON ALL SEQUENCES IN SCHEMA dw TO role_etl_admin;
-
--- Pastikan tabel masa depan juga otomatis bisa diakses ETL
-ALTER DEFAULT PRIVILEGES IN SCHEMA stg GRANT ALL PRIVILEGES ON TABLES TO role_etl_admin;
-ALTER DEFAULT PRIVILEGES IN SCHEMA dim GRANT ALL PRIVILEGES ON TABLES TO role_etl_admin;
-ALTER DEFAULT PRIVILEGES IN SCHEMA fact GRANT ALL PRIVILEGES ON TABLES TO role_etl_admin;
-ALTER DEFAULT PRIVILEGES IN SCHEMA etl_log GRANT ALL PRIVILEGES ON TABLES TO role_etl_admin;
-
--- 6. CREATE USERS & ASSIGN ROLES
--- User untuk Feby (Power BI Connection)
-CREATE USER user_bi WITH PASSWORD 'BiPassItera2025!';
-GRANT role_analyst TO user_bi;
-
--- User untuk Zahra (ETL Scripts / Python)
-CREATE USER user_etl WITH PASSWORD 'EtlPassItera2025!';
-GRANT role_etl_admin TO user_etl;
+GO
 
 -- =====================================================
--- NOTICE & VERIFICATION
+-- 3. GRANT PERMISSIONS (Schema Level)
 -- =====================================================
-DO $$
+-- SQL Server Best Practice: Granting on SCHEMA automatically covers 
+-- all current AND future tables/views/sequences in that schema.
+
+-- --- ROLE: ANALYST (Read Only) ---
+GRANT USAGE ON SCHEMA :: dim TO role_analyst; -- Allow access to schema
+GRANT USAGE ON SCHEMA :: fact TO role_analyst;
+GRANT USAGE ON SCHEMA :: analytics TO role_analyst;
+GRANT USAGE ON SCHEMA :: reports TO role_analyst;
+
+GRANT SELECT ON SCHEMA :: dim TO role_analyst;
+GRANT SELECT ON SCHEMA :: fact TO role_analyst;
+GRANT SELECT ON SCHEMA :: analytics TO role_analyst;
+GRANT SELECT ON SCHEMA :: reports TO role_analyst;
+
+-- --- ROLE: ETL ADMIN (Full Access) ---
+-- 'CONTROL' implies all permissions (Select, Insert, Update, Delete, Alter, etc.)
+GRANT CONTROL ON SCHEMA :: stg TO role_etl_admin;
+GRANT CONTROL ON SCHEMA :: dim TO role_etl_admin;
+GRANT CONTROL ON SCHEMA :: fact TO role_etl_admin;
+GRANT CONTROL ON SCHEMA :: etl_log TO role_etl_admin;
+GRANT CONTROL ON SCHEMA :: dw TO role_etl_admin;
+GRANT CONTROL ON SCHEMA :: analytics TO role_etl_admin;
+GRANT CONTROL ON SCHEMA :: reports TO role_etl_admin;
+
+-- Grant Execute for Stored Procedures
+GRANT EXECUTE TO role_etl_admin;
+
+GO
+
+-- =====================================================
+-- 4. CREATE LOGINS (Server Level) & USERS (DB Level)
+-- =====================================================
+
+-- User 1: user_bi (Power BI)
+-- Create Login (if not exists) in MASTER context check
+IF NOT EXISTS (SELECT * FROM sys.server_principals WHERE name = 'user_bi')
 BEGIN
-    RAISE NOTICE '======================================================';
-    RAISE NOTICE '10_Security.sql executed successfully';
-    RAISE NOTICE '======================================================';
-    RAISE NOTICE 'Roles created: role_analyst, role_etl_admin';
-    RAISE NOTICE 'Users created:';
-    RAISE NOTICE '1. user_bi (Password: BiPassItera2025!) -> Read Only';
-    RAISE NOTICE '2. user_etl (Password: EtlPassItera2025!) -> Full Access';
-    RAISE NOTICE '======================================================';
-END $$;
+    -- WARNING: Change password policy for production
+    CREATE LOGIN user_bi WITH PASSWORD = 'BiPassItera2025!', CHECK_POLICY = OFF;
+END
+
+-- Create Database User mapped to Login
+IF USER_ID('user_bi') IS NULL
+BEGIN
+    CREATE USER user_bi FOR LOGIN user_bi;
+END
+
+-- User 2: user_etl (ETL Scripts)
+IF NOT EXISTS (SELECT * FROM sys.server_principals WHERE name = 'user_etl')
+BEGIN
+    CREATE LOGIN user_etl WITH PASSWORD = 'EtlPassItera2025!', CHECK_POLICY = OFF;
+END
+
+IF USER_ID('user_etl') IS NULL
+BEGIN
+    CREATE USER user_etl FOR LOGIN user_etl;
+END
+GO
+
+-- =====================================================
+-- 5. ASSIGN ROLES
+-- =====================================================
+
+ALTER ROLE role_analyst ADD MEMBER user_bi;
+ALTER ROLE role_etl_admin ADD MEMBER user_etl;
+GO
+
+-- =====================================================
+-- SUCCESS NOTICE
+-- =====================================================
+PRINT '======================================================';
+PRINT '10_Security.sql executed successfully';
+PRINT '======================================================';
+PRINT 'Roles created: role_analyst, role_etl_admin';
+PRINT 'Permissions assigned via Schema-level grants.';
+PRINT 'Users mapped:';
+PRINT '1. user_bi (Mapped to role_analyst)';
+PRINT '2. user_etl (Mapped to role_etl_admin)';
+PRINT '======================================================';
+
+-- ====================== END OF FILE ======================
