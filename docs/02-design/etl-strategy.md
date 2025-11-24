@@ -111,11 +111,11 @@ Data Mart Biro Akademik Umum ITERA dirancang untuk mengintegrasikan data dari 6 
 | Layer | Technology | Purpose | Justification |
 | - | - | - | - |
 |**Extraction**|Python 3.10 + pandas|Data extraction & CSV generation|Flexibility, library support, synthetic data generation|
-|**Staging**|PostgreSQL Tables (stg schema)|Temporary raw data storage|Native integration, transaction support|
-|**Transformation**|PL/pgSQL Stored Procedures|Business logic execution|Performance, maintainability, version control|
-|**Loading**|PostgreSQL COPY / INSERT|SCD handling & incremental load|Native SCD support, atomic operations|
-|**Orchestration**|Python Script / Crontab|Job scheduling & dependency management|Built-in, no additional cost|
-|**Monitoring**|Custom Log Tables|Performance tracking & auditing|Native, low overhead, no extra tools|
+|**Staging**|SQL Server Tables (stg schema)|Temporary raw data storage|Native integration, transaction support|
+|**Transformation**|T-SQL Stored Procedures|Business logic execution|Performance, maintainability, version control|
+|**Loading**|BULK INSERT / T-SQL MERGE|SCD handling & incremental load|Native SCD support, efficient batch loading|
+|**Orchestration**|SQL Server Agent / Python|Job scheduling & dependency management|Standard enterprise scheduler|
+|**Monitoring**|Custom Log Tables|Performance tracking & auditing|Native logging schema (etl_log)|
 |**Version Control**|GitHub|Code & documentation management|Collaboration, backup, versioning|
 ---
 ### 1.4 Environment Strategy
