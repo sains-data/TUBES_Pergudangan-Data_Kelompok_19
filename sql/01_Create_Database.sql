@@ -31,6 +31,7 @@ IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = 'analytics') EXEC('CREATE 
 GO
 IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = 'reports') EXEC('CREATE SCHEMA [reports]');
 GO
+IF NOT EXISTS (SELECT * FROM sys.schemas WHERE name = 'etl') EXEC('CREATE SCHEMA [etl]');
 
 -- =====================================================
 -- DW METADATA
