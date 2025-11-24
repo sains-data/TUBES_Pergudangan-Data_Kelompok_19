@@ -1,0 +1,21 @@
+﻿kode_unit,nama_unit,tipe_unit,parent_kode_unit,kepala_unit,created_date
+UNIT-001,Rektorat ITERA,REKTORAT,,Prof. Dr. Rektor ITERA,2025-11-24 11:57:42
+UNIT-002,Biro Akademik Umum,BIRO,UNIT-001,Dr. Kepala Biro 2,2025-11-24 11:57:42
+UNIT-003,Biro Keuangan,BIRO,UNIT-001,Dr. Kepala Biro 3,2025-11-24 11:57:42
+UNIT-004,Biro Kepegawaian,BIRO,UNIT-001,Dr. Kepala Biro 4,2025-11-24 11:57:42
+UNIT-005,Biro Umum,BIRO,UNIT-001,Dr. Kepala Biro 5,2025-11-24 11:57:42
+UNIT-006,Biro Perencanaan,BIRO,UNIT-001,Dr. Kepala Biro 6,2025-11-24 11:57:42
+UNIT-007,Fakultas Teknik,FAKULTAS,UNIT-001,Prof. Dekan Fakultas 7,2025-11-24 11:57:42
+UNIT-008,Fakultas Sains,FAKULTAS,UNIT-001,Prof. Dekan Fakultas 8,2025-11-24 11:57:42
+UNIT-009,Fakultas Teknologi Industri,FAKULTAS,UNIT-001,Prof. Dekan Fakultas 9,2025-11-24 11:57:42
+UNIT-010,Fakultas Informatika,FAKULTAS,UNIT-001,Prof. Dekan Fakultas 10,2025-11-24 11:57:42
+UNIT-011,Fakultas Bisnis,FAKULTAS,UNIT-001,Prof. Dekan Fakultas 11,2025-11-24 11:57:42
+UNIT-012,Unit Organisasi 12,UPT,UNIT-010,Dr. Kepala Unit 12,2025-11-24 11:57:42
+UNIT-013,Unit Organisasi 13,LEMBAGA,UNIT-011,Dr. Kepala Unit 13,2025-11-24 11:57:42
+UNIT-014,Unit Organisasi 14,UPT,UNIT-007,Dr. Kepala Unit 14,2025-11-24 11:57:42
+UNIT-015,Unit Organisasi 15,UPT,UNIT-001,Dr. Kepala Unit 15,2025-11-24 11:57:42
+UNIT-016,Unit Organisasi 16,UPT,UNIT-009,,2025-11-24 11:57:42
+UNIT-017,Unit Organisasi 17,LEMBAGA,UNIT-004,Dr. Kepala Unit 17,2025-11-24 11:57:42
+UNIT-018,Unit Organisasi 18,LEMBAGA,UNIT-007,,2025-11-24 11:57:42
+UNIT-019,Unit Organisasi 19,LEMBAGA,UNIT-008,Dr. Kepala Unit 19,2025-11-24 11:57:42
+UNIT-020,Unit Organisasi 20,LEMBAGA,UNIT-011,Dr. Kepala Unit 20,2025-11-24 11:57:42
