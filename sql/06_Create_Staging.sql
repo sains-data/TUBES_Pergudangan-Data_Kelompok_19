@@ -191,8 +191,9 @@ GO
 IF OBJECT_ID('analytics.vw_staging_inventaris_quality', 'V') IS NOT NULL DROP VIEW analytics.vw_staging_inventaris_quality;
 GO
 
+-- [FIX]: Added Aliases (AS issue_type, AS issue_count)
 CREATE VIEW analytics.vw_staging_inventaris_quality AS
-SELECT 'Missing kode_barang', COUNT(*)
+SELECT 'Missing kode_barang' AS issue_type, COUNT(*) AS issue_count
 FROM stg.stg_inventaris WHERE kode_barang IS NULL OR TRIM(kode_barang) = ''
 UNION ALL
 SELECT 'Missing nama_barang', COUNT(*)
@@ -209,8 +210,9 @@ GO
 IF OBJECT_ID('analytics.vw_staging_pegawai_quality', 'V') IS NOT NULL DROP VIEW analytics.vw_staging_pegawai_quality;
 GO
 
+-- [FIX]: Added Aliases (AS issue_type, AS issue_count)
 CREATE VIEW analytics.vw_staging_pegawai_quality AS
-SELECT 'Missing NIP', COUNT(*)
+SELECT 'Missing NIP' AS issue_type, COUNT(*) AS issue_count
 FROM stg.stg_simpeg WHERE nip IS NULL OR TRIM(nip) = ''
 UNION ALL
 SELECT 'Missing nama', COUNT(*)
