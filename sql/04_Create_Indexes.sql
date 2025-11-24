@@ -19,11 +19,7 @@
 -- =====================================================
 -- SECTION 1: CLUSTERED INDEX OPTIMIZATION
 -- =====================================================
--- In SQL Server, the PRIMARY KEY constraints defined in 02 and 03 
--- automatically created CLUSTERED indexes on the surrogate keys.
--- No action needed here unless we want to change the clustering key 
--- (e.g., clustering by Date instead of ID), but for this stage, 
--- clustering by Surrogate Key (Identity) is best for insert performance.
+-- Automatically handled by Primary Keys in previous scripts.
 
 -- =====================================================
 -- SECTION 2: NON-CLUSTERED INDEXES FOR FK COLUMNS
@@ -77,7 +73,7 @@ CREATE INDEX ix_dim_lokasi_kode ON dim.dim_lokasi(kode_lokasi);
 -- 2.2 ADDITIONAL INDEXES ON FACT_SURAT
 -- ------------------------------------------------------
 
--- FK Indexes not covered by 03
+-- FK Indexes
 IF NOT EXISTS (SELECT * FROM sys.indexes WHERE name = 'ix_fact_surat_unit_penerima' AND object_id = OBJECT_ID('fact.fact_surat'))
 CREATE INDEX ix_fact_surat_unit_penerima ON fact.fact_surat(unit_penerima_key) WHERE unit_penerima_key IS NOT NULL;
 
@@ -134,8 +130,10 @@ CREATE INDEX ix_fact_aset_lokasi_unit ON fact.fact_aset(lokasi_key, unit_pemilik
 IF NOT EXISTS (SELECT * FROM sys.indexes WHERE name = 'ix_fact_surat_over_sla' AND object_id = OBJECT_ID('fact.fact_surat'))
 CREATE INDEX ix_fact_surat_over_sla ON fact.fact_surat(tanggal_key, jenis_surat_key, durasi_proses_hari) WHERE melewati_sla_flag = 1;
 
+-- [FIXED]: Mengganti NOT IN dengan operator <>
 IF NOT EXISTS (SELECT * FROM sys.indexes WHERE name = 'ix_fact_surat_in_process' AND object_id = OBJECT_ID('fact.fact_surat'))
-CREATE INDEX ix_fact_surat_in_process ON fact.fact_surat(tanggal_key, status_akhir) WHERE status_akhir NOT IN ('Selesai', 'Arsip');
+CREATE INDEX ix_fact_surat_in_process ON fact.fact_surat(tanggal_key, status_akhir) 
+WHERE status_akhir <> 'Selesai' AND status_akhir <> 'Arsip';
 
 IF NOT EXISTS (SELECT * FROM sys.indexes WHERE name = 'ix_fact_surat_digital' AND object_id = OBJECT_ID('fact.fact_surat'))
 CREATE INDEX ix_fact_surat_digital ON fact.fact_surat(tanggal_key, channel) WHERE channel IN ('Email', 'Sistem');
@@ -205,35 +203,6 @@ IF NOT EXISTS (SELECT * FROM sys.indexes WHERE name = 'ix_error_severity' AND ob
 CREATE INDEX ix_error_severity ON etl_log.error_details(severity, resolution_status, error_timestamp DESC);
 
 -- =====================================================
--- VALIDATION QUERIES (SQL Server)
--- =====================================================
-
-/*
--- Check index count
-SELECT 
-    s.name AS schema_name,
-    t.name AS table_name,
-    COUNT(*) AS index_count
-FROM sys.indexes i
-INNER JOIN sys.tables t ON i.object_id = t.object_id
-INNER JOIN sys.schemas s ON t.schema_id = s.schema_id
-WHERE s.name IN ('dim', 'fact', 'etl_log')
-GROUP BY s.name, t.name
-ORDER BY s.name, t.name;
-
--- Check index usage stats
-SELECT 
-    OBJECT_NAME(s.object_id) AS table_name,
-    i.name AS index_name,
-    s.user_seeks,
-    s.user_scans,
-    s.user_lookups
-FROM sys.dm_db_index_usage_stats s
-INNER JOIN sys.indexes i ON s.object_id = i.object_id AND s.index_id = i.index_id
-WHERE OBJECTPROPERTY(s.object_id,'IsUserTable') = 1;
-*/
-
--- =====================================================
 -- SUCCESS NOTICE
 -- =====================================================
 PRINT '======================================================';
@@ -241,7 +210,7 @@ PRINT '04_Create_Indexes.sql executed successfully';
 PRINT '======================================================';
 PRINT 'Summary:';
 PRINT '- Indexes created for Dimensions, Facts, and ETL logs';
-PRINT '- Filtered indexes adjusted for SQL Server (BIT values)';
+PRINT '- Fixed syntax error on Filtered Index (using <> instead of NOT IN)';
 PRINT '';
 PRINT 'Next steps:';
 PRINT '1. Update Statistics: EXEC sp_updatestats;';
