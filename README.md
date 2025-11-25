@@ -2,15 +2,12 @@
 
 ![Logo Tugas Besar Data Warehouse Gasal 2025](https://github.com/sains-data/Data-Warehouse-2025-Gasal/blob/main/Logo-DW-Gasal-2025.gif)
 
-**Tugas Besar Pergudangan Data (SD25-31007)**  
-**Program Studi Sains Data - Fakultas Sains**  
-**Institut Teknologi Sumatera**  
-**Tahun Ajaran 2024/2025**
+**Tugas Besar Pergudangan Data (SD25-31007)** **Program Studi Sains Data - Fakultas Sains** **Institut Teknologi Sumatera** **Tahun Ajaran 2024/2025**
 
 ![Status](https://img.shields.io/badge/Status-Active-brightgreen)
 ![Misi 1](https://img.shields.io/badge/Misi%201-Complete-success)
 ![Misi 2](https://img.shields.io/badge/Misi%202-Complete-success)
-![Misi 3](https://img.shields.io/badge/Misi%203-In%20Progress-yellow)
+![Misi 3](https://img.shields.io/badge/Misi%203-Ready-yellow)
 ![Documentation](https://img.shields.io/badge/Documentation-Excellent-blue)
 
 ---
@@ -39,13 +36,6 @@ Data Mart Biro Akademik Umum (BAU) ITERA adalah solusi Business Intelligence yan
 
 ### 📊 Ruang Lingkup
 
-**Area Tanggung Jawab BAU:**
-- Pengelolaan surat-menyurat dan kearsipan dokumen institusi
-- Manajemen inventaris, aset, dan pengadaan perlengkapan kerja
-- Administrasi dan pengembangan kepegawaian
-- Pelayanan kesekretariatan dan operasional harian
-- Monitoring, evaluasi, dan pelaporan kinerja administrasi
-
 **Dimensi (7 tables):**
 - `dim.waktu` - Time dimension (2020-2030)
 - `dim.pegawai` - Employee dimension (SCD Type 2)
@@ -53,7 +43,7 @@ Data Mart Biro Akademik Umum (BAU) ITERA adalah solusi Business Intelligence yan
 - `dim.jenis_surat` - Document types & SLA
 - `dim.jenis_layanan` - Service types & SLA
 - `dim.jenis_aset` - Asset types & specifications
-- `dim.status_layanan` - Service status definitions
+- `dim.lokasi` - Location details
 
 **Fakta (3 tables):**
 - `fact.surat` - Correspondence transactions (Grain: per surat)
@@ -68,79 +58,39 @@ Data Mart Biro Akademik Umum (BAU) ITERA adalah solusi Business Intelligence yan
 
 | Komponen | Teknologi |
 |----------|-----------|
-| **Database** | PostgreSQL 16 / Microsoft SQL Server 2019 / Azure SQL Database |
-| **ETL** | Python (Pandas) + PL/pgSQL / T-SQL Stored Procedures |
-| **Management Tools** | pgAdmin4 / SSMS & Azure Data Studio |
+| **Database** | Microsoft SQL Server 2019 / Azure SQL Database |
+| **ETL** | Python (Pandas) & T-SQL Stored Procedures |
+| **Management Tools** | SSMS & Azure Data Studio |
 | **BI Tools** | Power BI Desktop |
-| **Cloud** | Azure VM (Ubuntu) |
+| **Cloud** | Azure VM (Windows/Linux) |
 | **Version Control** | Git & GitHub |
 | **Modeling Approach** | Kimball Dimensional Modeling (Star Schema) |
 
 ### ETL Architecture
 
+```mermaid
+graph TD
+    subgraph Sources
+    S1[SIMASTER]
+    S2[Inventaris]
+    S3[SIMPEG]
+    S4[Layanan]
+    end
+
+    subgraph SQL_Server
+    STG[(Staging Area)]
+    ETL[Stored Procedures]
+    DW[(Data Warehouse)]
+    end
+
+    S1 -->|CSV Import| STG
+    S2 -->|CSV Import| STG
+    S3 -->|CSV Import| STG
+    S4 -->|CSV Import| STG
+    
+    STG -->|usp_MasterETL| ETL
+    ETL -->|Transform & Load| DW
 ```
-┌─────────────────────────────────────────────────────────┐
-│               SOURCE SYSTEMS (6)                        │
-│  SIMASTER | Inventaris | SIMPEG | Layanan |            │
-│           Monitoring | Unit Organisasi                  │
-└────────────────────┬────────────────────────────────────┘
-                     │
-                     ▼
-┌─────────────────────────────────────────────────────────┐
-│              EXTRACTION LAYER                           │
-│      Python + ODBC → CSV Export / Direct Load          │
-└────────────────────┬────────────────────────────────────┘
-                     │
-                     ▼
-┌─────────────────────────────────────────────────────────┐
-│             STAGING AREA (stg.*)                        │
-│  Temporary storage for raw data validation             │
-└────────────────────┬────────────────────────────────────┘
-                     │
-                     ▼
-┌─────────────────────────────────────────────────────────┐
-│          TRANSFORMATION LAYER                           │
-│   PL/pgSQL / T-SQL Stored Procedures                   │
-│   - Data Cleansing & Validation                        │
-│   - Business Rules Application                         │
-│   - SCD Type 2 for dim.pegawai                         │
-│   - Surrogate Key Generation                           │
-└────────────────────┬────────────────────────────────────┘
-                     │
-                     ▼
-┌─────────────────────────────────────────────────────────┐
-│          DATA WAREHOUSE (Star Schema)                   │
-│           dim.* (7 dimensions)                         │
-│           fact.* (3 fact tables)                       │
-└─────────────────────────────────────────────────────────┘
-```
-
-Diagram lengkap: [ETL Architecture](docs/03-implementation/ETL_Architecture_BAU_ITERA.png)
-
----
-
-## 🎯 Key Performance Indicators (KPIs)
-
-### 1. Efektivitas Layanan
-- **Tingkat akurasi pencatatan surat** (target: >98%, diukur bulanan)
-- **Waktu pencarian arsip** (target: <15 menit, diukur per kasus)
-- **Waktu respon permintaan layanan** (target: <24 jam, diukur harian)
-- **SLA compliance rate** (% on-time)
-- **Average satisfaction rating** (target: >4.0/5.0)
-
-### 2. Pengelolaan Aset & Data
-- **Persentase aset terlabeli dan tercatat** (target: 100%, diukur semester)
-- **Akurasi data kepegawaian** (target: 100%, diukur triwulan)
-- **Total asset value & depreciation trends**
-- **Asset condition distribution**
-
-### 3. Kinerja Strategis
-- **Ketepatan waktu pelaporan rutin** (target: 100%, diukur bulanan)
-- **Tingkat kepuasan civitas akademika** (target: >4.0/5.0, diukur semester)
-- **Document processing time trends**
-- **Service type distribution analysis**
-
----
 
 ## 📁 Struktur Repository
 
@@ -149,137 +99,91 @@ TUBES_Pergudangan-Data_Kelompok-19/
 ├── README.md                          # ⭐ File ini
 ├── .gitignore
 │
-├── Data/                              # 📊 Data Files
-│   └── sample/                        # Sample data (400+ rows) ⭐
-│       ├── sample_stg_aset.csv
-│       ├── sample_stg_layanan.csv
-│       ├── sample_stg_pegawai.csv
-│       ├── sample_stg_surat (1).csv
-│       ├── sample_stg_unit_organisasi.csv
-│       └── tempat.csv
-│
-├── dashboards/                        # 📈 Power BI Dashboards
-│   └── PowerBI files/                 # .pbix files
-│       └── .gitkeep
+├── etl/                               # 🔄 ETL Components
+│   ├── sample_data/                   # Sample CSV Data (400+ rows)
+│   │   ├── stg_inventaris.csv
+│   │   ├── stg_layanan.csv
+│   │   ├── stg_simpeg.csv
+│   │   ├── stg_simaster_surat.csv
+│   │   └── stg_unit_kerja.csv
+│   └── scripts/                       # Python Generators
+│       └── generate_dummy_data.py
 │
 ├── docs/                              # 📚 Dokumentasi lengkap
-│   ├── 01-requirements/               # Misi 1: Requirements & Analysis
-│   │   ├── business-requirements.md
-│   │   ├── data-sources.md
-│   │   └── kpi-definitions.md
-│   ├── 02-design/                     # Misi 1 & 2: Design Documents
-│   │   ├── ERD.png
-│   │   ├── dimensional-model.svg
-│   │   ├── dimensional-model.md
-│   │   ├── data-dictionary.md
-│   │   ├── bus-matrix.md
-│   │   ├── source-to-target-mapping.md
-│   │   ├── etl-strategy.md
-│   │   └── ETL_Mapping_Spreadsheet.csv ⭐
-│   ├── 03-implementation/             # Misi 2: Technical Documentation
-│   │   ├── Technical_Documentation_Misi_2.md ⭐
-│   │   ├── ETL_Process_Flow.md ⭐
-│   │   ├── ETL_Architecture_BAU_ITERA.png ⭐
-│   │   ├── etl-documentation.md
-│   │   ├── user-manual.pdf
-│   │   └── operations-manual.pdf
-│   └── presentations/                 # Slide presentasi
+│   ├── 01-requirements/               # Misi 1 Documents
+│   ├── 02-design/                     # Misi 1 & 2 Design Documents
+│   └── 03-implementation/             # Misi 2 Technical Docs
+│       ├── Data Quality Report.pdf    # ⭐ Hasil Testing Misi 2
+│       ├── Performance Test Results.pdf
+│       └── Technical Documentation.pdf
 │
-├── etl/                               # 🔄 ETL Scripts (Python)
-│   ├── packages/                      # ETL packages/modules
-│   ├── scripts/                       # ETL execution scripts
-│   └── ETL architecture diagram.png   # ⭐ Architecture visualization
-│
-├── sql/                               # 💾 SQL Scripts
-│   ├── 01_Create_Database.sql         # ⭐ Database initialization
-│   ├── 02_Create_Dimensions.sql       # Dimension tables DDL
-│   ├── 03_Create_Facts.sql            # Fact tables DDL
-│   ├── 04_Create_Indexes.sql          # Indexes & constraints
-│   ├── 05_Create_Partitions.sql       # Table partitioning
-│   ├── 06_Create_Staging.sql          # Staging tables DDL
-│   ├── 07_ETL_Procedures.sql          # ETL stored procedures
-│   ├── 08_Data_Quality_Checks.sql     # Data quality validation
-│   ├── 09_Test_Queries.sql            # Testing & verification
-│   ├── 10_Security.sql                # Security & access control
-│   └── 11_Backup                      # Backup procedures
+├── sql/                               # 💾 SQL Scripts (T-SQL)
+│   ├── 01_Create_Database.sql         # Schema setup
+│   ├── 02_Create_Dimensions.sql       # Dim tables + Seeding
+│   ├── 03_Create_Facts.sql            # Fact tables
+│   ├── 04_Create_Indexes.sql          # Optimization
+│   ├── 05_Create_Partitions.sql       # Partitioning
+│   ├── 06_Create_Staging.sql          # Validation views
+│   ├── 07_ETL_Procedures.sql          # Main ETL Logic
+│   ├── 08_Data_Quality_Checks.sql     # DQ Logic
+│   ├── 09_Test_Queries.sql            # Performance tests
+│   ├── 10_Security.sql                # RBAC
+│   ├── 11_Backup.sql                  # Backup ops
+│   └── 12_Run_ETL_Pipeline.sql        # ⭐ ONE-CLICK DEMO
 │
 └── tests/                             # 🧪 Testing Scripts
-    ├── unit_tests/
-    ├── integration_tests/
-    ├── data_quality_tests/
-    └── test_results/
 ```
 
 ---
 
-## 🚀 Quick Start
+## 🚀 Quick Start (Cara Menjalankan)
 
-### Prerequisites
+Ikuti panduan "Zero-Friction" ini untuk membangun dan menjalankan Data Mart secara otomatis di lingkungan lokal Anda.
 
-- **PostgreSQL 16+** atau **Microsoft SQL Server 2019+**
-- **Python 3.10+** (untuk ETL scripts)
-- **Power BI Desktop** (untuk dashboard)
-- **Git** (untuk version control)
-- **pgAdmin4** atau **SSMS** (untuk database management)
+### 1. Persiapan Database
+1.  Pastikan **SQL Server 2019+** dan **SSMS** (atau Azure Data Studio) sudah terinstall.
+2.  Buka SSMS dan buat database baru bernama: **`datamart_bau_itera`**.
+3.  Buka folder `sql/` di repository ini.
+4.  Jalankan script SQL berikut secara berurutan (Tekan F5):
+    * `01_Create_Database.sql` (Membuat Schema & Tabel)
+    * `02_Create_Dimensions.sql` (Membuat Dimensi & Seeding Data Referensi)
+    * `03_Create_Facts.sql` (Membuat Fakta)
+    * `04_Create_Indexes.sql` (Optimasi Index)
+    * `05_Create_Partitions.sql` (Partisi Tabel Fakta)
+    * `06_Create_Staging.sql` (View Monitoring & Validasi)
+    * `07_ETL_Procedures.sql` (Mesin ETL Utama)
+    * `08_Data_Quality_Checks.sql` (Prosedur Validasi Kualitas)
+    * `10_Security.sql` (User & Roles)
+    * `11_Backup.sql` (Prosedur Backup)
 
-### Setup Database (PostgreSQL)
+### 2. Import Data Dummy (PENTING!)
+Sistem membutuhkan data mentah agar bisa bekerja.
+1.  Di SSMS, Klik Kanan Database `datamart_bau_itera` > **Tasks** > **Import Flat File...**
+2.  Pilih file CSV dari folder `etl/sample_data/`.
+3.  **PENTING:** Biarkan nama tabel tujuan **DEFAULT** (sesuai nama file CSV) dan schema **dbo**.
+    * Contoh: File `stg_unit_kerja.csv` -> Table `dbo.stg_unit_kerja`
+4.  Klik **Next** > **Finish**.
+5.  Ulangi untuk ke-5 file CSV.
 
-```bash
-# 1. Clone repository
-git clone https://github.com/username/TUBES_Pergudangan-Data_Kelompok-19.git
-cd TUBES_Pergudangan-Data_Kelompok-19
+> *Catatan: Script ETL kami memiliki fitur "Smart Ingestion" yang otomatis mendeteksi tabel import tersebut.*
 
-# 2. Create database
-psql -U postgres -c "CREATE DATABASE datamart_bau_itera;"
+### 3. Eksekusi ETL (Satu Klik)
+Setelah data diimpor, jalankan script otomatisasi berikut:
 
-# 3. Run DDL scripts (in order)
-psql -U postgres -d datamart_bau_itera -f sql/01_Create_Database.sql
-psql -U postgres -d datamart_bau_itera -f sql/02_Create_Dimensions.sql
-psql -U postgres -d datamart_bau_itera -f sql/03_Create_Facts.sql
-psql -U postgres -d datamart_bau_itera -f sql/04_Create_Indexes.sql
-psql -U postgres -d datamart_bau_itera -f sql/05_Create_Partitions.sql
-psql -U postgres -d datamart_bau_itera -f sql/06_Create_Staging.sql
+1.  Buka file **`sql/12_Run_ETL_Pipeline.sql`**.
+2.  Tekan **Execute (F5)**.
 
-# 4. Load sample data
-psql -U postgres -d datamart_bau_itera -c "\COPY stg.surat FROM 'Data/sample/sample_stg_surat (1).csv' CSV HEADER;"
-psql -U postgres -d datamart_bau_itera -c "\COPY stg.layanan FROM 'Data/sample/sample_stg_layanan.csv' CSV HEADER;"
-psql -U postgres -d datamart_bau_itera -c "\COPY stg.aset FROM 'Data/sample/sample_stg_aset.csv' CSV HEADER;"
-psql -U postgres -d datamart_bau_itera -c "\COPY stg.pegawai FROM 'Data/sample/sample_stg_pegawai.csv' CSV HEADER;"
-psql -U postgres -d datamart_bau_itera -c "\COPY stg.unit_organisasi FROM 'Data/sample/sample_stg_unit_organisasi.csv' CSV HEADER;"
+Script ini akan secara otomatis:
+* ✅ Mereset status staging.
+* ✅ Menjalankan *Master ETL Stored Procedure* (Memindahkan data Staging -> DW).
+* ✅ Menampilkan jumlah baris data yang berhasil masuk.
+* ✅ Menjalankan *Data Quality Checks* dan menampilkan laporannya.
 
-# 5. Verify installation
-psql -U postgres -d datamart_bau_itera -c "SELECT schema_name FROM information_schema.schemata WHERE schema_name IN ('stg', 'dim', 'fact', 'etl_log', 'dw');"
-```
-
-### Setup via pgAdmin4 (Alternative)
-
-1. Buka **pgAdmin4**
-2. Create new database: `datamart_bau_itera`
-3. Open Query Tool pada database tersebut
-4. Execute script: `sql/01_ddl/01_Create_Database_PostgreSQL.sql`
-5. Verifikasi dengan menjalankan validation queries di akhir script
-
-### Run ETL
-
-```bash
-# Option 1: Run full ETL via SQL
-psql -U postgres -d datamart_bau_itera -c "CALL dw.run_etl_full();"
-
-# Option 2: Run individual ETL procedures
-psql -U postgres -d datamart_bau_itera -f sql/07_ETL_Procedures.sql
-
-# Option 3: Run Python extraction script (if available)
-cd etl/scripts
-python extract_all.py
-```
-
-### Open Dashboard
-
-```bash
-# Open Power BI file
-open dashboards/PowerBI\ files/DataMart_BAU_ITERA.pbix
-```
-
+### 4. Verifikasi Hasil
+Untuk melihat bukti performa query:
+1.  Buka file **`sql/09_Test_Queries.sql`**.
+2.  Jalankan (F5).
+3.  Cek tab **Messages** untuk melihat waktu eksekusi (`CPU time` & `Elapsed time`).
 ---
 
 ## 📚 Dokumentasi Lengkap
@@ -362,38 +266,6 @@ open dashboards/PowerBI\ files/DataMart_BAU_ITERA.pbix
 | **Documentation** | 70+ KB markdown |
 | **Test Coverage** | Unit + Integration + Data Quality tests |
 | **Time Dimension Range** | 2020-2030 (10 years) |
-
----
-
-## 🧪 Testing & Validation
-
-### Run Tests
-
-```bash
-# Data Quality Tests
-psql -U postgres -d datamart_bau_itera -f tests/data_quality_tests/test_data_quality.sql
-
-# Unit Tests (Dimensions)
-psql -U postgres -d datamart_bau_itera -f tests/unit_tests/test_etl_dimensions.sql
-
-# Integration Tests (Full ETL)
-psql -U postgres -d datamart_bau_itera -f tests/integration_tests/test_full_etl.sql
-
-# Validation Queries
-psql -U postgres -d datamart_bau_itera -f sql/05_queries/09_Test_Queries.sql
-```
-
-### Test Coverage
-- ✅ Dimension loading (dim.waktu, dim.pegawai, dim.unit_organisasi, etc.)
-- ✅ Fact table population (fact.surat, fact.layanan, fact.aset)
-- ✅ SCD Type 2 implementation (dim.pegawai)
-- ✅ Referential integrity
-- ✅ Business rule validation
-- ✅ Data completeness checks
-- ✅ Row count validation
-
-### Test Results
-- [Test Results Misi 2](tests/test_results/test_results_misi2.md)
 
 ---
 
