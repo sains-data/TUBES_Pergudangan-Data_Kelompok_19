@@ -131,7 +131,7 @@ BEGIN
         tanggal_masuk       DATE,
         status_kepegawaian  VARCHAR(30),
         email               VARCHAR(100),
-        no_hp               VARCHAR(15),
+        no_hp               VARCHAR(50),
         extract_timestamp   DATETIME DEFAULT GETDATE(),
         is_processed        BIT DEFAULT 0
     );
