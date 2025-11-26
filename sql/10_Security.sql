@@ -29,9 +29,6 @@ IF USER_ID('user_etl') IS NOT NULL DROP USER user_etl;
 IF DATABASE_PRINCIPAL_ID('role_analyst') IS NOT NULL DROP ROLE role_analyst;
 IF DATABASE_PRINCIPAL_ID('role_etl_admin') IS NOT NULL DROP ROLE role_etl_admin;
 
--- Note: We do not drop Server Logins automatically to prevent locking out connections 
--- if this script is run on a shared server. We create them if missing.
-
 -- =====================================================
 -- 2. CREATE DATABASE ROLES
 -- =====================================================
@@ -47,10 +44,8 @@ GO
 -- all current AND future tables/views/sequences in that schema.
 
 -- --- ROLE: ANALYST (Read Only) ---
-GRANT USAGE ON SCHEMA :: dim TO role_analyst; -- Allow access to schema
-GRANT USAGE ON SCHEMA :: fact TO role_analyst;
-GRANT USAGE ON SCHEMA :: analytics TO role_analyst;
-GRANT USAGE ON SCHEMA :: reports TO role_analyst;
+-- Note: Removed 'GRANT USAGE' as it is PostgreSQL syntax. 
+-- In SQL Server, GRANT SELECT is sufficient.
 
 GRANT SELECT ON SCHEMA :: dim TO role_analyst;
 GRANT SELECT ON SCHEMA :: fact TO role_analyst;
