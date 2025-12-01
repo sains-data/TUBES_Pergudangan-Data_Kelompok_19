@@ -25,7 +25,7 @@ BEGIN
     
     -- Loop through dates and insert
     WHILE v_current_date <= p_end_date LOOP
-        v_date_key := TO_NUMBER(TO_CHAR(v_current_date, 'YYYYMMDD'), '99999999');
+        v_date_key := CAST(TO_CHAR(v_current_date, 'YYYYMMDD') AS INT);
         
         INSERT INTO dim.dim_waktu (tanggal_key, tanggal, hari, bulan, tahun, quarter, minggu_tahun, hari_dalam_bulan, hari_kerja, bulan_tahun)
         VALUES (
@@ -149,7 +149,7 @@ CREATE OR REPLACE PROCEDURE etl.load_fact_aset() AS $$
 DECLARE
     v_snapshot_date_key INT;
 BEGIN
-    v_snapshot_date_key := TO_NUMBER(TO_CHAR(CURRENT_DATE, 'YYYYMMDD'), '99999999');
+    v_snapshot_date_key := CAST(TO_CHAR(CURRENT_DATE, 'YYYYMMDD') AS INT);
     
     INSERT INTO fact.fact_aset (tanggal_snapshot_key, barang_key, lokasi_key, unit_pemilik_key, jumlah_unit, nilai_perolehan, nilai_buku, kondisi, status_pemanfaatan, created_at)
     SELECT 
