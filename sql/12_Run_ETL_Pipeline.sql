@@ -18,9 +18,8 @@
 -- STEP 1: VERIFY STAGING DATA EXISTS
 -- =====================================================
 
-RAISE NOTICE '=== ETL PIPELINE EXECUTION STARTED ===';
+SELECT 'ETL Pipeline Execution Started' as step;
 
--- Count staging records
 SELECT 
     'stg_simaster_surat' as table_name,
     COUNT(*) as row_count
@@ -40,7 +39,7 @@ SELECT 'stg_unit_kerja', COUNT(*) FROM stg.stg_unit_kerja;
 -- STEP 2: EXECUTE MASTER ETL PROCEDURE
 -- =====================================================
 
-RAISE NOTICE 'Executing Master ETL...';
+SELECT 'Executing Master ETL...' as status;
 
 CALL etl.master_etl();
 
@@ -48,7 +47,7 @@ CALL etl.master_etl();
 -- STEP 3: RUN DATA QUALITY CHECKS
 -- =====================================================
 
-RAISE NOTICE 'Running Data Quality Checks...';
+SELECT 'Running Data Quality Checks...' as status;
 
 CALL etl.run_data_quality_checks();
 
@@ -56,7 +55,7 @@ CALL etl.run_data_quality_checks();
 -- STEP 4: VERIFY LOADED DATA
 -- =====================================================
 
-RAISE NOTICE 'Verifying loaded data...';
+SELECT 'Verifying loaded data...' as status;
 
 SELECT 
     'dim_waktu' as table_name,
@@ -85,7 +84,7 @@ SELECT 'fact_aset', COUNT(*) FROM fact.fact_aset;
 -- STEP 5: EXECUTION SUMMARY
 -- =====================================================
 
-RAISE NOTICE 'ETL Pipeline execution completed.';
+SELECT 'ETL Pipeline execution completed.' as final_status;
 
 SELECT 
     job_name,
@@ -99,7 +98,5 @@ SELECT
 FROM etl_log.job_execution
 ORDER BY execution_id DESC
 LIMIT 5;
-
-RAISE NOTICE '=== ETL PIPELINE EXECUTION COMPLETED ===';
 
 -- ====================== END OF FILE ======================
