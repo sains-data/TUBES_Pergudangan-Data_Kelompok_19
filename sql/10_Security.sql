@@ -10,18 +10,12 @@
 -- 1. CREATE ROLES
 -- =====================================================
 
-DROP ROLE IF EXISTS role_analyst CASCADE;
-DROP ROLE IF EXISTS role_etl_admin CASCADE;
-
-CREATE ROLE role_analyst WITH NOINHERIT;
-CREATE ROLE role_etl_admin WITH NOINHERIT;
+CREATE ROLE role_analyst NOINHERIT;
+CREATE ROLE role_etl_admin NOINHERIT;
 
 -- =====================================================
 -- 2. CREATE USERS (LOGINS)
 -- =====================================================
-
-DROP USER IF EXISTS user_bi CASCADE;
-DROP USER IF EXISTS user_etl CASCADE;
 
 CREATE USER user_bi WITH PASSWORD 'BiPassItera2025!' NOINHERIT;
 CREATE USER user_etl WITH PASSWORD 'EtlPassItera2025!' NOINHERIT;
@@ -68,7 +62,6 @@ GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA analytics TO role_etl_admin;
 GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA reports TO role_etl_admin;
 
 GRANT ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA etl TO role_etl_admin;
-GRANT ALL PRIVILEGES ON ALL PROCEDURES IN SCHEMA etl TO role_etl_admin;
 
 -- =====================================================
 -- 4. ASSIGN USERS TO ROLES
@@ -78,18 +71,11 @@ GRANT role_analyst TO user_bi;
 GRANT role_etl_admin TO user_etl;
 
 -- =====================================================
--- 5. SET ROLE DEFAULT
--- =====================================================
-
-ALTER USER user_bi IN DATABASE datamart_bau_itera SET ROLE role_analyst;
-ALTER USER user_etl IN DATABASE datamart_bau_itera SET ROLE role_etl_admin;
-
--- =====================================================
--- SUCCESS NOTICE
+-- 5. SUCCESS MESSAGE
 -- =====================================================
 
 SELECT 'Security setup completed successfully.' as status;
-SELECT 'Roles created: role_analyst, role_etl_admin' as info1;
-SELECT 'Users created: user_bi, user_etl' as info2;
+SELECT 'Roles: role_analyst (read-only), role_etl_admin (full)' as info1;
+SELECT 'Users: user_bi (analyst), user_etl (etl admin)' as info2;
 
 -- ====================== END OF FILE ======================
