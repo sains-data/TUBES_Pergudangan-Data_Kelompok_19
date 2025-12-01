@@ -1,200 +1,109 @@
 -- =====================================================
 -- 08_Data_Quality_Checks.sql
+-- POSTGRESQL VERSION (Fixed from SQL Server)
 -- Project : Data Mart Biro Akademik Umum ITERA
--- Purpose : Automated DQ Checks (Post-Load Validation)
--- Engine  : Microsoft SQL Server 2019+
--- Dependencies: 03_Create_Facts.sql must be executed first
--- Author  : Aldi (Project Lead)
+-- Purpose : Automated DQ Checks
+-- Engine  : PostgreSQL 14+
 -- =====================================================
-
-/*
-    DQ CHECK STRATEGY:
-    1. Completeness : Check NULL on critical columns (PK/FK).
-    2. Uniqueness   : Check duplication on Business Keys.
-    3. Consistency  : Check SCD logic and cross-column logic.
-    4. Accuracy     : Check value ranges (Negative Values, Future Dates).
-    
-    Output: Results stored in etl_log.data_quality_checks
-*/
 
 -- =====================================================
 -- HELPER PROCEDURE: LOGGING
 -- =====================================================
-IF OBJECT_ID('etl.usp_LogDQResult', 'P') IS NOT NULL DROP PROCEDURE etl.usp_LogDQResult;
-GO
 
-CREATE PROCEDURE etl.usp_LogDQResult
-    @ExecutionId INT,
-    @CheckName VARCHAR(100),
-    @TableName VARCHAR(100),
-    @ColumnName VARCHAR(100),
-    @FailedCount INT,
-    @Threshold INT,
-    @Notes VARCHAR(MAX)
-AS
+DROP PROCEDURE IF EXISTS etl.log_dq_result(INT, VARCHAR, VARCHAR, VARCHAR, INT, INT, VARCHAR) CASCADE;
+CREATE OR REPLACE PROCEDURE etl.log_dq_result(
+    p_execution_id INT,
+    p_check_name VARCHAR,
+    p_table_name VARCHAR,
+    p_column_name VARCHAR,
+    p_failed_count INT,
+    p_threshold INT,
+    p_notes VARCHAR
+) AS $$
+DECLARE
+    v_result VARCHAR(20);
 BEGIN
-    SET NOCOUNT ON;
-    DECLARE @Result VARCHAR(20);
-
-    IF @FailedCount > @Threshold
-        SET @Result = 'Fail';
-    ELSE IF @FailedCount > 0
-        SET @Result = 'Warning';
+    IF p_failed_count > p_threshold THEN
+        v_result := 'Fail';
+    ELSIF p_failed_count > 0 THEN
+        v_result := 'Warning';
     ELSE
-        SET @Result = 'Pass';
-
-    INSERT INTO etl_log.data_quality_checks (
-        execution_id,
-        check_name,
-        table_name,
-        column_name,
-        check_result,
-        actual_value,
-        expected_value,
-        notes
-    ) VALUES (
-        @ExecutionId,
-        @CheckName,
-        @TableName,
-        @ColumnName,
-        @Result,
-        CAST(@FailedCount AS VARCHAR(100)), -- Actual: Failed rows count
-        '0',                                -- Expected: 0 errors
-        @Notes
-    );
-END
-GO
+        v_result := 'Pass';
+    END IF;
+    
+    INSERT INTO etl_log.data_quality_checks (execution_id, check_name, table_name, column_name, check_result, actual_value, expected_value, notes)
+    VALUES (p_execution_id, p_check_name, p_table_name, p_column_name, v_result, p_failed_count::VARCHAR, '0', p_notes);
+END;
+$$ LANGUAGE plpgsql;
 
 -- =====================================================
 -- MAIN PROCEDURE: RUN ALL CHECKS
 -- =====================================================
-IF OBJECT_ID('etl.usp_RunDataQualityChecks', 'P') IS NOT NULL DROP PROCEDURE etl.usp_RunDataQualityChecks;
-GO
 
-CREATE PROCEDURE etl.usp_RunDataQualityChecks
-    @ExecutionId INT = NULL
-AS
+DROP PROCEDURE IF EXISTS etl.run_data_quality_checks(INT) CASCADE;
+CREATE OR REPLACE PROCEDURE etl.run_data_quality_checks(p_execution_id INT DEFAULT NULL) AS $$
+DECLARE
+    v_exec_id INT;
+    v_fail_count INT;
 BEGIN
-    SET NOCOUNT ON;
-    DECLARE @ExecID INT;
-    DECLARE @FailCount INT;
-
-    -- 1. Setup Execution ID (if null, create dummy for manual testing)
-    IF @ExecutionId IS NULL
-    BEGIN
-        INSERT INTO etl_log.job_execution (job_name, status) 
-        VALUES ('Manual_DQ_Check', 'Running');
-        SET @ExecID = SCOPE_IDENTITY();
-    END
+    -- Setup execution ID
+    IF p_execution_id IS NULL THEN
+        INSERT INTO etl_log.job_execution (job_name, status) VALUES ('Manual_DQ_Check', 'Running')
+        RETURNING execution_id INTO v_exec_id;
     ELSE
-    BEGIN
-        SET @ExecID = @ExecutionId;
-    END
-
-    PRINT 'Starting DQ Checks for Execution ID: ' + CAST(@ExecID AS VARCHAR);
-
-    -- =================================================
-    -- SECTION 1: DIMENSION CHECKS
-    -- =================================================
-
-    -- 1.1 Dim Pegawai: Check SCD Consistency
-    -- Rule: effective_date should not be greater than end_date
-    SELECT @FailCount = COUNT(*)
-    FROM dim.dim_pegawai
-    WHERE effective_date > end_date;
+        v_exec_id := p_execution_id;
+    END IF;
     
-    EXEC etl.usp_LogDQResult @ExecID, 'SCD Date Logic', 'dim_pegawai', 'effective_date', @FailCount, 0, 'Effective date > End date';
-
-    -- 1.2 Dim Pegawai: Check Uniqueness (Only 1 active record per NIP)
-    SELECT @FailCount = COUNT(*)
-    FROM (
-        SELECT nip
-        FROM dim.dim_pegawai 
-        WHERE is_current = 1 
-        GROUP BY nip 
-        HAVING COUNT(*) > 1
+    RAISE NOTICE 'Starting DQ Checks for Execution ID: %', v_exec_id;
+    
+    -- =====================================================
+    -- DIMENSION CHECKS
+    -- =====================================================
+    
+    -- 1.1 Dim Pegawai: SCD Date Logic
+    SELECT COUNT(*) INTO v_fail_count FROM dim.dim_pegawai WHERE effective_date > end_date;
+    CALL etl.log_dq_result(v_exec_id, 'SCD Date Logic', 'dim_pegawai', 'effective_date', v_fail_count, 0, 'Effective date > End date');
+    
+    -- 1.2 Dim Pegawai: Active Record Uniqueness
+    SELECT COUNT(*) INTO v_fail_count FROM (
+        SELECT nip FROM dim.dim_pegawai WHERE is_current = TRUE GROUP BY nip HAVING COUNT(*) > 1
     ) sub;
-
-    EXEC etl.usp_LogDQResult @ExecID, 'Active Record Uniqueness', 'dim_pegawai', 'is_current', @FailCount, 0, 'Multiple active records for single NIP';
-
-    -- 1.3 Dim Barang: Completeness (Kode Barang cannot be NULL/Empty)
-    SELECT @FailCount = COUNT(*)
-    FROM dim.dim_barang
-    WHERE kode_barang IS NULL OR TRIM(kode_barang) = '';
-
-    EXEC etl.usp_LogDQResult @ExecID, 'Mandatory Fields', 'dim_barang', 'kode_barang', @FailCount, 0, 'Missing Code';
-
-    -- =================================================
-    -- SECTION 2: FACT TABLE CHECKS
-    -- =================================================
-
-    -- 2.1 Fact Surat: Referential Integrity (Orphaned Keys)
-    -- Check for unit_pengirim_key not existing in dim_unit_kerja
-    SELECT @FailCount = COUNT(*)
-    FROM fact.fact_surat f
-    LEFT JOIN dim.dim_unit_kerja d ON f.unit_pengirim_key = d.unit_key
-    WHERE d.unit_key IS NULL;
-
-    EXEC etl.usp_LogDQResult @ExecID, 'FK Integrity', 'fact_surat', 'unit_pengirim_key', @FailCount, 0, 'Orphaned Unit Key';
-
-    -- 2.2 Fact Surat: Accuracy (Negative Duration)
-    -- Rule: Process duration cannot be negative
-    SELECT @FailCount = COUNT(*)
-    FROM fact.fact_surat
-    WHERE durasi_proses_hari < 0;
-
-    EXEC etl.usp_LogDQResult @ExecID, 'Value Accuracy', 'fact_surat', 'durasi_proses_hari', @FailCount, 0, 'Negative duration found';
-
-    -- 2.3 Fact Aset: Accuracy (Negative Asset Value)
-    SELECT @FailCount = COUNT(*)
-    FROM fact.fact_aset
-    WHERE nilai_perolehan < 0 OR nilai_buku < 0;
-
-    EXEC etl.usp_LogDQResult @ExecID, 'Financial Accuracy', 'fact_aset', 'nilai_perolehan', @FailCount, 0, 'Negative asset value';
-
-    -- 2.4 Fact Layanan: Consistency (SLA Flag Logic)
-    -- Rule: If duration > target, flag must be 1.
-    SELECT @FailCount = COUNT(*)
-    FROM fact.fact_layanan
-    WHERE status_akhir = 'Selesai'
-    AND (
-        (waktu_selesai_jam > sla_target_jam AND melewati_sla_flag = 0)
-        OR
-        (waktu_selesai_jam <= sla_target_jam AND melewati_sla_flag = 1)
+    CALL etl.log_dq_result(v_exec_id, 'Active Record Uniqueness', 'dim_pegawai', 'is_current', v_fail_count, 0, 'Multiple active records for single NIP');
+    
+    -- =====================================================
+    -- FACT TABLE CHECKS
+    -- =====================================================
+    
+    -- 2.1 Fact Surat: Referential Integrity
+    SELECT COUNT(*) INTO v_fail_count FROM fact.fact_surat f LEFT JOIN dim.dim_unit_kerja d ON f.unit_pengirim_key = d.unit_key WHERE d.unit_key IS NULL;
+    CALL etl.log_dq_result(v_exec_id, 'FK Integrity', 'fact_surat', 'unit_pengirim_key', v_fail_count, 0, 'Orphaned Unit Key');
+    
+    -- 2.2 Fact Surat: Negative Duration
+    SELECT COUNT(*) INTO v_fail_count FROM fact.fact_surat WHERE durasi_proses_hari < 0;
+    CALL etl.log_dq_result(v_exec_id, 'Value Accuracy', 'fact_surat', 'durasi_proses_hari', v_fail_count, 0, 'Negative duration found');
+    
+    -- 2.3 Fact Layanan: SLA Flag Logic
+    SELECT COUNT(*) INTO v_fail_count FROM fact.fact_layanan
+    WHERE status_akhir = 'Selesai' AND (
+        (waktu_selesai_jam > sla_target_jam AND melewati_sla_flag = FALSE) OR
+        (waktu_selesai_jam <= sla_target_jam AND melewati_sla_flag = TRUE)
     );
-
-    EXEC etl.usp_LogDQResult @ExecID, 'Logic Consistency', 'fact_layanan', 'melewati_sla_flag', @FailCount, 0, 'SLA Flag contradicts duration';
-
-    -- 2.5 Fact Layanan: Validity (Rating Range)
-    -- Rule: Rating must be between 1.0 and 5.0 (if not null)
-    SELECT @FailCount = COUNT(*)
-    FROM fact.fact_layanan
-    WHERE rating_kepuasan IS NOT NULL 
-    AND (rating_kepuasan < 1.0 OR rating_kepuasan > 5.0);
-
-    EXEC etl.usp_LogDQResult @ExecID, 'Range Validity', 'fact_layanan', 'rating_kepuasan', @FailCount, 0, 'Rating out of range (1-5)';
-
-    -- =================================================
-    -- FINISH
-    -- =================================================
-    PRINT 'DQ Checks completed successfully.';
+    CALL etl.log_dq_result(v_exec_id, 'Logic Consistency', 'fact_layanan', 'melewati_sla_flag', v_fail_count, 0, 'SLA Flag contradicts duration');
+    
+    RAISE NOTICE 'DQ Checks completed successfully.';
     
     -- Update job status if manual run
-    IF @ExecutionId IS NULL
-    BEGIN
-        UPDATE etl_log.job_execution 
-        SET status = 'Success', end_time = GETDATE() 
-        WHERE execution_id = @ExecID;
-    END
-END
-GO
+    IF p_execution_id IS NULL THEN
+        UPDATE etl_log.job_execution SET status = 'Success', end_time = CURRENT_TIMESTAMP WHERE execution_id = v_exec_id;
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
 
 -- =====================================================
 -- VIEW: DQ DASHBOARD SUMMARY
 -- =====================================================
-IF OBJECT_ID('reports.vw_dq_dashboard', 'V') IS NOT NULL DROP VIEW reports.vw_dq_dashboard;
-GO
 
+DROP VIEW IF EXISTS reports.vw_dq_dashboard CASCADE;
 CREATE VIEW reports.vw_dq_dashboard AS
 SELECT 
     CAST(dq.check_timestamp AS DATE) as check_date,
@@ -204,19 +113,6 @@ SELECT
     dq.actual_value as failed_rows,
     dq.notes
 FROM etl_log.data_quality_checks dq
-INNER JOIN (
-    SELECT MAX(execution_id) as max_id 
-    FROM etl_log.job_execution 
-    WHERE job_name LIKE '%DQ%'
-) latest ON dq.execution_id = latest.max_id
--- ORDER BY not allowed in VIEW without TOP
-GO
-
--- =====================================================
--- SUCCESS NOTICE
--- =====================================================
-PRINT '08_Data_Quality_Checks.sql executed successfully.';
-PRINT 'Procedure etl.usp_RunDataQualityChecks created.';
-PRINT 'View reports.vw_dq_dashboard created.';
+WHERE dq.execution_id = (SELECT MAX(execution_id) FROM etl_log.job_execution WHERE job_name LIKE '%DQ%');
 
 -- ====================== END OF FILE ======================
