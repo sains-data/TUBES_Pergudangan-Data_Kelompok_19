@@ -1,158 +1,132 @@
 -- =====================================================
 -- 11_Backup.sql
+-- POSTGRESQL VERSION (Fixed from SQL Server)
 -- Project : Data Mart Biro Akademik Umum ITERA
--- Purpose : Backup & Recovery Strategy Procedures
--- Engine  : Microsoft SQL Server 2019+
+-- Purpose : Backup & Recovery Strategy
+-- Engine  : PostgreSQL 14+
 -- =====================================================
 
 /*
-    BACKUP STRATEGY:
-    1. Full Backup: Weekly (Sunday @ 02:00)
-    2. Differential Backup: Daily (Mon-Sat @ 02:00)
-    3. Transaction Log Backup: Every 4 Hours
+    NOTE: PostgreSQL backup is done via command-line tools (pg_dump, pg_basebackup).
+    This script documents the backup strategy.
     
-    NOTE: Ensure the backup directory exists before running these procedures.
+    BACKUP COMMANDS (run from shell):
+    
+    1. Full Backup:
+    pg_dump -U datamart_user -d datamart_bau_itera -Fc -f backup_full_$(date +%Y%m%d).dump
+    
+    2. Restore Backup:
+    pg_restore -U postgres -d datamart_bau_itera backup_full_20250101.dump
+    
+    3. Backup entire cluster:
+    pg_dumpall -U postgres > backup_all_$(date +%Y%m%d).sql
 */
 
 -- =====================================================
--- 1. PROCEDURE: FULL BACKUP
+-- BACKUP PROCEDURE (Shell Commands Reference)
 -- =====================================================
-IF OBJECT_ID('dbo.usp_Backup_Full', 'P') IS NOT NULL DROP PROCEDURE dbo.usp_Backup_Full;
-GO
 
-CREATE PROCEDURE dbo.usp_Backup_Full
-    @BackupPath NVARCHAR(255) = N'C:\Backups\' -- Ganti path sesuai server
-AS
+CREATE TABLE IF NOT EXISTS dw.backup_log (
+    backup_id SERIAL PRIMARY KEY,
+    backup_type VARCHAR(50),
+    backup_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    backup_file VARCHAR(500),
+    status VARCHAR(20),
+    notes TEXT
+);
+
+-- =====================================================
+-- FUNCTION: LOG BACKUP EXECUTION
+-- =====================================================
+
+DROP FUNCTION IF EXISTS dw.log_backup(VARCHAR, VARCHAR, VARCHAR, TEXT) CASCADE;
+CREATE OR REPLACE FUNCTION dw.log_backup(
+    p_backup_type VARCHAR,
+    p_backup_file VARCHAR,
+    p_status VARCHAR,
+    p_notes TEXT DEFAULT NULL
+) RETURNS INT AS $$
+DECLARE
+    v_backup_id INT;
 BEGIN
-    SET NOCOUNT ON;
+    INSERT INTO dw.backup_log (backup_type, backup_file, status, notes)
+    VALUES (p_backup_type, p_backup_file, p_status, p_notes)
+    RETURNING backup_id INTO v_backup_id;
     
-    DECLARE @FileName NVARCHAR(500);
-    DECLARE @DateStamp NVARCHAR(20) = FORMAT(GETDATE(), 'yyyyMMdd_HHmmss');
-    DECLARE @DBName NVARCHAR(50) = DB_NAME();
-
-    -- Format: DBName_FULL_YYYYMMDD_HHMMSS.bak
-    SET @FileName = @BackupPath + @DBName + '_FULL_' + @DateStamp + '.bak';
-
-    PRINT 'Starting FULL Backup for ' + @DBName + ' to ' + @FileName;
-
-    BEGIN TRY
-        BACKUP DATABASE @DBName
-        TO DISK = @FileName
-        WITH 
-            FORMAT,             -- Overwrite header if exists
-            COMPRESSION,        -- Compress to save space
-            INIT,               -- Overwrite existing file
-            NAME = 'Full Database Backup',
-            STATS = 10;         -- Show progress every 10%
-            
-        PRINT 'FULL Backup completed successfully.';
-        
-        -- Log to Job Execution (Optional integration)
-        IF OBJECT_ID('etl_log.job_execution', 'U') IS NOT NULL
-            INSERT INTO etl_log.job_execution (job_name, status) VALUES ('Backup_Full', 'Success');
-    END TRY
-    BEGIN CATCH
-        PRINT 'Error during FULL Backup: ' + ERROR_MESSAGE();
-    END CATCH
-END
-GO
+    RETURN v_backup_id;
+END;
+$$ LANGUAGE plpgsql;
 
 -- =====================================================
--- 2. PROCEDURE: DIFFERENTIAL BACKUP
+-- BACKUP VERIFICATION QUERIES
 -- =====================================================
-IF OBJECT_ID('dbo.usp_Backup_Diff', 'P') IS NOT NULL DROP PROCEDURE dbo.usp_Backup_Diff;
-GO
 
-CREATE PROCEDURE dbo.usp_Backup_Diff
-    @BackupPath NVARCHAR(255) = N'C:\Backups\'
-AS
-BEGIN
-    SET NOCOUNT ON;
+-- View backup history
+CREATE OR REPLACE VIEW dw.vw_backup_history AS
+SELECT 
+    backup_id,
+    backup_type,
+    backup_timestamp,
+    backup_file,
+    status,
+    notes
+FROM dw.backup_log
+ORDER BY backup_timestamp DESC;
+
+-- =====================================================
+-- BACKUP STRATEGY DOCUMENTATION
+-- =====================================================
+
+/*
+    ===== RECOMMENDED BACKUP STRATEGY FOR POSTGRESQL =====
     
-    DECLARE @FileName NVARCHAR(500);
-    DECLARE @DateStamp NVARCHAR(20) = FORMAT(GETDATE(), 'yyyyMMdd_HHmmss');
-    DECLARE @DBName NVARCHAR(50) = DB_NAME();
-
-    -- Format: DBName_DIFF_YYYYMMDD_HHMMSS.bak
-    SET @FileName = @BackupPath + @DBName + '_DIFF_' + @DateStamp + '.bak';
-
-    PRINT 'Starting DIFFERENTIAL Backup for ' + @DBName + ' to ' + @FileName;
-
-    BEGIN TRY
-        BACKUP DATABASE @DBName
-        TO DISK = @FileName
-        WITH 
-            DIFFERENTIAL,       -- Capture only changes since last Full Backup
-            COMPRESSION,
-            INIT,
-            NAME = 'Differential Database Backup',
-            STATS = 10;
-            
-        PRINT 'DIFFERENTIAL Backup completed successfully.';
-    END TRY
-    BEGIN CATCH
-        PRINT 'Error during DIFFERENTIAL Backup: ' + ERROR_MESSAGE();
-    END CATCH
-END
-GO
-
--- =====================================================
--- 3. PROCEDURE: TRANSACTION LOG BACKUP
--- =====================================================
-IF OBJECT_ID('dbo.usp_Backup_Log', 'P') IS NOT NULL DROP PROCEDURE dbo.usp_Backup_Log;
-GO
-
-CREATE PROCEDURE dbo.usp_Backup_Log
-    @BackupPath NVARCHAR(255) = N'C:\Backups\'
-AS
-BEGIN
-    SET NOCOUNT ON;
+    1. FULL DATABASE BACKUP (Weekly - Sunday)
+    -----------------------------------------------
+    Command:
+    pg_dump -U datamart_user -d datamart_bau_itera -Fc -f /backup/datamart_FULL_$(date +%Y%m%d).dump
     
-    DECLARE @FileName NVARCHAR(500);
-    DECLARE @DateStamp NVARCHAR(20) = FORMAT(GETDATE(), 'yyyyMMdd_HHmmss');
-    DECLARE @DBName NVARCHAR(50) = DB_NAME();
+    Schedule: Weekly (Sunday 02:00 UTC)
+    Retention: 4 weeks
+    Location: /backup/ directory
+    
+    2. CONTINUOUS ARCHIVING (Daily)
+    -----------------------------------------------
+    Configure in postgresql.conf:
+    - wal_level = archive
+    - archive_mode = on
+    - archive_command = 'cp %p /backup/wal_archive/%f'
+    
+    This enables Point-in-Time Recovery (PITR)
+    
+    3. RESTORE PROCEDURE
+    -----------------------------------------------
+    Full Restore:
+    pg_restore -U postgres -d datamart_bau_itera -Fc /backup/datamart_FULL_20250101.dump
+    
+    Point-in-Time Restore (PITR):
+    Set recovery_target_timeline, recovery_target_time, etc. in recovery.conf
+    
+    4. BACKUP TESTING
+    -----------------------------------------------
+    Always test backups on a separate server:
+    createdb test_datamart
+    pg_restore -U postgres -d test_datamart -Fc /backup/datamart_FULL_20250101.dump
+    SELECT COUNT(*) FROM fact.fact_surat;  -- Verify data
+*/
 
-    -- Format: DBName_LOG_YYYYMMDD_HHMMSS.trn
-    SET @FileName = @BackupPath + @DBName + '_LOG_' + @DateStamp + '.trn';
+-- =====================================================
+-- SAMPLE: RECORD BACKUP COMPLETION
+-- =====================================================
 
-    PRINT 'Starting TRANSACTION LOG Backup for ' + @DBName + ' to ' + @FileName;
-
-    BEGIN TRY
-        -- Check Recovery Model first
-        IF (SELECT recovery_model_desc FROM sys.databases WHERE name = @DBName) = 'SIMPLE'
-        BEGIN
-            PRINT 'WARNING: Database is in SIMPLE recovery model. Log backup skipped.';
-            RETURN;
-        END
-
-        BACKUP LOG @DBName
-        TO DISK = @FileName
-        WITH 
-            COMPRESSION,
-            NOINIT,             -- Append to existing media set if needed
-            NAME = 'Transaction Log Backup',
-            STATS = 10;
-            
-        PRINT 'LOG Backup completed successfully.';
-    END TRY
-    BEGIN CATCH
-        PRINT 'Error during LOG Backup: ' + ERROR_MESSAGE();
-    END CATCH
-END
-GO
+-- Example: After manual full backup
+-- SELECT dw.log_backup('FULL', '/backup/datamart_FULL_20250128.dump', 'Success', 'Full database backup completed');
 
 -- =====================================================
 -- SUCCESS NOTICE
 -- =====================================================
-PRINT '======================================================';
-PRINT '11_Backup.sql executed successfully';
-PRINT '======================================================';
-PRINT 'Backup procedures created:';
-PRINT '1. dbo.usp_Backup_Full (Weekly)';
-PRINT '2. dbo.usp_Backup_Diff (Daily)';
-PRINT '3. dbo.usp_Backup_Log  (Hourly)';
-PRINT '';
-PRINT 'To execute manually: EXEC dbo.usp_Backup_Full @BackupPath = ''C:\YourPath\'';';
-PRINT '======================================================';
+
+SELECT 'Backup logging infrastructure created.' as status;
+SELECT 'Manual backup commands documented above.' as note1;
+SELECT 'See comments for recommended backup strategy.' as note2;
 
 -- ====================== END OF FILE ======================
