@@ -1,6 +1,6 @@
 -- =====================================================
 -- 11_Backup.sql
--- POSTGRESQL VERSION (Fixed from SQL Server)
+-- POSTGRESQL VERSION
 -- Project : Data Mart Biro Akademik Umum ITERA
 -- Purpose : Backup & Recovery Strategy
 -- Engine  : PostgreSQL 14+
@@ -8,7 +8,7 @@
 
 /*
     NOTE: PostgreSQL backup is done via command-line tools (pg_dump, pg_basebackup).
-    This script documents the backup strategy.
+    This script documents the backup strategy and creates logging infrastructure.
     
     BACKUP COMMANDS (run from shell):
     
@@ -23,7 +23,7 @@
 */
 
 -- =====================================================
--- BACKUP PROCEDURE (Shell Commands Reference)
+-- BACKUP LOGGING TABLE
 -- =====================================================
 
 CREATE TABLE IF NOT EXISTS dw.backup_log (
@@ -35,11 +35,12 @@ CREATE TABLE IF NOT EXISTS dw.backup_log (
     notes TEXT
 );
 
+CREATE INDEX IF NOT EXISTS ix_backup_log_timestamp ON dw.backup_log(backup_timestamp);
+
 -- =====================================================
 -- FUNCTION: LOG BACKUP EXECUTION
 -- =====================================================
 
-DROP FUNCTION IF EXISTS dw.log_backup(VARCHAR, VARCHAR, VARCHAR, TEXT) CASCADE;
 CREATE OR REPLACE FUNCTION dw.log_backup(
     p_backup_type VARCHAR,
     p_backup_file VARCHAR,
@@ -58,10 +59,9 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- =====================================================
--- BACKUP VERIFICATION QUERIES
+-- BACKUP HISTORY VIEW
 -- =====================================================
 
--- View backup history
 CREATE OR REPLACE VIEW dw.vw_backup_history AS
 SELECT 
     backup_id,
@@ -74,59 +74,11 @@ FROM dw.backup_log
 ORDER BY backup_timestamp DESC;
 
 -- =====================================================
--- BACKUP STRATEGY DOCUMENTATION
--- =====================================================
-
-/*
-    ===== RECOMMENDED BACKUP STRATEGY FOR POSTGRESQL =====
-    
-    1. FULL DATABASE BACKUP (Weekly - Sunday)
-    -----------------------------------------------
-    Command:
-    pg_dump -U datamart_user -d datamart_bau_itera -Fc -f /backup/datamart_FULL_$(date +%Y%m%d).dump
-    
-    Schedule: Weekly (Sunday 02:00 UTC)
-    Retention: 4 weeks
-    Location: /backup/ directory
-    
-    2. CONTINUOUS ARCHIVING (Daily)
-    -----------------------------------------------
-    Configure in postgresql.conf:
-    - wal_level = archive
-    - archive_mode = on
-    - archive_command = 'cp %p /backup/wal_archive/%f'
-    
-    This enables Point-in-Time Recovery (PITR)
-    
-    3. RESTORE PROCEDURE
-    -----------------------------------------------
-    Full Restore:
-    pg_restore -U postgres -d datamart_bau_itera -Fc /backup/datamart_FULL_20250101.dump
-    
-    Point-in-Time Restore (PITR):
-    Set recovery_target_timeline, recovery_target_time, etc. in recovery.conf
-    
-    4. BACKUP TESTING
-    -----------------------------------------------
-    Always test backups on a separate server:
-    createdb test_datamart
-    pg_restore -U postgres -d test_datamart -Fc /backup/datamart_FULL_20250101.dump
-    SELECT COUNT(*) FROM fact.fact_surat;  -- Verify data
-*/
-
--- =====================================================
--- SAMPLE: RECORD BACKUP COMPLETION
--- =====================================================
-
--- Example: After manual full backup
--- SELECT dw.log_backup('FULL', '/backup/datamart_FULL_20250128.dump', 'Success', 'Full database backup completed');
-
--- =====================================================
--- SUCCESS NOTICE
+-- SUCCESS MESSAGES
 -- =====================================================
 
 SELECT 'Backup logging infrastructure created.' as status;
-SELECT 'Manual backup commands documented above.' as note1;
-SELECT 'See comments for recommended backup strategy.' as note2;
+SELECT 'Manual backup commands documented in comments above.' as note1;
+SELECT 'Use: SELECT dw.log_backup(...) to record backup completion.' as note2;
 
 -- ====================== END OF FILE ======================
