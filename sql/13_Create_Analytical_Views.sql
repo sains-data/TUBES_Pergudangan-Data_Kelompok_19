@@ -1,18 +1,17 @@
 -- =====================================================
 -- 13_Create_Analytical_Views.sql
+-- POSTGRESQL VERSION (Fixed from SQL Server)
 -- Project : Data Mart Biro Akademik Umum ITERA
--- Purpose : Views for Power BI Reporting
--- Engine  : Microsoft SQL Server 2019+
+-- Purpose : Views for Power BI / Tableau Reporting
+-- Engine  : PostgreSQL 14+
 -- =====================================================
 
-USE datamart_bau_itera;
-GO
+-- =====================================================
+-- 1. VIEW: Surat Summary
+-- =====================================================
 
--- 1. View: Surat Summary (Ringkasan Persuratan)
-IF OBJECT_ID('analytics.vw_Surat_Summary', 'V') IS NOT NULL DROP VIEW analytics.vw_Surat_Summary;
-GO
-
-CREATE VIEW analytics.vw_Surat_Summary AS
+DROP VIEW IF EXISTS analytics.vw_surat_summary CASCADE;
+CREATE VIEW analytics.vw_surat_summary AS
 SELECT 
     dw.tahun,
     dw.bulan_tahun,
@@ -28,13 +27,13 @@ FROM fact.fact_surat fs
 INNER JOIN dim.dim_waktu dw ON fs.tanggal_key = dw.tanggal_key
 INNER JOIN dim.dim_unit_kerja du ON fs.unit_pengirim_key = du.unit_key
 INNER JOIN dim.dim_jenis_surat djs ON fs.jenis_surat_key = djs.jenis_surat_key;
-GO
 
--- 2. View: Layanan Performance (Kinerja Layanan)
-IF OBJECT_ID('analytics.vw_Layanan_Performance', 'V') IS NOT NULL DROP VIEW analytics.vw_Layanan_Performance;
-GO
+-- =====================================================
+-- 2. VIEW: Layanan Performance
+-- =====================================================
 
-CREATE VIEW analytics.vw_Layanan_Performance AS
+DROP VIEW IF EXISTS analytics.vw_layanan_performance CASCADE;
+CREATE VIEW analytics.vw_layanan_performance AS
 SELECT 
     dw.bulan_tahun,
     djl.nama_jenis_layanan,
@@ -50,13 +49,13 @@ SELECT
 FROM fact.fact_layanan fl
 INNER JOIN dim.dim_waktu dw ON fl.tanggal_request_key = dw.tanggal_key
 INNER JOIN dim.dim_jenis_layanan djl ON fl.jenis_layanan_key = djl.jenis_layanan_key;
-GO
 
--- 3. View: Aset Overview (Inventaris)
-IF OBJECT_ID('analytics.vw_Aset_Overview', 'V') IS NOT NULL DROP VIEW analytics.vw_Aset_Overview;
-GO
+-- =====================================================
+-- 3. VIEW: Aset Overview
+-- =====================================================
 
-CREATE VIEW analytics.vw_Aset_Overview AS
+DROP VIEW IF EXISTS analytics.vw_aset_overview CASCADE;
+CREATE VIEW analytics.vw_aset_overview AS
 SELECT 
     dw.bulan_tahun AS periode_snapshot,
     du.nama_unit AS unit_pemilik,
@@ -72,6 +71,40 @@ INNER JOIN dim.dim_waktu dw ON fa.tanggal_snapshot_key = dw.tanggal_key
 INNER JOIN dim.dim_unit_kerja du ON fa.unit_pemilik_key = du.unit_key
 INNER JOIN dim.dim_barang db ON fa.barang_key = db.barang_key
 INNER JOIN dim.dim_lokasi dl ON fa.lokasi_key = dl.lokasi_key;
-GO
 
-PRINT 'Analytical Views created successfully.';
+-- =====================================================
+-- 4. VIEW: Executive Dashboard Summary
+-- =====================================================
+
+DROP VIEW IF EXISTS reports.vw_executive_dashboard CASCADE;
+CREATE VIEW reports.vw_executive_dashboard AS
+SELECT 
+    CURRENT_DATE AS report_date,
+    (SELECT COUNT(*) FROM fact.fact_surat) AS total_surat,
+    (SELECT COUNT(DISTINCT unit_pengirim_key) FROM fact.fact_surat) AS unique_units,
+    (SELECT AVG(durasi_proses_hari) FROM fact.fact_surat) AS avg_processing_days,
+    (SELECT COUNT(*) FILTER (WHERE melewati_sla_flag = FALSE) FROM fact.fact_surat) AS on_time_count,
+    (SELECT COUNT(*) FROM fact.fact_layanan) AS total_layanan,
+    (SELECT AVG(rating_kepuasan) FROM fact.fact_layanan WHERE rating_kepuasan IS NOT NULL) AS avg_satisfaction;
+
+-- =====================================================
+-- 5. VIEW: Operational Dashboard
+-- =====================================================
+
+DROP VIEW IF EXISTS reports.vw_operational_dashboard CASCADE;
+CREATE VIEW reports.vw_operational_dashboard AS
+SELECT 
+    CURRENT_DATE AS report_date,
+    (SELECT COUNT(*) FROM fact.fact_surat WHERE DATE(created_at) = CURRENT_DATE) AS today_surat_received,
+    (SELECT COUNT(*) FROM fact.fact_surat WHERE DATE(created_at) = CURRENT_DATE AND status_akhir = 'Selesai') AS today_surat_completed,
+    (SELECT COUNT(*) FROM fact.fact_layanan WHERE DATE(created_at) = CURRENT_DATE AND status_akhir <> 'Selesai') AS today_pending_layanan,
+    (SELECT COUNT(*) FROM fact.fact_layanan WHERE melewati_sla_flag = TRUE AND DATE(created_at) = CURRENT_DATE) AS today_sla_violations;
+
+-- =====================================================
+-- SUCCESS NOTICE
+-- =====================================================
+
+SELECT 'Analytical views created successfully.' as status;
+SELECT 'Views available for Power BI / Tableau reporting.' as note;
+
+-- ====================== END OF FILE ======================
