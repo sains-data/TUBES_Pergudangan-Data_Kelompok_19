@@ -1,68 +1,85 @@
 -- =====================================================
 -- 11_Backup.sql
--- POSTGRESQL VERSION
+-- SQL SERVER VERSION (CORRECTED)
 -- Project : Data Mart Biro Akademik Umum ITERA
--- Purpose : Backup & Recovery Strategy
--- Engine  : PostgreSQL 14+
+-- Purpose : Backup Infrastructure & Strategy
+-- Target  : SQL Server 2019+ / Azure SQL
 -- =====================================================
 
 /*
-    NOTE: PostgreSQL backup is done via command-line tools (pg_dump, pg_basebackup).
-    This script documents the backup strategy and creates logging infrastructure.
+    NOTE: SQL Server Backup Strategy
     
-    BACKUP COMMANDS (run from shell):
-    
-    1. Full Backup:
-    pg_dump -U datamart_user -d datamart_bau_itera -Fc -f backup_full_$(date +%Y%m%d).dump
-    
-    2. Restore Backup:
-    pg_restore -U postgres -d datamart_bau_itera backup_full_20250101.dump
-    
-    3. Backup entire cluster:
-    pg_dumpall -U postgres > backup_all_$(date +%Y%m%d).sql
+    1. Full Backup (T-SQL Command):
+       BACKUP DATABASE [datamart_bau_itera] 
+       TO DISK = 'C:\Backups\datamart_bau_itera_full.bak' 
+       WITH FORMAT, INIT, COMPRESSION;
+       
+    2. Restore Backup (T-SQL Command):
+       USE master;
+       RESTORE DATABASE [datamart_bau_itera] 
+       FROM DISK = 'C:\Backups\datamart_bau_itera_full.bak' 
+       WITH REPLACE;
+       
+    3. Azure SQL Specific:
+       Azure SQL Database handles automated backups automatically (PITR).
+       Manual export can be done via BACPAC files in Azure Portal.
 */
 
--- =====================================================
--- BACKUP LOGGING TABLE
--- =====================================================
+USE datamart_bau_itera;
+GO
 
-CREATE TABLE IF NOT EXISTS dw.backup_log (
-    backup_id SERIAL PRIMARY KEY,
-    backup_type VARCHAR(50),
-    backup_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    backup_file VARCHAR(500),
-    status VARCHAR(20),
-    notes TEXT
-);
-
-CREATE INDEX IF NOT EXISTS ix_backup_log_timestamp ON dw.backup_log(backup_timestamp);
+PRINT '>> Creating Backup Logging Infrastructure...';
+GO
 
 -- =====================================================
--- FUNCTION: LOG BACKUP EXECUTION
+-- 1. BACKUP LOGGING TABLE
 -- =====================================================
 
-CREATE OR REPLACE FUNCTION dw.log_backup(
-    p_backup_type VARCHAR,
-    p_backup_file VARCHAR,
-    p_status VARCHAR,
-    p_notes TEXT DEFAULT NULL
-) RETURNS INT AS $$
-DECLARE
-    v_backup_id INT;
+IF OBJECT_ID('dw.backup_log', 'U') IS NULL
 BEGIN
-    INSERT INTO dw.backup_log (backup_type, backup_file, status, notes)
-    VALUES (p_backup_type, p_backup_file, p_status, p_notes)
-    RETURNING backup_id INTO v_backup_id;
+    CREATE TABLE dw.backup_log (
+        backup_id INT IDENTITY(1,1) PRIMARY KEY,
+        backup_type VARCHAR(50), -- 'Full', 'Differential', 'Log'
+        backup_timestamp DATETIME DEFAULT GETDATE(),
+        backup_file VARCHAR(500),
+        status VARCHAR(20), -- 'Success', 'Failed'
+        notes VARCHAR(MAX)
+    );
     
-    RETURN v_backup_id;
+    CREATE INDEX ix_backup_log_timestamp ON dw.backup_log(backup_timestamp);
+    PRINT '>> Table dw.backup_log created.';
+END
+GO
+
+-- =====================================================
+-- 2. PROCEDURE: LOG BACKUP EXECUTION
+-- =====================================================
+
+CREATE OR ALTER PROCEDURE dw.usp_LogBackup
+    @p_backup_type VARCHAR(50),
+    @p_backup_file VARCHAR(500),
+    @p_status VARCHAR(20),
+    @p_notes VARCHAR(MAX) = NULL
+AS
+BEGIN
+    SET NOCOUNT ON;
+    DECLARE @NewId INT;
+
+    INSERT INTO dw.backup_log (backup_type, backup_file, status, notes)
+    VALUES (@p_backup_type, @p_backup_file, @p_status, @p_notes);
+    
+    SET @NewId = SCOPE_IDENTITY();
+    
+    PRINT '>> Backup logged with ID: ' + CAST(@NewId AS VARCHAR(20));
+    RETURN @NewId;
 END;
-$$ LANGUAGE plpgsql;
+GO
 
 -- =====================================================
--- BACKUP HISTORY VIEW
+-- 3. BACKUP HISTORY VIEW
 -- =====================================================
 
-CREATE OR REPLACE VIEW dw.vw_backup_history AS
+CREATE OR ALTER VIEW dw.vw_backup_history AS
 SELECT 
     backup_id,
     backup_type,
@@ -71,14 +88,15 @@ SELECT
     status,
     notes
 FROM dw.backup_log
-ORDER BY backup_timestamp DESC;
+-- ORDER BY clause in views is only allowed if TOP is used, 
+-- but usually sorting is done in the query, not the view.
+-- We'll keep standard selection here.
+GO
 
 -- =====================================================
 -- SUCCESS MESSAGES
 -- =====================================================
 
-SELECT 'Backup logging infrastructure created.' as status;
-SELECT 'Manual backup commands documented in comments above.' as note1;
-SELECT 'Use: SELECT dw.log_backup(...) to record backup completion.' as note2;
-
--- ====================== END OF FILE ======================
+PRINT '>> 11_Backup.sql executed successfully.';
+PRINT '>> Use: EXEC dw.usp_LogBackup ... to record manual backups.';
+GO
