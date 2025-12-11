@@ -1,24 +1,30 @@
 -- =====================================================
 -- 12_Run_ETL_Pipeline.sql
--- POSTGRESQL VERSION
+-- SQL SERVER VERSION (CORRECTED)
 -- Project : Data Mart Biro Akademik Umum ITERA
 -- Purpose : Execute Master ETL Pipeline
--- Engine  : PostgreSQL 14+
+-- Target  : SQL Server 2019+ / Azure SQL
 -- =====================================================
 
 /*
     INSTRUCTIONS:
-    1. Ensure all staging tables are populated with source data
-    2. Run this script to execute the complete ETL pipeline
-    3. Monitor job_execution table for status
-    4. Check data_quality_checks table for validation results
+    1. Ensure all staging tables are populated with source data.
+    2. Run this script to execute the complete ETL pipeline.
+    3. Monitor job_execution table for status.
+    4. Check data_quality_checks table for validation results.
 */
+
+USE datamart_bau_itera;
+GO
+
+PRINT '>>> STARTING ETL PIPELINE EXECUTION...';
+GO
 
 -- =====================================================
 -- STEP 1: VERIFY STAGING DATA EXISTS
 -- =====================================================
 
-SELECT 'ETL Pipeline Execution Started' as step;
+PRINT '--- STEP 1: Verifying Staging Data ---';
 
 SELECT 
     'stg_simaster_surat' as table_name,
@@ -34,28 +40,33 @@ UNION ALL
 SELECT 'stg_monitoring', COUNT(*) FROM stg.stg_monitoring
 UNION ALL
 SELECT 'stg_unit_kerja', COUNT(*) FROM stg.stg_unit_kerja;
+GO
 
 -- =====================================================
 -- STEP 2: EXECUTE MASTER ETL PROCEDURE
 -- =====================================================
 
-SELECT 'Executing Master ETL...' as status;
+PRINT '--- STEP 2: Executing Master ETL (Loading Dims & Facts) ---';
 
-CALL etl.master_etl();
+-- Execute the orchestrator procedure created in Script 07
+EXEC etl.usp_MasterETL;
+GO
 
 -- =====================================================
 -- STEP 3: RUN DATA QUALITY CHECKS
 -- =====================================================
 
-SELECT 'Running Data Quality Checks...' as status;
+PRINT '--- STEP 3: Running Automated Data Quality Checks ---';
 
-CALL etl.run_data_quality_checks();
+-- Execute DQ procedure created in Script 08
+EXEC etl.usp_RunDataQualityChecks;
+GO
 
 -- =====================================================
 -- STEP 4: VERIFY LOADED DATA
 -- =====================================================
 
-SELECT 'Verifying loaded data...' as status;
+PRINT '--- STEP 4: Verifying Loaded Data in Warehouse ---';
 
 SELECT 
     'dim_waktu' as table_name,
@@ -79,14 +90,15 @@ UNION ALL
 SELECT 'fact_layanan', COUNT(*) FROM fact.fact_layanan
 UNION ALL
 SELECT 'fact_aset', COUNT(*) FROM fact.fact_aset;
+GO
 
 -- =====================================================
 -- STEP 5: EXECUTION SUMMARY
 -- =====================================================
 
-SELECT 'ETL Pipeline execution completed.' as final_status;
+PRINT '--- STEP 5: Execution Summary & Logs ---';
 
-SELECT 
+SELECT TOP 5 -- LIMIT replaced with TOP
     job_name,
     start_time,
     end_time,
@@ -96,7 +108,8 @@ SELECT
     rows_loaded,
     error_message
 FROM etl_log.job_execution
-ORDER BY execution_id DESC
-LIMIT 5;
+ORDER BY execution_id DESC;
+GO
 
--- ====================== END OF FILE ======================
+PRINT '>>> ETL Pipeline execution completed.';
+GO
