@@ -1,62 +1,49 @@
 -- =====================================================
 -- 14_Create_Audit_Trail.sql
--- POSTGRESQL VERSION
+-- SQL SERVER VERSION (CORRECTED)
 -- Project : Data Mart Biro Akademik Umum ITERA
 -- Purpose : Audit Trail & Change Tracking
--- Engine  : PostgreSQL 14+
+-- Target  : SQL Server 2019+ / Azure SQL
 -- =====================================================
 
--- =====================================================
--- AUDIT TRAIL TABLE
--- =====================================================
+USE datamart_bau_itera;
+GO
 
-CREATE TABLE IF NOT EXISTS dw.audit_trail (
-    audit_id BIGSERIAL PRIMARY KEY,
-    table_name VARCHAR(100) NOT NULL,
-    operation VARCHAR(20) NOT NULL, -- INSERT, UPDATE, DELETE
-    record_key VARCHAR(255),
-    old_values JSONB,
-    new_values JSONB,
-    changed_by VARCHAR(100) DEFAULT CURRENT_USER,
-    changed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    ip_address INET,
-    session_id VARCHAR(255)
-);
-
-CREATE INDEX IF NOT EXISTS ix_audit_trail_table ON dw.audit_trail(table_name);
-CREATE INDEX IF NOT EXISTS ix_audit_trail_timestamp ON dw.audit_trail(changed_at);
-CREATE INDEX IF NOT EXISTS ix_audit_trail_operation ON dw.audit_trail(operation);
+PRINT '>> Creating Audit Trail Infrastructure...';
+GO
 
 -- =====================================================
--- AUDIT TRIGGER FUNCTION
+-- 1. AUDIT TRAIL TABLE
 -- =====================================================
 
-CREATE OR REPLACE FUNCTION dw.audit_trigger_function()
-RETURNS TRIGGER AS $$
+IF OBJECT_ID('dw.audit_trail', 'U') IS NULL
 BEGIN
-    IF TG_OP = 'INSERT' THEN
-        INSERT INTO dw.audit_trail (table_name, operation, record_key, new_values, changed_by)
-        VALUES (TG_TABLE_NAME, 'INSERT', NEW.*::TEXT, row_to_json(NEW), CURRENT_USER);
-        RETURN NEW;
-    ELSIF TG_OP = 'UPDATE' THEN
-        INSERT INTO dw.audit_trail (table_name, operation, record_key, old_values, new_values, changed_by)
-        VALUES (TG_TABLE_NAME, 'UPDATE', OLD.*::TEXT, row_to_json(OLD), row_to_json(NEW), CURRENT_USER);
-        RETURN NEW;
-    ELSIF TG_OP = 'DELETE' THEN
-        INSERT INTO dw.audit_trail (table_name, operation, record_key, old_values, changed_by)
-        VALUES (TG_TABLE_NAME, 'DELETE', OLD.*::TEXT, row_to_json(OLD), CURRENT_USER);
-        RETURN OLD;
-    END IF;
-    RETURN NULL;
-END;
-$$ LANGUAGE plpgsql;
+    CREATE TABLE dw.audit_trail (
+        audit_id BIGINT IDENTITY(1,1) PRIMARY KEY,
+        table_name VARCHAR(100) NOT NULL,
+        operation VARCHAR(20) NOT NULL, -- INSERT, UPDATE, DELETE
+        record_key VARCHAR(255),
+        old_values NVARCHAR(MAX), -- JSONB replaced with NVARCHAR(MAX)
+        new_values NVARCHAR(MAX), -- JSONB replaced with NVARCHAR(MAX)
+        changed_by VARCHAR(100) DEFAULT SUSER_SNAME(), -- CURRENT_USER -> SUSER_SNAME()
+        changed_at DATETIME DEFAULT GETDATE(),
+        ip_address VARCHAR(45), -- INET -> VARCHAR(45)
+        session_id VARCHAR(255)
+    );
+
+    CREATE INDEX ix_audit_trail_table ON dw.audit_trail(table_name);
+    CREATE INDEX ix_audit_trail_timestamp ON dw.audit_trail(changed_at);
+    CREATE INDEX ix_audit_trail_operation ON dw.audit_trail(operation);
+    
+    PRINT '>> Table dw.audit_trail created.';
+END
+GO
 
 -- =====================================================
--- AUDIT TRAIL VIEWS
+-- 2. AUDIT TRAIL VIEWS
 -- =====================================================
 
-DROP VIEW IF EXISTS dw.vw_audit_summary CASCADE;
-CREATE VIEW dw.vw_audit_summary AS
+CREATE OR ALTER VIEW dw.vw_Audit_Summary AS
 SELECT 
     CAST(changed_at AS DATE) as audit_date,
     table_name,
@@ -65,10 +52,10 @@ SELECT
     COUNT(DISTINCT changed_by) as users_involved
 FROM dw.audit_trail
 GROUP BY CAST(changed_at AS DATE), table_name, operation
-ORDER BY audit_date DESC, table_name;
+-- ORDER BY not allowed in views without TOP
+GO
 
-DROP VIEW IF EXISTS dw.vw_audit_detail CASCADE;
-CREATE VIEW dw.vw_audit_detail AS
+CREATE OR ALTER VIEW dw.vw_Audit_Detail AS
 SELECT 
     audit_id,
     table_name,
@@ -77,88 +64,93 @@ SELECT
     changed_by,
     new_values
 FROM dw.audit_trail
-WHERE changed_at >= CURRENT_DATE - INTERVAL '30 days'
-ORDER BY changed_at DESC;
+WHERE changed_at >= DATEADD(DAY, -30, GETDATE());
+GO
 
 -- =====================================================
--- DATA MODIFICATION AUDIT (STORED PROCEDURES)
+-- 3. DATA MODIFICATION AUDIT (STORED PROCEDURE)
 -- =====================================================
 
-DROP FUNCTION IF EXISTS dw.log_data_modification(VARCHAR, VARCHAR, VARCHAR, JSONB, JSONB) CASCADE;
-CREATE OR REPLACE FUNCTION dw.log_data_modification(
-    p_table_name VARCHAR,
-    p_operation VARCHAR,
-    p_record_key VARCHAR,
-    p_old_values JSONB DEFAULT NULL,
-    p_new_values JSONB DEFAULT NULL
-)
-RETURNS BIGINT AS $$
-DECLARE
-    v_audit_id BIGINT;
+CREATE OR ALTER PROCEDURE dw.usp_LogDataModification
+    @p_table_name VARCHAR(100),
+    @p_operation VARCHAR(20),
+    @p_record_key VARCHAR(255),
+    @p_old_values NVARCHAR(MAX) = NULL,
+    @p_new_values NVARCHAR(MAX) = NULL
+AS
 BEGIN
+    SET NOCOUNT ON;
+    DECLARE @NewAuditId BIGINT;
+
     INSERT INTO dw.audit_trail (table_name, operation, record_key, old_values, new_values, changed_by)
-    VALUES (p_table_name, p_operation, p_record_key, p_old_values, p_new_values, CURRENT_USER)
-    RETURNING audit_id INTO v_audit_id;
+    VALUES (@p_table_name, @p_operation, @p_record_key, @p_old_values, @p_new_values, SUSER_SNAME());
     
-    RETURN v_audit_id;
+    SET @NewAuditId = SCOPE_IDENTITY();
+    
+    -- In procedures, we usually don't return scalar values like functions.
+    -- We can use OUTPUT parameters if needed, but here we just insert.
 END;
-$$ LANGUAGE plpgsql;
+GO
 
 -- =====================================================
--- CLEANUP PROCEDURES
+-- 4. CLEANUP PROCEDURE
 -- =====================================================
 
-DROP FUNCTION IF EXISTS dw.cleanup_old_audit_records(INT) CASCADE;
-CREATE OR REPLACE FUNCTION dw.cleanup_old_audit_records(p_days_retention INT DEFAULT 90)
-RETURNS INT AS $$
-DECLARE
-    v_deleted_count INT;
+CREATE OR ALTER PROCEDURE dw.usp_CleanupOldAuditRecords
+    @p_days_retention INT = 90
+AS
 BEGIN
+    SET NOCOUNT ON;
+    DECLARE @v_deleted_count INT;
+
     DELETE FROM dw.audit_trail
-    WHERE changed_at < CURRENT_DATE - (p_days_retention::TEXT || ' days')::INTERVAL;
+    WHERE changed_at < DATEADD(DAY, -@p_days_retention, GETDATE());
     
-    GET DIAGNOSTICS v_deleted_count = ROW_COUNT;
+    SET @v_deleted_count = @@ROWCOUNT;
     
-    RAISE NOTICE 'Deleted % audit records older than % days', v_deleted_count, p_days_retention;
-    
-    RETURN v_deleted_count;
+    PRINT 'Deleted ' + CAST(@v_deleted_count AS VARCHAR(20)) + ' audit records older than ' + CAST(@p_days_retention AS VARCHAR(10)) + ' days.';
 END;
-$$ LANGUAGE plpgsql;
+GO
 
 -- =====================================================
--- AUDIT CONFIGURATION TABLE
+-- 5. AUDIT CONFIGURATION TABLE
 -- =====================================================
 
-CREATE TABLE IF NOT EXISTS dw.audit_config (
-    config_id SERIAL PRIMARY KEY,
-    table_name VARCHAR(100) NOT NULL UNIQUE,
-    audit_enabled BOOLEAN DEFAULT TRUE,
-    audit_inserts BOOLEAN DEFAULT TRUE,
-    audit_updates BOOLEAN DEFAULT TRUE,
-    audit_deletes BOOLEAN DEFAULT TRUE,
-    retention_days INT DEFAULT 90,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+IF OBJECT_ID('dw.audit_config', 'U') IS NULL
+BEGIN
+    CREATE TABLE dw.audit_config (
+        config_id INT IDENTITY(1,1) PRIMARY KEY,
+        table_name VARCHAR(100) NOT NULL UNIQUE,
+        audit_enabled BIT DEFAULT 1,
+        audit_inserts BIT DEFAULT 1,
+        audit_updates BIT DEFAULT 1,
+        audit_deletes BIT DEFAULT 1,
+        retention_days INT DEFAULT 90,
+        created_at DATETIME DEFAULT GETDATE(),
+        updated_at DATETIME DEFAULT GETDATE()
+    );
 
--- Seed audit configuration
-INSERT INTO dw.audit_config (table_name, audit_enabled) VALUES
-('dim_waktu', TRUE),
-('dim_unit_kerja', TRUE),
-('dim_pegawai', TRUE),
-('dim_jenis_surat', TRUE),
-('dim_jenis_layanan', TRUE),
-('dim_barang', TRUE),
-('dim_lokasi', TRUE),
-('fact_surat', TRUE),
-('fact_layanan', TRUE),
-('fact_aset', TRUE)
-ON CONFLICT (table_name) DO NOTHING;
+    -- Seed audit configuration (Upsert logic)
+    -- SQL Server doesn't have ON CONFLICT, use IF NOT EXISTS logic
+    
+    IF NOT EXISTS (SELECT 1 FROM dw.audit_config WHERE table_name = 'dim_waktu') INSERT INTO dw.audit_config (table_name) VALUES ('dim_waktu');
+    IF NOT EXISTS (SELECT 1 FROM dw.audit_config WHERE table_name = 'dim_unit_kerja') INSERT INTO dw.audit_config (table_name) VALUES ('dim_unit_kerja');
+    IF NOT EXISTS (SELECT 1 FROM dw.audit_config WHERE table_name = 'dim_pegawai') INSERT INTO dw.audit_config (table_name) VALUES ('dim_pegawai');
+    IF NOT EXISTS (SELECT 1 FROM dw.audit_config WHERE table_name = 'dim_jenis_surat') INSERT INTO dw.audit_config (table_name) VALUES ('dim_jenis_surat');
+    IF NOT EXISTS (SELECT 1 FROM dw.audit_config WHERE table_name = 'dim_jenis_layanan') INSERT INTO dw.audit_config (table_name) VALUES ('dim_jenis_layanan');
+    IF NOT EXISTS (SELECT 1 FROM dw.audit_config WHERE table_name = 'dim_barang') INSERT INTO dw.audit_config (table_name) VALUES ('dim_barang');
+    IF NOT EXISTS (SELECT 1 FROM dw.audit_config WHERE table_name = 'dim_lokasi') INSERT INTO dw.audit_config (table_name) VALUES ('dim_lokasi');
+    IF NOT EXISTS (SELECT 1 FROM dw.audit_config WHERE table_name = 'fact_surat') INSERT INTO dw.audit_config (table_name) VALUES ('fact_surat');
+    IF NOT EXISTS (SELECT 1 FROM dw.audit_config WHERE table_name = 'fact_layanan') INSERT INTO dw.audit_config (table_name) VALUES ('fact_layanan');
+    IF NOT EXISTS (SELECT 1 FROM dw.audit_config WHERE table_name = 'fact_aset') INSERT INTO dw.audit_config (table_name) VALUES ('fact_aset');
+    
+    PRINT '>> Table dw.audit_config created and seeded.';
+END
+GO
 
 -- =====================================================
 -- SUCCESS MESSAGE
 -- =====================================================
 
-SELECT '14_Create_Audit_Trail.sql executed successfully' as status;
-
--- ====================== END OF FILE ======================
+PRINT '>> 14_Create_Audit_Trail.sql executed successfully.';
+GO
