@@ -81,3 +81,4 @@ Inventaris,dbo,aset,status_aset,VARCHAR(20),fact,aset,status_aset,VARCHAR(20),UP
 Calculated,N/A,N/A,N/A,INTEGER,fact,aset,jumlah_aset,INTEGER,Always 1,Additive measure,DEFAULT 1,N/A,Count measure
 Calculated,N/A,N/A,N/A,"DECIMAL(15,2)",fact,aset,nilai_penyusutan,"DECIMAL(15,2)",nilai_perolehan - nilai_buku,Depreciation amount,>= 0,N/A,Accumulated depreciation
 Calculated,N/A,N/A,N/A,INTEGER,fact,aset,umur_aset_bulan,INTEGER,"EXTRACT(YEAR FROM AGE(snapshot_date, tanggal_perolehan)) * 12 + EXTRACT(MONTH FROM AGE(snapshot_date, tanggal_perolehan))",Asset age,>= 0,N/A,Age in months
+
