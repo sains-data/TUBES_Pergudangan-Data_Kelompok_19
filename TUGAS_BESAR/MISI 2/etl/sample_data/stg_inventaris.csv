@@ -1,0 +1,501 @@
+id_barang,kode_barang,nama_barang,kategori,tanggal_pengadaan,nilai_perolehan,kondisi,lokasi_id,unit_kerja_id
+INV-0,BRG-FUR-000,Furniture - nulla,Furniture,2025-04-24,4268874,Baik,10,3
+INV-1,BRG-FUR-001,Furniture - culpa,Furniture,2025-10-15,3808414,Rusak Berat,5,15
+INV-2,BRG-ALA-002,Alat Tulis - enim,Alat Tulis,2023-08-20,10364562,Rusak Berat,10,15
+INV-3,BRG-ELE-003,Elektronik - expedita,Elektronik,2025-08-29,3175140,Rusak Ringan,9,2
+INV-4,BRG-KEN-004,Kendaraan - suscipit,Kendaraan,2025-01-20,5277782,Baik,9,1
+INV-5,BRG-ALA-005,Alat Tulis - ab,Alat Tulis,2021-05-16,2050406,Rusak Berat,3,2
+INV-6,BRG-FUR-006,Furniture - necessitatibus,Furniture,2025-08-27,826879,Rusak Ringan,3,13
+INV-7,BRG-ALA-007,Alat Tulis - quos,Alat Tulis,2022-06-19,10224675,Rusak Ringan,3,13
+INV-8,BRG-ALA-008,Alat Tulis - repudiandae,Alat Tulis,2025-09-30,7194368,Rusak Ringan,2,9
+INV-9,BRG-ALA-009,Alat Tulis - totam,Alat Tulis,2022-09-12,1527214,Rusak Ringan,2,12
+INV-10,BRG-ALA-010,Alat Tulis - sequi,Alat Tulis,2022-06-19,13142415,Baik,3,15
+INV-11,BRG-FUR-011,Furniture - incidunt,Furniture,2023-01-09,8805803,Rusak Berat,1,15
+INV-12,BRG-FUR-012,Furniture - cum,Furniture,2022-03-29,5157194,Rusak Ringan,5,7
+INV-13,BRG-ELE-013,Elektronik - repudiandae,Elektronik,2024-01-28,12466510,Rusak Berat,10,10
+INV-14,BRG-ALA-014,Alat Tulis - odio,Alat Tulis,2024-07-24,8878904,Baik,1,7
+INV-15,BRG-ELE-015,Elektronik - rerum,Elektronik,2023-01-30,10895188,Baik,8,10
+INV-16,BRG-ELE-016,Elektronik - qui,Elektronik,2024-03-27,3105056,Baik,5,9
+INV-17,BRG-ELE-017,Elektronik - voluptas,Elektronik,2022-09-15,10326988,Rusak Berat,3,14
+INV-18,BRG-ELE-018,Elektronik - officiis,Elektronik,2021-05-28,12933728,Rusak Berat,1,7
+INV-19,BRG-FUR-019,Furniture - inventore,Furniture,2022-11-29,2618163,Rusak Berat,6,13
+INV-20,BRG-ELE-020,Elektronik - vitae,Elektronik,2025-03-13,3825109,Rusak Berat,10,8
+INV-21,BRG-ALA-021,Alat Tulis - optio,Alat Tulis,2025-08-03,13195472,Rusak Berat,10,15
+INV-22,BRG-KEN-022,Kendaraan - ullam,Kendaraan,2025-07-16,7146031,Baik,3,12
+INV-23,BRG-KEN-023,Kendaraan - vel,Kendaraan,2022-11-09,8332194,Rusak Ringan,8,3
+INV-24,BRG-ALA-024,Alat Tulis - laborum,Alat Tulis,2022-11-19,13552782,Rusak Ringan,7,4
+INV-25,BRG-ELE-025,Elektronik - magnam,Elektronik,2024-02-08,6710996,Rusak Ringan,10,11
+INV-26,BRG-FUR-026,Furniture - unde,Furniture,2023-04-26,12848551,Rusak Berat,5,13
+INV-27,BRG-ELE-027,Elektronik - voluptatum,Elektronik,2021-02-25,13272270,Rusak Ringan,6,14
+INV-28,BRG-KEN-028,Kendaraan - pariatur,Kendaraan,2021-05-30,6181087,Baik,10,5
+INV-29,BRG-ALA-029,Alat Tulis - corrupti,Alat Tulis,2022-04-17,5365017,Rusak Ringan,6,6
+INV-30,BRG-FUR-030,Furniture - voluptatem,Furniture,2021-01-27,7461938,Baik,7,14
+INV-31,BRG-ELE-031,Elektronik - consequatur,Elektronik,2025-03-31,7985347,Baik,4,10
+INV-32,BRG-ELE-032,Elektronik - maiores,Elektronik,2022-07-05,10522906,Rusak Ringan,6,11
+INV-33,BRG-KEN-033,Kendaraan - dolores,Kendaraan,2025-01-12,9082525,Rusak Berat,5,1
+INV-34,BRG-ELE-034,Elektronik - placeat,Elektronik,2023-02-11,10628738,Rusak Ringan,5,3
+INV-35,BRG-ELE-035,Elektronik - quaerat,Elektronik,2024-04-14,5922944,Rusak Berat,3,15
+INV-36,BRG-ALA-036,Alat Tulis - facilis,Alat Tulis,2023-12-05,518985,Rusak Berat,8,12
+INV-37,BRG-ALA-037,Alat Tulis - animi,Alat Tulis,2025-07-28,13500617,Baik,10,11
+INV-38,BRG-KEN-038,Kendaraan - voluptates,Kendaraan,2021-09-02,14019619,Rusak Berat,1,1
+INV-39,BRG-KEN-039,Kendaraan - laudantium,Kendaraan,2023-01-01,3639098,Rusak Ringan,10,9
+INV-40,BRG-KEN-040,Kendaraan - voluptates,Kendaraan,2024-04-12,1622177,Rusak Ringan,9,8
+INV-41,BRG-FUR-041,Furniture - asperiores,Furniture,2023-04-22,9630375,Baik,3,1
+INV-42,BRG-FUR-042,Furniture - eos,Furniture,2022-04-28,3779877,Rusak Berat,9,13
+INV-43,BRG-KEN-043,Kendaraan - occaecati,Kendaraan,2021-07-06,3257664,Rusak Berat,3,11
+INV-44,BRG-ELE-044,Elektronik - placeat,Elektronik,2021-03-31,1007748,Rusak Ringan,8,15
+INV-45,BRG-ELE-045,Elektronik - cumque,Elektronik,2022-11-30,2915598,Rusak Ringan,7,9
+INV-46,BRG-KEN-046,Kendaraan - totam,Kendaraan,2025-05-13,13619950,Rusak Ringan,3,10
+INV-47,BRG-ALA-047,Alat Tulis - sed,Alat Tulis,2025-10-09,3151971,Rusak Berat,2,13
+INV-48,BRG-ALA-048,Alat Tulis - saepe,Alat Tulis,2023-01-07,4925260,Rusak Ringan,1,10
+INV-49,BRG-ALA-049,Alat Tulis - quasi,Alat Tulis,2021-07-24,10059753,Rusak Berat,7,7
+INV-50,BRG-ALA-050,Alat Tulis - necessitatibus,Alat Tulis,2025-05-15,4911843,Rusak Ringan,4,6
+INV-51,BRG-FUR-051,Furniture - suscipit,Furniture,2023-06-01,4622559,Rusak Ringan,1,9
+INV-52,BRG-ELE-052,Elektronik - quaerat,Elektronik,2021-10-24,1533564,Rusak Ringan,2,2
+INV-53,BRG-FUR-053,Furniture - dolor,Furniture,2024-09-12,10607957,Baik,6,12
+INV-54,BRG-ALA-054,Alat Tulis - pariatur,Alat Tulis,2021-10-09,1087957,Rusak Ringan,10,12
+INV-55,BRG-ELE-055,Elektronik - temporibus,Elektronik,2025-03-05,14682368,Baik,2,6
+INV-56,BRG-FUR-056,Furniture - quasi,Furniture,2023-10-26,9062089,Rusak Berat,2,11
+INV-57,BRG-KEN-057,Kendaraan - enim,Kendaraan,2025-05-01,10634081,Rusak Ringan,8,12
+INV-58,BRG-FUR-058,Furniture - odit,Furniture,2022-10-27,12001365,Rusak Ringan,2,14
+INV-59,BRG-FUR-059,Furniture - dolorem,Furniture,2021-08-04,2655744,Rusak Berat,7,10
+INV-60,BRG-FUR-060,Furniture - reiciendis,Furniture,2024-10-28,2368146,Baik,5,15
+INV-61,BRG-ALA-061,Alat Tulis - tenetur,Alat Tulis,2024-11-15,8137453,Baik,5,12
+INV-62,BRG-ALA-062,Alat Tulis - tempore,Alat Tulis,2024-02-25,1902219,Rusak Ringan,2,6
+INV-63,BRG-ELE-063,Elektronik - perferendis,Elektronik,2023-12-10,10486121,Rusak Berat,8,1
+INV-64,BRG-FUR-064,Furniture - suscipit,Furniture,2022-08-23,12995836,Rusak Ringan,4,1
+INV-65,BRG-ALA-065,Alat Tulis - voluptas,Alat Tulis,2023-03-30,516456,Rusak Berat,6,13
+INV-66,BRG-FUR-066,Furniture - recusandae,Furniture,2023-11-12,8954657,Baik,5,8
+INV-67,BRG-ALA-067,Alat Tulis - voluptatibus,Alat Tulis,2024-04-16,2443690,Baik,6,1
+INV-68,BRG-KEN-068,Kendaraan - enim,Kendaraan,2025-10-06,5617543,Baik,10,6
+INV-69,BRG-FUR-069,Furniture - molestias,Furniture,2024-03-16,14455129,Rusak Ringan,5,2
+INV-70,BRG-ELE-070,Elektronik - hic,Elektronik,2020-11-26,12236927,Baik,2,9
+INV-71,BRG-ALA-071,Alat Tulis - tempore,Alat Tulis,2022-05-24,7985795,Baik,1,12
+INV-72,BRG-KEN-072,Kendaraan - eligendi,Kendaraan,2023-12-15,14062708,Rusak Berat,7,14
+INV-73,BRG-FUR-073,Furniture - vero,Furniture,2024-07-21,3834683,Rusak Ringan,9,13
+INV-74,BRG-KEN-074,Kendaraan - unde,Kendaraan,2025-05-29,11195870,Rusak Ringan,10,2
+INV-75,BRG-ELE-075,Elektronik - eveniet,Elektronik,2022-10-21,6248930,Baik,3,9
+INV-76,BRG-ELE-076,Elektronik - fugit,Elektronik,2023-12-25,3068300,Rusak Ringan,9,2
+INV-77,BRG-ALA-077,Alat Tulis - mollitia,Alat Tulis,2024-07-20,13933766,Baik,8,10
+INV-78,BRG-ALA-078,Alat Tulis - aliquam,Alat Tulis,2023-09-25,4719495,Rusak Ringan,7,5
+INV-79,BRG-FUR-079,Furniture - fuga,Furniture,2024-04-16,2942185,Rusak Berat,6,1
+INV-80,BRG-KEN-080,Kendaraan - neque,Kendaraan,2021-09-30,10522987,Baik,5,11
+INV-81,BRG-KEN-081,Kendaraan - quisquam,Kendaraan,2024-10-17,4061256,Rusak Ringan,1,6
+INV-82,BRG-ALA-082,Alat Tulis - quisquam,Alat Tulis,2025-08-24,8270605,Rusak Ringan,10,4
+INV-83,BRG-ALA-083,Alat Tulis - possimus,Alat Tulis,2022-07-11,11206456,Rusak Berat,5,1
+INV-84,BRG-FUR-084,Furniture - earum,Furniture,2024-01-14,5193320,Rusak Berat,9,1
+INV-85,BRG-FUR-085,Furniture - quaerat,Furniture,2022-03-06,14271187,Rusak Ringan,6,1
+INV-86,BRG-ALA-086,Alat Tulis - sapiente,Alat Tulis,2020-11-29,3090617,Baik,5,5
+INV-87,BRG-FUR-087,Furniture - at,Furniture,2025-07-30,14452233,Baik,4,9
+INV-88,BRG-ELE-088,Elektronik - in,Elektronik,2024-04-21,3960951,Baik,5,5
+INV-89,BRG-KEN-089,Kendaraan - nam,Kendaraan,2024-05-05,14270387,Baik,6,11
+INV-90,BRG-ALA-090,Alat Tulis - dolorum,Alat Tulis,2025-02-20,6040157,Rusak Berat,5,2
+INV-91,BRG-ELE-091,Elektronik - provident,Elektronik,2023-09-09,7461361,Baik,9,11
+INV-92,BRG-FUR-092,Furniture - labore,Furniture,2023-06-11,8132304,Rusak Ringan,4,11
+INV-93,BRG-KEN-093,Kendaraan - fugiat,Kendaraan,2021-12-05,12188796,Baik,2,9
+INV-94,BRG-FUR-094,Furniture - nostrum,Furniture,2023-10-16,14646765,Rusak Ringan,8,1
+INV-95,BRG-KEN-095,Kendaraan - commodi,Kendaraan,2021-12-12,4471685,Rusak Berat,6,4
+INV-96,BRG-ELE-096,Elektronik - ratione,Elektronik,2023-10-01,2660232,Baik,5,15
+INV-97,BRG-ALA-097,Alat Tulis - et,Alat Tulis,2022-09-17,3054737,Baik,5,7
+INV-98,BRG-KEN-098,Kendaraan - rem,Kendaraan,2021-10-12,11173650,Rusak Ringan,2,11
+INV-99,BRG-ALA-099,Alat Tulis - cum,Alat Tulis,2023-03-25,11106170,Rusak Berat,6,14
+INV-100,BRG-KEN-100,Kendaraan - velit,Kendaraan,2023-12-03,12094823,Rusak Ringan,8,4
+INV-101,BRG-ELE-101,Elektronik - expedita,Elektronik,2021-12-31,10290820,Baik,8,8
+INV-102,BRG-KEN-102,Kendaraan - eius,Kendaraan,2025-02-24,7360722,Rusak Ringan,7,8
+INV-103,BRG-ELE-103,Elektronik - voluptates,Elektronik,2021-02-20,7281358,Rusak Ringan,7,10
+INV-104,BRG-FUR-104,Furniture - quibusdam,Furniture,2023-04-22,8131313,Rusak Berat,1,12
+INV-105,BRG-FUR-105,Furniture - cupiditate,Furniture,2022-12-01,4415403,Baik,9,3
+INV-106,BRG-ELE-106,Elektronik - tempora,Elektronik,2021-09-07,6307706,Baik,4,10
+INV-107,BRG-ALA-107,Alat Tulis - consectetur,Alat Tulis,2023-06-17,460704,Rusak Berat,9,15
+INV-108,BRG-KEN-108,Kendaraan - possimus,Kendaraan,2025-02-04,7908778,Rusak Ringan,7,5
+INV-109,BRG-KEN-109,Kendaraan - deserunt,Kendaraan,2023-04-19,11475629,Rusak Berat,9,10
+INV-110,BRG-ALA-110,Alat Tulis - veritatis,Alat Tulis,2023-04-22,10375962,Baik,1,2
+INV-111,BRG-ELE-111,Elektronik - totam,Elektronik,2021-09-24,11703134,Rusak Berat,8,5
+INV-112,BRG-ALA-112,Alat Tulis - veritatis,Alat Tulis,2024-06-26,3081640,Rusak Ringan,7,2
+INV-113,BRG-KEN-113,Kendaraan - eveniet,Kendaraan,2023-04-14,13625080,Rusak Berat,5,1
+INV-114,BRG-FUR-114,Furniture - illum,Furniture,2023-02-22,1429230,Rusak Berat,1,9
+INV-115,BRG-FUR-115,Furniture - nam,Furniture,2025-11-20,1263812,Rusak Berat,3,10
+INV-116,BRG-KEN-116,Kendaraan - eius,Kendaraan,2021-11-29,2262076,Rusak Ringan,9,10
+INV-117,BRG-FUR-117,Furniture - atque,Furniture,2021-01-13,1359088,Rusak Berat,9,9
+INV-118,BRG-FUR-118,Furniture - praesentium,Furniture,2023-01-01,13477720,Rusak Berat,3,3
+INV-119,BRG-FUR-119,Furniture - repudiandae,Furniture,2022-04-08,4908268,Rusak Ringan,9,7
+INV-120,BRG-ALA-120,Alat Tulis - totam,Alat Tulis,2023-01-10,1222212,Baik,6,1
+INV-121,BRG-ELE-121,Elektronik - minus,Elektronik,2022-11-20,12355785,Rusak Berat,4,10
+INV-122,BRG-ALA-122,Alat Tulis - vero,Alat Tulis,2025-05-14,2585657,Rusak Berat,10,12
+INV-123,BRG-ALA-123,Alat Tulis - aperiam,Alat Tulis,2022-12-01,7974563,Rusak Ringan,6,7
+INV-124,BRG-ALA-124,Alat Tulis - amet,Alat Tulis,2025-08-19,14535663,Rusak Ringan,5,8
+INV-125,BRG-ALA-125,Alat Tulis - laborum,Alat Tulis,2021-05-11,4441194,Baik,6,9
+INV-126,BRG-KEN-126,Kendaraan - aperiam,Kendaraan,2025-02-03,6808526,Baik,5,9
+INV-127,BRG-ELE-127,Elektronik - perferendis,Elektronik,2023-01-04,114733,Rusak Ringan,4,11
+INV-128,BRG-ELE-128,Elektronik - saepe,Elektronik,2025-01-31,5309144,Baik,5,5
+INV-129,BRG-KEN-129,Kendaraan - sint,Kendaraan,2023-05-15,5565396,Rusak Ringan,6,14
+INV-130,BRG-KEN-130,Kendaraan - repellendus,Kendaraan,2025-05-06,13386517,Baik,4,5
+INV-131,BRG-KEN-131,Kendaraan - nulla,Kendaraan,2023-07-09,11342043,Rusak Ringan,8,15
+INV-132,BRG-ELE-132,Elektronik - iusto,Elektronik,2024-06-28,3981385,Baik,8,9
+INV-133,BRG-KEN-133,Kendaraan - omnis,Kendaraan,2024-05-16,2190520,Rusak Berat,2,9
+INV-134,BRG-ELE-134,Elektronik - pariatur,Elektronik,2022-05-31,6091832,Baik,2,7
+INV-135,BRG-KEN-135,Kendaraan - et,Kendaraan,2024-12-01,7316239,Rusak Berat,5,4
+INV-136,BRG-FUR-136,Furniture - dolore,Furniture,2025-05-31,2981776,Rusak Ringan,8,13
+INV-137,BRG-ALA-137,Alat Tulis - fugiat,Alat Tulis,2023-12-31,12580830,Rusak Ringan,3,11
+INV-138,BRG-FUR-138,Furniture - earum,Furniture,2021-06-30,7965402,Baik,10,12
+INV-139,BRG-ELE-139,Elektronik - occaecati,Elektronik,2023-10-23,13797690,Baik,8,7
+INV-140,BRG-KEN-140,Kendaraan - enim,Kendaraan,2021-10-03,10709411,Baik,8,2
+INV-141,BRG-ELE-141,Elektronik - voluptatum,Elektronik,2022-07-09,10059825,Baik,7,10
+INV-142,BRG-ALA-142,Alat Tulis - nisi,Alat Tulis,2025-08-22,4952278,Baik,7,9
+INV-143,BRG-KEN-143,Kendaraan - soluta,Kendaraan,2024-07-09,2653292,Rusak Berat,9,10
+INV-144,BRG-FUR-144,Furniture - amet,Furniture,2022-07-31,328123,Rusak Ringan,1,11
+INV-145,BRG-ALA-145,Alat Tulis - similique,Alat Tulis,2021-04-01,14494536,Baik,10,4
+INV-146,BRG-ALA-146,Alat Tulis - sed,Alat Tulis,2022-06-15,11402391,Rusak Ringan,9,1
+INV-147,BRG-KEN-147,Kendaraan - quasi,Kendaraan,2025-09-11,13724674,Rusak Berat,6,6
+INV-148,BRG-FUR-148,Furniture - dolor,Furniture,2023-01-22,1308918,Rusak Berat,2,15
+INV-149,BRG-KEN-149,Kendaraan - iure,Kendaraan,2024-09-14,9996041,Rusak Ringan,6,13
+INV-150,BRG-KEN-150,Kendaraan - modi,Kendaraan,2022-06-23,8674807,Baik,9,8
+INV-151,BRG-ELE-151,Elektronik - expedita,Elektronik,2023-11-16,2619725,Rusak Berat,5,5
+INV-152,BRG-FUR-152,Furniture - recusandae,Furniture,2022-08-17,6732098,Rusak Berat,9,9
+INV-153,BRG-KEN-153,Kendaraan - quia,Kendaraan,2024-10-22,9436883,Rusak Ringan,10,7
+INV-154,BRG-FUR-154,Furniture - quidem,Furniture,2024-11-18,4536017,Rusak Berat,10,4
+INV-155,BRG-FUR-155,Furniture - illo,Furniture,2025-11-01,6020969,Rusak Berat,5,15
+INV-156,BRG-ALA-156,Alat Tulis - cum,Alat Tulis,2023-02-19,13099339,Rusak Ringan,8,13
+INV-157,BRG-ALA-157,Alat Tulis - tenetur,Alat Tulis,2021-05-26,3069484,Baik,2,1
+INV-158,BRG-ELE-158,Elektronik - laborum,Elektronik,2025-04-11,12606241,Rusak Ringan,7,11
+INV-159,BRG-FUR-159,Furniture - consectetur,Furniture,2022-10-04,5911086,Rusak Ringan,10,4
+INV-160,BRG-ELE-160,Elektronik - in,Elektronik,2022-01-23,4580092,Baik,9,6
+INV-161,BRG-ALA-161,Alat Tulis - officiis,Alat Tulis,2023-01-22,2259472,Rusak Berat,5,12
+INV-162,BRG-ELE-162,Elektronik - dolore,Elektronik,2023-07-19,4674245,Rusak Ringan,4,10
+INV-163,BRG-KEN-163,Kendaraan - tempora,Kendaraan,2024-11-19,14739648,Baik,2,13
+INV-164,BRG-ALA-164,Alat Tulis - deserunt,Alat Tulis,2023-08-05,9182157,Baik,5,9
+INV-165,BRG-ELE-165,Elektronik - non,Elektronik,2022-05-25,7002893,Rusak Berat,1,6
+INV-166,BRG-ALA-166,Alat Tulis - perspiciatis,Alat Tulis,2022-06-21,169886,Baik,5,13
+INV-167,BRG-KEN-167,Kendaraan - doloribus,Kendaraan,2025-05-08,8016442,Rusak Berat,1,3
+INV-168,BRG-KEN-168,Kendaraan - praesentium,Kendaraan,2021-12-23,4652164,Baik,5,12
+INV-169,BRG-ALA-169,Alat Tulis - expedita,Alat Tulis,2021-04-12,7068387,Baik,3,3
+INV-170,BRG-FUR-170,Furniture - ea,Furniture,2024-04-15,2923527,Baik,8,13
+INV-171,BRG-KEN-171,Kendaraan - sit,Kendaraan,2021-09-14,14232802,Baik,5,14
+INV-172,BRG-KEN-172,Kendaraan - dolore,Kendaraan,2021-02-11,12309968,Baik,3,10
+INV-173,BRG-FUR-173,Furniture - similique,Furniture,2022-10-14,11947006,Baik,5,8
+INV-174,BRG-KEN-174,Kendaraan - inventore,Kendaraan,2023-05-18,13876247,Baik,10,3
+INV-175,BRG-ELE-175,Elektronik - minima,Elektronik,2025-10-08,6381449,Baik,3,8
+INV-176,BRG-FUR-176,Furniture - iste,Furniture,2023-01-28,5196853,Baik,1,11
+INV-177,BRG-KEN-177,Kendaraan - eaque,Kendaraan,2025-08-16,8877023,Rusak Ringan,4,5
+INV-178,BRG-KEN-178,Kendaraan - rem,Kendaraan,2023-07-05,13238912,Rusak Berat,1,6
+INV-179,BRG-ALA-179,Alat Tulis - labore,Alat Tulis,2023-10-06,8867222,Rusak Berat,8,13
+INV-180,BRG-FUR-180,Furniture - molestias,Furniture,2021-11-25,14803402,Rusak Ringan,6,7
+INV-181,BRG-ELE-181,Elektronik - sunt,Elektronik,2025-06-03,10612759,Baik,8,11
+INV-182,BRG-FUR-182,Furniture - molestias,Furniture,2022-05-18,144061,Rusak Berat,3,2
+INV-183,BRG-FUR-183,Furniture - quis,Furniture,2021-02-15,7202574,Rusak Ringan,5,5
+INV-184,BRG-KEN-184,Kendaraan - unde,Kendaraan,2022-05-20,2637358,Rusak Ringan,9,9
+INV-185,BRG-ALA-185,Alat Tulis - corporis,Alat Tulis,2025-01-17,194453,Rusak Ringan,10,13
+INV-186,BRG-KEN-186,Kendaraan - sequi,Kendaraan,2020-11-25,10265944,Rusak Berat,9,11
+INV-187,BRG-KEN-187,Kendaraan - odio,Kendaraan,2023-03-23,3444691,Baik,10,1
+INV-188,BRG-KEN-188,Kendaraan - dolorem,Kendaraan,2025-05-28,1798413,Baik,10,14
+INV-189,BRG-FUR-189,Furniture - nobis,Furniture,2023-03-09,11876139,Rusak Berat,4,2
+INV-190,BRG-FUR-190,Furniture - nemo,Furniture,2024-06-11,10319130,Rusak Berat,4,8
+INV-191,BRG-ELE-191,Elektronik - laudantium,Elektronik,2025-09-07,10844227,Rusak Berat,10,8
+INV-192,BRG-KEN-192,Kendaraan - eveniet,Kendaraan,2023-03-10,6389489,Rusak Berat,6,8
+INV-193,BRG-KEN-193,Kendaraan - accusantium,Kendaraan,2023-12-14,2147487,Rusak Berat,6,15
+INV-194,BRG-FUR-194,Furniture - culpa,Furniture,2024-01-06,3810433,Rusak Ringan,6,7
+INV-195,BRG-ELE-195,Elektronik - consequuntur,Elektronik,2021-10-12,10963372,Rusak Berat,3,12
+INV-196,BRG-FUR-196,Furniture - quis,Furniture,2023-11-29,6395758,Baik,10,11
+INV-197,BRG-KEN-197,Kendaraan - officiis,Kendaraan,2023-04-24,5901090,Baik,9,9
+INV-198,BRG-FUR-198,Furniture - harum,Furniture,2022-03-31,11221740,Rusak Ringan,10,2
+INV-199,BRG-FUR-199,Furniture - voluptas,Furniture,2021-11-30,2559603,Baik,1,2
+INV-200,BRG-ALA-200,Alat Tulis - perspiciatis,Alat Tulis,2023-09-06,12184394,Rusak Berat,6,13
+INV-201,BRG-ALA-201,Alat Tulis - voluptates,Alat Tulis,2022-06-04,8329302,Rusak Ringan,10,14
+INV-202,BRG-ALA-202,Alat Tulis - praesentium,Alat Tulis,2025-06-15,12730813,Baik,9,9
+INV-203,BRG-KEN-203,Kendaraan - voluptates,Kendaraan,2022-06-15,4772616,Baik,8,11
+INV-204,BRG-ALA-204,Alat Tulis - impedit,Alat Tulis,2022-07-27,8259877,Baik,10,9
+INV-205,BRG-ALA-205,Alat Tulis - porro,Alat Tulis,2023-05-18,14223782,Baik,10,3
+INV-206,BRG-KEN-206,Kendaraan - qui,Kendaraan,2023-08-21,13972277,Rusak Berat,6,11
+INV-207,BRG-ELE-207,Elektronik - impedit,Elektronik,2022-12-31,9360284,Baik,3,13
+INV-208,BRG-ELE-208,Elektronik - sint,Elektronik,2021-01-25,417878,Baik,2,6
+INV-209,BRG-FUR-209,Furniture - numquam,Furniture,2025-10-05,8797044,Rusak Berat,9,10
+INV-210,BRG-FUR-210,Furniture - occaecati,Furniture,2021-07-11,6180728,Rusak Berat,2,6
+INV-211,BRG-KEN-211,Kendaraan - ex,Kendaraan,2021-11-06,4671095,Baik,4,6
+INV-212,BRG-ALA-212,Alat Tulis - nam,Alat Tulis,2024-12-03,12374441,Rusak Ringan,7,10
+INV-213,BRG-KEN-213,Kendaraan - quia,Kendaraan,2021-11-05,13086253,Rusak Berat,9,5
+INV-214,BRG-FUR-214,Furniture - officia,Furniture,2021-02-17,6407085,Rusak Berat,9,2
+INV-215,BRG-KEN-215,Kendaraan - consequuntur,Kendaraan,2022-07-27,353489,Baik,1,2
+INV-216,BRG-ELE-216,Elektronik - quisquam,Elektronik,2025-02-16,8565669,Rusak Berat,2,12
+INV-217,BRG-ALA-217,Alat Tulis - laboriosam,Alat Tulis,2023-12-24,1396430,Rusak Ringan,6,5
+INV-218,BRG-KEN-218,Kendaraan - deleniti,Kendaraan,2021-07-28,3698269,Rusak Ringan,3,15
+INV-219,BRG-KEN-219,Kendaraan - dolor,Kendaraan,2021-01-06,10503830,Rusak Ringan,9,13
+INV-220,BRG-ELE-220,Elektronik - cupiditate,Elektronik,2021-04-16,7505814,Rusak Berat,6,2
+INV-221,BRG-FUR-221,Furniture - id,Furniture,2023-04-11,2711652,Baik,2,4
+INV-222,BRG-ALA-222,Alat Tulis - libero,Alat Tulis,2025-03-28,1972958,Rusak Ringan,4,11
+INV-223,BRG-ELE-223,Elektronik - non,Elektronik,2023-10-08,8292871,Rusak Berat,8,11
+INV-224,BRG-KEN-224,Kendaraan - quam,Kendaraan,2025-02-20,4143742,Baik,4,15
+INV-225,BRG-FUR-225,Furniture - odit,Furniture,2022-06-20,2913664,Rusak Ringan,8,13
+INV-226,BRG-ELE-226,Elektronik - incidunt,Elektronik,2024-03-13,14642478,Rusak Berat,2,15
+INV-227,BRG-KEN-227,Kendaraan - excepturi,Kendaraan,2024-12-25,14215914,Baik,2,4
+INV-228,BRG-KEN-228,Kendaraan - doloribus,Kendaraan,2021-06-18,10490144,Baik,10,9
+INV-229,BRG-ALA-229,Alat Tulis - neque,Alat Tulis,2021-04-24,6315914,Rusak Ringan,6,15
+INV-230,BRG-ELE-230,Elektronik - ipsam,Elektronik,2023-09-03,11892270,Rusak Berat,9,10
+INV-231,BRG-FUR-231,Furniture - eligendi,Furniture,2024-11-29,5213127,Baik,6,15
+INV-232,BRG-ELE-232,Elektronik - quaerat,Elektronik,2023-10-14,658464,Rusak Ringan,6,11
+INV-233,BRG-FUR-233,Furniture - rerum,Furniture,2021-01-04,2660507,Rusak Ringan,4,3
+INV-234,BRG-FUR-234,Furniture - praesentium,Furniture,2021-04-04,3479907,Baik,4,3
+INV-235,BRG-FUR-235,Furniture - recusandae,Furniture,2024-04-07,13027726,Baik,4,9
+INV-236,BRG-ELE-236,Elektronik - nihil,Elektronik,2025-03-24,565230,Baik,9,10
+INV-237,BRG-KEN-237,Kendaraan - quibusdam,Kendaraan,2021-03-11,12021883,Baik,2,10
+INV-238,BRG-ALA-238,Alat Tulis - beatae,Alat Tulis,2024-07-04,9430392,Baik,1,5
+INV-239,BRG-KEN-239,Kendaraan - iste,Kendaraan,2025-09-16,3638695,Rusak Ringan,5,14
+INV-240,BRG-FUR-240,Furniture - fuga,Furniture,2022-11-17,2800169,Rusak Ringan,1,15
+INV-241,BRG-ALA-241,Alat Tulis - cumque,Alat Tulis,2024-10-19,12368607,Rusak Berat,1,10
+INV-242,BRG-ELE-242,Elektronik - officiis,Elektronik,2022-06-28,10030381,Rusak Ringan,2,4
+INV-243,BRG-ELE-243,Elektronik - in,Elektronik,2021-04-30,10763707,Rusak Ringan,1,9
+INV-244,BRG-ELE-244,Elektronik - atque,Elektronik,2024-08-12,965883,Rusak Berat,7,13
+INV-245,BRG-KEN-245,Kendaraan - quae,Kendaraan,2022-01-11,12424078,Baik,8,5
+INV-246,BRG-FUR-246,Furniture - mollitia,Furniture,2023-04-22,523536,Rusak Berat,4,3
+INV-247,BRG-KEN-247,Kendaraan - voluptatum,Kendaraan,2025-09-19,421487,Baik,10,10
+INV-248,BRG-KEN-248,Kendaraan - sint,Kendaraan,2023-03-21,6806217,Rusak Berat,6,4
+INV-249,BRG-KEN-249,Kendaraan - ipsa,Kendaraan,2022-09-22,6411740,Rusak Berat,10,2
+INV-250,BRG-FUR-250,Furniture - nesciunt,Furniture,2022-05-29,11261627,Rusak Ringan,9,2
+INV-251,BRG-ELE-251,Elektronik - odio,Elektronik,2023-04-12,5511969,Baik,8,5
+INV-252,BRG-ELE-252,Elektronik - soluta,Elektronik,2022-02-05,14577249,Rusak Ringan,2,8
+INV-253,BRG-KEN-253,Kendaraan - accusamus,Kendaraan,2022-08-31,1909701,Rusak Ringan,10,1
+INV-254,BRG-FUR-254,Furniture - sunt,Furniture,2025-06-12,11099058,Rusak Ringan,7,8
+INV-255,BRG-ALA-255,Alat Tulis - labore,Alat Tulis,2023-11-05,6816516,Baik,7,2
+INV-256,BRG-FUR-256,Furniture - nemo,Furniture,2025-04-06,8915948,Rusak Berat,5,5
+INV-257,BRG-ALA-257,Alat Tulis - placeat,Alat Tulis,2022-11-02,8853395,Rusak Berat,5,3
+INV-258,BRG-FUR-258,Furniture - officiis,Furniture,2025-03-29,6353078,Rusak Ringan,3,15
+INV-259,BRG-ALA-259,Alat Tulis - corporis,Alat Tulis,2025-01-11,6346230,Rusak Ringan,2,3
+INV-260,BRG-ALA-260,Alat Tulis - inventore,Alat Tulis,2024-01-02,4499184,Rusak Ringan,4,12
+INV-261,BRG-FUR-261,Furniture - voluptatibus,Furniture,2025-05-20,14343271,Baik,9,2
+INV-262,BRG-FUR-262,Furniture - laborum,Furniture,2022-03-19,7694297,Rusak Ringan,1,9
+INV-263,BRG-ELE-263,Elektronik - asperiores,Elektronik,2023-03-28,12680927,Rusak Berat,7,13
+INV-264,BRG-ALA-264,Alat Tulis - dolores,Alat Tulis,2022-06-29,3758944,Rusak Berat,7,11
+INV-265,BRG-FUR-265,Furniture - nobis,Furniture,2022-06-27,1822847,Baik,8,6
+INV-266,BRG-FUR-266,Furniture - laborum,Furniture,2023-12-11,4091797,Rusak Berat,10,14
+INV-267,BRG-KEN-267,Kendaraan - rerum,Kendaraan,2024-01-16,8740762,Rusak Ringan,4,2
+INV-268,BRG-KEN-268,Kendaraan - cumque,Kendaraan,2024-04-17,12899879,Baik,3,6
+INV-269,BRG-ELE-269,Elektronik - quam,Elektronik,2024-04-12,10036259,Rusak Ringan,2,5
+INV-270,BRG-ALA-270,Alat Tulis - aliquid,Alat Tulis,2023-06-02,1008174,Baik,5,1
+INV-271,BRG-KEN-271,Kendaraan - facilis,Kendaraan,2025-02-07,13454444,Rusak Berat,10,6
+INV-272,BRG-FUR-272,Furniture - itaque,Furniture,2025-09-10,1988493,Baik,6,4
+INV-273,BRG-ELE-273,Elektronik - earum,Elektronik,2023-02-10,1041329,Rusak Berat,10,7
+INV-274,BRG-ELE-274,Elektronik - ut,Elektronik,2024-01-12,1929815,Baik,1,10
+INV-275,BRG-ALA-275,Alat Tulis - cumque,Alat Tulis,2022-02-14,8118373,Rusak Ringan,1,5
+INV-276,BRG-FUR-276,Furniture - vitae,Furniture,2025-03-01,2013352,Rusak Berat,9,6
+INV-277,BRG-FUR-277,Furniture - rem,Furniture,2024-01-12,14223631,Rusak Ringan,8,12
+INV-278,BRG-KEN-278,Kendaraan - totam,Kendaraan,2023-01-31,1189315,Baik,3,7
+INV-279,BRG-ELE-279,Elektronik - nisi,Elektronik,2023-06-05,5443983,Rusak Berat,10,9
+INV-280,BRG-ELE-280,Elektronik - delectus,Elektronik,2025-01-09,13904755,Rusak Ringan,4,5
+INV-281,BRG-ELE-281,Elektronik - fugiat,Elektronik,2022-05-25,9761704,Rusak Berat,10,9
+INV-282,BRG-ALA-282,Alat Tulis - itaque,Alat Tulis,2023-04-04,12084717,Rusak Ringan,10,14
+INV-283,BRG-ALA-283,Alat Tulis - consequatur,Alat Tulis,2024-09-21,13418976,Rusak Ringan,10,10
+INV-284,BRG-ALA-284,Alat Tulis - officia,Alat Tulis,2025-10-07,6355539,Baik,6,12
+INV-285,BRG-KEN-285,Kendaraan - libero,Kendaraan,2021-04-21,1499151,Rusak Ringan,9,5
+INV-286,BRG-FUR-286,Furniture - ratione,Furniture,2021-10-10,6389912,Rusak Berat,5,15
+INV-287,BRG-KEN-287,Kendaraan - sed,Kendaraan,2022-10-07,196986,Rusak Ringan,8,11
+INV-288,BRG-ALA-288,Alat Tulis - laborum,Alat Tulis,2021-03-11,3535011,Rusak Ringan,8,6
+INV-289,BRG-ALA-289,Alat Tulis - fuga,Alat Tulis,2024-05-16,10328786,Rusak Ringan,5,14
+INV-290,BRG-ELE-290,Elektronik - recusandae,Elektronik,2024-11-28,6293654,Baik,10,8
+INV-291,BRG-KEN-291,Kendaraan - maiores,Kendaraan,2023-05-05,13425879,Rusak Berat,10,2
+INV-292,BRG-KEN-292,Kendaraan - corporis,Kendaraan,2020-12-14,7583669,Rusak Ringan,5,12
+INV-293,BRG-ELE-293,Elektronik - earum,Elektronik,2022-12-30,10331505,Rusak Ringan,8,4
+INV-294,BRG-ELE-294,Elektronik - sapiente,Elektronik,2022-05-28,10338671,Rusak Berat,6,15
+INV-295,BRG-ELE-295,Elektronik - soluta,Elektronik,2023-03-27,7838848,Baik,1,13
+INV-296,BRG-KEN-296,Kendaraan - consequuntur,Kendaraan,2025-11-22,2570518,Baik,4,4
+INV-297,BRG-ELE-297,Elektronik - temporibus,Elektronik,2023-10-16,1990567,Rusak Berat,7,5
+INV-298,BRG-ALA-298,Alat Tulis - enim,Alat Tulis,2025-07-23,5657611,Rusak Ringan,4,3
+INV-299,BRG-ALA-299,Alat Tulis - nihil,Alat Tulis,2025-01-21,618133,Rusak Ringan,2,5
+INV-300,BRG-KEN-300,Kendaraan - eum,Kendaraan,2022-09-21,7479046,Baik,8,8
+INV-301,BRG-ELE-301,Elektronik - molestiae,Elektronik,2022-09-15,12120360,Baik,1,2
+INV-302,BRG-ALA-302,Alat Tulis - officia,Alat Tulis,2022-05-05,2191477,Rusak Ringan,3,7
+INV-303,BRG-ALA-303,Alat Tulis - optio,Alat Tulis,2021-10-17,7415106,Baik,10,7
+INV-304,BRG-FUR-304,Furniture - eum,Furniture,2022-06-22,13459565,Rusak Ringan,9,8
+INV-305,BRG-ALA-305,Alat Tulis - ipsa,Alat Tulis,2021-01-26,11220039,Rusak Ringan,5,1
+INV-306,BRG-ALA-306,Alat Tulis - quidem,Alat Tulis,2024-04-14,12179177,Rusak Ringan,10,15
+INV-307,BRG-FUR-307,Furniture - sapiente,Furniture,2022-09-29,14845779,Baik,5,9
+INV-308,BRG-ELE-308,Elektronik - qui,Elektronik,2022-09-01,10200774,Rusak Berat,8,10
+INV-309,BRG-ELE-309,Elektronik - odit,Elektronik,2022-12-09,3933062,Baik,3,12
+INV-310,BRG-ALA-310,Alat Tulis - eos,Alat Tulis,2022-08-27,2760503,Rusak Ringan,1,1
+INV-311,BRG-KEN-311,Kendaraan - impedit,Kendaraan,2024-08-07,2809668,Baik,2,9
+INV-312,BRG-FUR-312,Furniture - nihil,Furniture,2022-06-27,12400273,Baik,2,11
+INV-313,BRG-KEN-313,Kendaraan - consequatur,Kendaraan,2024-01-02,12592340,Rusak Ringan,9,9
+INV-314,BRG-ELE-314,Elektronik - officia,Elektronik,2024-02-12,8045449,Rusak Ringan,4,15
+INV-315,BRG-KEN-315,Kendaraan - odio,Kendaraan,2024-02-12,5473582,Rusak Ringan,9,14
+INV-316,BRG-KEN-316,Kendaraan - doloribus,Kendaraan,2022-05-27,9513605,Rusak Ringan,6,9
+INV-317,BRG-KEN-317,Kendaraan - atque,Kendaraan,2024-11-20,5919686,Rusak Ringan,6,12
+INV-318,BRG-KEN-318,Kendaraan - illo,Kendaraan,2021-10-23,3516610,Rusak Berat,3,5
+INV-319,BRG-ALA-319,Alat Tulis - maxime,Alat Tulis,2023-07-27,3857465,Rusak Berat,8,4
+INV-320,BRG-FUR-320,Furniture - consequuntur,Furniture,2025-05-23,11437936,Baik,4,1
+INV-321,BRG-ELE-321,Elektronik - nisi,Elektronik,2021-06-28,14069861,Rusak Ringan,7,11
+INV-322,BRG-ELE-322,Elektronik - cumque,Elektronik,2025-05-23,7716655,Rusak Ringan,2,15
+INV-323,BRG-FUR-323,Furniture - doloremque,Furniture,2025-10-18,7081145,Baik,10,4
+INV-324,BRG-KEN-324,Kendaraan - placeat,Kendaraan,2023-11-18,10976856,Rusak Berat,9,4
+INV-325,BRG-ELE-325,Elektronik - impedit,Elektronik,2023-02-09,11251884,Rusak Berat,3,13
+INV-326,BRG-FUR-326,Furniture - quasi,Furniture,2022-02-03,12962115,Rusak Ringan,7,14
+INV-327,BRG-KEN-327,Kendaraan - est,Kendaraan,2024-01-23,6565035,Rusak Berat,10,9
+INV-328,BRG-ELE-328,Elektronik - fugiat,Elektronik,2021-12-19,11640959,Rusak Ringan,2,15
+INV-329,BRG-ELE-329,Elektronik - consequuntur,Elektronik,2024-05-24,11452554,Baik,1,1
+INV-330,BRG-ELE-330,Elektronik - neque,Elektronik,2023-10-19,11986083,Rusak Ringan,8,4
+INV-331,BRG-ALA-331,Alat Tulis - modi,Alat Tulis,2022-04-22,9489091,Rusak Ringan,2,8
+INV-332,BRG-KEN-332,Kendaraan - impedit,Kendaraan,2022-07-18,977612,Rusak Ringan,1,7
+INV-333,BRG-FUR-333,Furniture - suscipit,Furniture,2022-07-21,2119218,Rusak Ringan,7,15
+INV-334,BRG-KEN-334,Kendaraan - totam,Kendaraan,2025-10-19,14522658,Rusak Ringan,4,9
+INV-335,BRG-FUR-335,Furniture - impedit,Furniture,2022-01-28,8077771,Rusak Ringan,2,2
+INV-336,BRG-FUR-336,Furniture - eligendi,Furniture,2020-12-03,9511737,Baik,7,10
+INV-337,BRG-ALA-337,Alat Tulis - a,Alat Tulis,2025-03-02,12483235,Rusak Ringan,7,3
+INV-338,BRG-KEN-338,Kendaraan - doloribus,Kendaraan,2023-11-23,12014142,Rusak Ringan,1,4
+INV-339,BRG-FUR-339,Furniture - similique,Furniture,2023-09-11,474628,Rusak Ringan,3,11
+INV-340,BRG-ALA-340,Alat Tulis - rerum,Alat Tulis,2023-06-03,2299415,Rusak Ringan,7,6
+INV-341,BRG-FUR-341,Furniture - veritatis,Furniture,2021-08-18,2628055,Baik,3,7
+INV-342,BRG-ALA-342,Alat Tulis - animi,Alat Tulis,2024-11-03,11468155,Baik,2,4
+INV-343,BRG-ALA-343,Alat Tulis - ullam,Alat Tulis,2023-10-10,5527302,Rusak Berat,9,11
+INV-344,BRG-ALA-344,Alat Tulis - iste,Alat Tulis,2024-08-25,714778,Rusak Ringan,1,12
+INV-345,BRG-ELE-345,Elektronik - minus,Elektronik,2024-06-15,8620904,Rusak Ringan,2,9
+INV-346,BRG-ALA-346,Alat Tulis - modi,Alat Tulis,2021-07-04,1936127,Baik,1,8
+INV-347,BRG-FUR-347,Furniture - hic,Furniture,2021-08-31,7555323,Rusak Berat,10,15
+INV-348,BRG-FUR-348,Furniture - ipsa,Furniture,2022-07-23,8607668,Rusak Berat,7,3
+INV-349,BRG-ELE-349,Elektronik - est,Elektronik,2024-12-19,6667432,Rusak Berat,5,12
+INV-350,BRG-ELE-350,Elektronik - esse,Elektronik,2023-06-27,2944208,Rusak Berat,9,12
+INV-351,BRG-ELE-351,Elektronik - quisquam,Elektronik,2022-03-15,12734464,Rusak Berat,5,8
+INV-352,BRG-ALA-352,Alat Tulis - harum,Alat Tulis,2025-03-05,4911274,Rusak Berat,1,6
+INV-353,BRG-ALA-353,Alat Tulis - ullam,Alat Tulis,2025-11-05,10542253,Rusak Ringan,8,5
+INV-354,BRG-ALA-354,Alat Tulis - cum,Alat Tulis,2022-12-09,1520791,Baik,9,10
+INV-355,BRG-KEN-355,Kendaraan - reiciendis,Kendaraan,2024-06-23,4314636,Baik,6,3
+INV-356,BRG-ALA-356,Alat Tulis - alias,Alat Tulis,2023-03-01,355941,Baik,8,7
+INV-357,BRG-ELE-357,Elektronik - dicta,Elektronik,2023-05-04,11007476,Rusak Ringan,9,5
+INV-358,BRG-FUR-358,Furniture - quod,Furniture,2024-02-09,6627634,Rusak Berat,7,7
+INV-359,BRG-ELE-359,Elektronik - consequatur,Elektronik,2025-10-26,11206715,Baik,3,3
+INV-360,BRG-ALA-360,Alat Tulis - odio,Alat Tulis,2022-01-21,4636152,Rusak Berat,7,4
+INV-361,BRG-FUR-361,Furniture - excepturi,Furniture,2025-08-06,10385765,Rusak Ringan,4,8
+INV-362,BRG-KEN-362,Kendaraan - dolorum,Kendaraan,2022-02-02,11815827,Rusak Berat,7,4
+INV-363,BRG-ALA-363,Alat Tulis - voluptatem,Alat Tulis,2022-07-20,9313034,Rusak Berat,2,10
+INV-364,BRG-FUR-364,Furniture - veniam,Furniture,2024-04-06,3655492,Rusak Berat,6,4
+INV-365,BRG-ELE-365,Elektronik - inventore,Elektronik,2021-02-04,3377647,Rusak Berat,4,15
+INV-366,BRG-KEN-366,Kendaraan - iure,Kendaraan,2025-09-30,4014882,Baik,7,4
+INV-367,BRG-KEN-367,Kendaraan - sint,Kendaraan,2023-01-21,7266301,Rusak Ringan,4,8
+INV-368,BRG-ELE-368,Elektronik - sed,Elektronik,2023-08-23,10615572,Rusak Ringan,4,4
+INV-369,BRG-FUR-369,Furniture - adipisci,Furniture,2025-02-23,2240625,Baik,5,4
+INV-370,BRG-FUR-370,Furniture - molestiae,Furniture,2020-12-17,6562846,Rusak Ringan,5,10
+INV-371,BRG-FUR-371,Furniture - ratione,Furniture,2021-06-02,13225151,Baik,1,6
+INV-372,BRG-FUR-372,Furniture - laborum,Furniture,2025-10-31,10791674,Baik,9,8
+INV-373,BRG-KEN-373,Kendaraan - dolor,Kendaraan,2021-10-26,3610016,Rusak Berat,4,5
+INV-374,BRG-ALA-374,Alat Tulis - placeat,Alat Tulis,2021-08-22,4674626,Rusak Ringan,1,2
+INV-375,BRG-ALA-375,Alat Tulis - veritatis,Alat Tulis,2023-08-23,4949121,Rusak Berat,8,13
+INV-376,BRG-KEN-376,Kendaraan - asperiores,Kendaraan,2022-08-18,13927945,Rusak Berat,7,9
+INV-377,BRG-FUR-377,Furniture - ut,Furniture,2023-03-09,11194557,Rusak Berat,9,12
+INV-378,BRG-KEN-378,Kendaraan - odio,Kendaraan,2025-10-15,11535407,Rusak Ringan,2,9
+INV-379,BRG-ALA-379,Alat Tulis - tempore,Alat Tulis,2025-11-19,13479838,Rusak Ringan,8,10
+INV-380,BRG-KEN-380,Kendaraan - voluptate,Kendaraan,2020-11-24,1182158,Baik,5,3
+INV-381,BRG-FUR-381,Furniture - amet,Furniture,2022-11-30,4684540,Baik,6,2
+INV-382,BRG-FUR-382,Furniture - temporibus,Furniture,2021-04-15,215655,Rusak Ringan,9,11
+INV-383,BRG-ALA-383,Alat Tulis - omnis,Alat Tulis,2024-04-09,596786,Rusak Ringan,3,1
+INV-384,BRG-ELE-384,Elektronik - voluptates,Elektronik,2024-07-13,1754699,Rusak Berat,6,1
+INV-385,BRG-ALA-385,Alat Tulis - possimus,Alat Tulis,2025-05-11,5937605,Rusak Ringan,1,12
+INV-386,BRG-KEN-386,Kendaraan - odio,Kendaraan,2023-10-20,14517520,Baik,3,9
+INV-387,BRG-ELE-387,Elektronik - in,Elektronik,2020-12-12,11313049,Baik,6,4
+INV-388,BRG-ALA-388,Alat Tulis - voluptate,Alat Tulis,2023-12-31,12795434,Rusak Berat,9,7
+INV-389,BRG-ALA-389,Alat Tulis - ex,Alat Tulis,2025-10-29,14276474,Rusak Berat,9,11
+INV-390,BRG-KEN-390,Kendaraan - quibusdam,Kendaraan,2024-12-11,390246,Rusak Ringan,4,6
+INV-391,BRG-ALA-391,Alat Tulis - maiores,Alat Tulis,2025-06-12,5098970,Baik,8,7
+INV-392,BRG-KEN-392,Kendaraan - consequuntur,Kendaraan,2025-08-22,6297329,Rusak Ringan,10,4
+INV-393,BRG-KEN-393,Kendaraan - nulla,Kendaraan,2023-11-09,7431490,Baik,10,13
+INV-394,BRG-FUR-394,Furniture - voluptatum,Furniture,2022-09-23,8284051,Rusak Ringan,4,3
+INV-395,BRG-KEN-395,Kendaraan - quas,Kendaraan,2023-11-01,14465050,Baik,1,13
+INV-396,BRG-FUR-396,Furniture - temporibus,Furniture,2022-10-28,7556757,Rusak Berat,6,2
+INV-397,BRG-ELE-397,Elektronik - dolore,Elektronik,2021-03-09,8568285,Baik,6,12
+INV-398,BRG-FUR-398,Furniture - sapiente,Furniture,2023-11-26,3503956,Rusak Berat,8,1
+INV-399,BRG-FUR-399,Furniture - molestias,Furniture,2021-09-08,7326373,Rusak Berat,4,10
+INV-400,BRG-ALA-400,Alat Tulis - corporis,Alat Tulis,2025-02-04,13856838,Rusak Berat,1,13
+INV-401,BRG-ALA-401,Alat Tulis - impedit,Alat Tulis,2024-09-07,13852554,Rusak Berat,9,13
+INV-402,BRG-FUR-402,Furniture - ad,Furniture,2022-09-10,3888356,Baik,7,7
+INV-403,BRG-FUR-403,Furniture - dolores,Furniture,2024-06-12,12116118,Baik,4,6
+INV-404,BRG-KEN-404,Kendaraan - veritatis,Kendaraan,2023-12-13,9831887,Rusak Ringan,8,8
+INV-405,BRG-KEN-405,Kendaraan - dolor,Kendaraan,2021-08-10,9729380,Rusak Ringan,3,9
+INV-406,BRG-KEN-406,Kendaraan - mollitia,Kendaraan,2024-09-21,12082838,Baik,10,8
+INV-407,BRG-KEN-407,Kendaraan - exercitationem,Kendaraan,2021-08-23,3481525,Baik,9,8
+INV-408,BRG-FUR-408,Furniture - dolorum,Furniture,2025-10-30,11569201,Baik,6,3
+INV-409,BRG-KEN-409,Kendaraan - quas,Kendaraan,2025-03-27,2284857,Baik,10,10
+INV-410,BRG-ELE-410,Elektronik - iure,Elektronik,2024-03-09,8955719,Baik,3,11
+INV-411,BRG-KEN-411,Kendaraan - nisi,Kendaraan,2025-08-26,3264975,Rusak Ringan,5,14
+INV-412,BRG-ALA-412,Alat Tulis - consequatur,Alat Tulis,2024-06-06,13261255,Rusak Ringan,3,12
+INV-413,BRG-FUR-413,Furniture - quisquam,Furniture,2021-07-18,1003709,Rusak Berat,6,13
+INV-414,BRG-FUR-414,Furniture - voluptate,Furniture,2025-09-18,1489808,Rusak Berat,4,4
+INV-415,BRG-ALA-415,Alat Tulis - nemo,Alat Tulis,2021-01-04,8688511,Rusak Berat,8,14
+INV-416,BRG-FUR-416,Furniture - in,Furniture,2023-09-06,3418065,Rusak Berat,5,4
+INV-417,BRG-ELE-417,Elektronik - quod,Elektronik,2022-01-20,4953117,Rusak Ringan,3,10
+INV-418,BRG-KEN-418,Kendaraan - tempora,Kendaraan,2021-11-15,11869357,Baik,7,5
+INV-419,BRG-KEN-419,Kendaraan - cum,Kendaraan,2024-10-09,2321656,Baik,4,14
+INV-420,BRG-ALA-420,Alat Tulis - dolor,Alat Tulis,2023-04-13,13889166,Rusak Berat,7,5
+INV-421,BRG-ELE-421,Elektronik - porro,Elektronik,2025-05-29,8257702,Rusak Ringan,6,3
+INV-422,BRG-ELE-422,Elektronik - at,Elektronik,2021-07-15,2389972,Rusak Ringan,7,13
+INV-423,BRG-ELE-423,Elektronik - aut,Elektronik,2025-10-17,7626332,Baik,7,12
+INV-424,BRG-ALA-424,Alat Tulis - dicta,Alat Tulis,2025-01-12,13709158,Rusak Ringan,8,5
+INV-425,BRG-KEN-425,Kendaraan - totam,Kendaraan,2022-07-04,163897,Baik,5,3
+INV-426,BRG-ALA-426,Alat Tulis - excepturi,Alat Tulis,2021-05-22,2895765,Baik,3,4
+INV-427,BRG-ELE-427,Elektronik - officiis,Elektronik,2021-01-06,9250924,Rusak Ringan,8,11
+INV-428,BRG-KEN-428,Kendaraan - illum,Kendaraan,2025-03-16,7004405,Rusak Ringan,10,15
+INV-429,BRG-ALA-429,Alat Tulis - sapiente,Alat Tulis,2022-08-22,5832925,Rusak Berat,5,3
+INV-430,BRG-KEN-430,Kendaraan - labore,Kendaraan,2022-04-01,10822175,Baik,1,7
+INV-431,BRG-KEN-431,Kendaraan - sunt,Kendaraan,2024-02-21,2934157,Rusak Ringan,2,5
+INV-432,BRG-ELE-432,Elektronik - laboriosam,Elektronik,2022-11-06,2288017,Baik,2,9
+INV-433,BRG-ELE-433,Elektronik - quis,Elektronik,2023-06-22,4645760,Baik,4,7
+INV-434,BRG-ELE-434,Elektronik - nemo,Elektronik,2025-04-15,10520074,Rusak Berat,5,10
+INV-435,BRG-KEN-435,Kendaraan - doloribus,Kendaraan,2024-02-07,9497382,Rusak Ringan,7,6
+INV-436,BRG-FUR-436,Furniture - nam,Furniture,2025-08-04,10087460,Rusak Berat,10,2
+INV-437,BRG-KEN-437,Kendaraan - nam,Kendaraan,2022-04-22,6899896,Baik,2,11
+INV-438,BRG-FUR-438,Furniture - quis,Furniture,2021-04-10,7032082,Rusak Ringan,2,15
+INV-439,BRG-KEN-439,Kendaraan - optio,Kendaraan,2024-12-23,11987333,Rusak Berat,10,6
+INV-440,BRG-KEN-440,Kendaraan - excepturi,Kendaraan,2025-01-15,11407830,Rusak Berat,7,4
+INV-441,BRG-ALA-441,Alat Tulis - recusandae,Alat Tulis,2024-07-15,1529755,Baik,3,13
+INV-442,BRG-ALA-442,Alat Tulis - quos,Alat Tulis,2022-09-29,652059,Rusak Ringan,1,9
+INV-443,BRG-ELE-443,Elektronik - voluptas,Elektronik,2021-01-13,14902518,Rusak Berat,6,3
+INV-444,BRG-ELE-444,Elektronik - possimus,Elektronik,2022-03-19,4412951,Rusak Ringan,8,3
+INV-445,BRG-FUR-445,Furniture - perferendis,Furniture,2021-02-04,13451855,Rusak Berat,9,3
+INV-446,BRG-ELE-446,Elektronik - minima,Elektronik,2024-04-16,3410537,Rusak Berat,7,15
+INV-447,BRG-FUR-447,Furniture - velit,Furniture,2021-08-10,10354263,Rusak Ringan,1,9
+INV-448,BRG-FUR-448,Furniture - natus,Furniture,2025-10-22,13524522,Rusak Ringan,6,12
+INV-449,BRG-KEN-449,Kendaraan - accusantium,Kendaraan,2021-08-06,4646627,Baik,2,9
+INV-450,BRG-ALA-450,Alat Tulis - minus,Alat Tulis,2021-01-02,14250816,Baik,3,11
+INV-451,BRG-ELE-451,Elektronik - ipsam,Elektronik,2024-12-09,10214599,Rusak Ringan,9,5
+INV-452,BRG-FUR-452,Furniture - sunt,Furniture,2023-12-04,2293255,Rusak Ringan,9,5
+INV-453,BRG-ELE-453,Elektronik - accusamus,Elektronik,2023-03-05,4374099,Rusak Berat,6,10
+INV-454,BRG-FUR-454,Furniture - odit,Furniture,2022-09-23,4392175,Rusak Ringan,4,5
+INV-455,BRG-KEN-455,Kendaraan - eligendi,Kendaraan,2024-12-23,13362435,Rusak Ringan,2,6
+INV-456,BRG-FUR-456,Furniture - ex,Furniture,2023-04-03,2730743,Rusak Berat,2,9
+INV-457,BRG-FUR-457,Furniture - assumenda,Furniture,2025-04-12,4482769,Baik,8,8
+INV-458,BRG-ALA-458,Alat Tulis - ipsam,Alat Tulis,2022-02-08,7795252,Rusak Berat,10,4
+INV-459,BRG-FUR-459,Furniture - recusandae,Furniture,2025-11-22,9160088,Rusak Ringan,8,12
+INV-460,BRG-KEN-460,Kendaraan - fugiat,Kendaraan,2024-02-28,7726645,Rusak Berat,9,2
+INV-461,BRG-ELE-461,Elektronik - quo,Elektronik,2025-04-12,4853357,Baik,6,14
+INV-462,BRG-KEN-462,Kendaraan - odio,Kendaraan,2021-12-28,250083,Baik,3,15
+INV-463,BRG-FUR-463,Furniture - quidem,Furniture,2023-11-23,11655653,Baik,1,7
+INV-464,BRG-ELE-464,Elektronik - fugit,Elektronik,2024-09-01,14080373,Rusak Ringan,8,1
+INV-465,BRG-KEN-465,Kendaraan - sit,Kendaraan,2021-05-23,10272612,Rusak Berat,6,8
+INV-466,BRG-KEN-466,Kendaraan - voluptatem,Kendaraan,2020-12-21,4880444,Baik,10,6
+INV-467,BRG-FUR-467,Furniture - maiores,Furniture,2022-05-15,7598532,Rusak Ringan,5,11
+INV-468,BRG-ALA-468,Alat Tulis - tempora,Alat Tulis,2025-07-01,401841,Rusak Berat,1,1
+INV-469,BRG-FUR-469,Furniture - ad,Furniture,2020-12-17,1532969,Baik,8,15
+INV-470,BRG-KEN-470,Kendaraan - natus,Kendaraan,2021-05-09,1375928,Rusak Ringan,10,14
+INV-471,BRG-ELE-471,Elektronik - repudiandae,Elektronik,2025-11-17,13521052,Rusak Ringan,7,4
+INV-472,BRG-ALA-472,Alat Tulis - numquam,Alat Tulis,2024-01-21,9808900,Rusak Ringan,10,14
+INV-473,BRG-FUR-473,Furniture - repellendus,Furniture,2023-06-05,13579247,Rusak Ringan,10,1
+INV-474,BRG-ALA-474,Alat Tulis - soluta,Alat Tulis,2021-02-24,10078865,Baik,8,15
+INV-475,BRG-ALA-475,Alat Tulis - suscipit,Alat Tulis,2021-07-22,12991216,Rusak Berat,4,13
+INV-476,BRG-ELE-476,Elektronik - sint,Elektronik,2024-09-11,4652234,Rusak Ringan,7,14
+INV-477,BRG-FUR-477,Furniture - saepe,Furniture,2023-08-06,14221639,Rusak Ringan,3,10
+INV-478,BRG-ALA-478,Alat Tulis - vero,Alat Tulis,2022-11-25,518848,Baik,9,1
+INV-479,BRG-FUR-479,Furniture - eos,Furniture,2024-07-23,2540404,Rusak Berat,8,11
+INV-480,BRG-KEN-480,Kendaraan - laboriosam,Kendaraan,2023-05-05,2719332,Rusak Berat,10,2
+INV-481,BRG-FUR-481,Furniture - ducimus,Furniture,2021-02-25,13054746,Baik,2,12
+INV-482,BRG-KEN-482,Kendaraan - quas,Kendaraan,2022-12-14,14420014,Baik,8,12
+INV-483,BRG-ALA-483,Alat Tulis - amet,Alat Tulis,2023-03-22,584861,Rusak Ringan,5,6
+INV-484,BRG-FUR-484,Furniture - ad,Furniture,2022-08-26,3104120,Rusak Berat,10,12
+INV-485,BRG-FUR-485,Furniture - voluptates,Furniture,2020-12-07,14975197,Rusak Ringan,1,9
+INV-486,BRG-KEN-486,Kendaraan - pariatur,Kendaraan,2024-02-16,3415325,Baik,5,14
+INV-487,BRG-KEN-487,Kendaraan - nobis,Kendaraan,2024-01-17,9871725,Baik,6,13
+INV-488,BRG-ELE-488,Elektronik - placeat,Elektronik,2025-09-19,781203,Baik,6,3
+INV-489,BRG-FUR-489,Furniture - modi,Furniture,2023-05-22,8995922,Rusak Ringan,1,5
+INV-490,BRG-FUR-490,Furniture - reprehenderit,Furniture,2024-05-04,14230695,Rusak Berat,5,6
+INV-491,BRG-ALA-491,Alat Tulis - odio,Alat Tulis,2023-12-17,4936868,Baik,2,14
+INV-492,BRG-KEN-492,Kendaraan - eveniet,Kendaraan,2023-03-23,8510034,Rusak Ringan,5,15
+INV-493,BRG-ELE-493,Elektronik - laborum,Elektronik,2023-11-09,10306584,Baik,4,15
+INV-494,BRG-ELE-494,Elektronik - saepe,Elektronik,2022-11-19,8975035,Baik,2,8
+INV-495,BRG-KEN-495,Kendaraan - dignissimos,Kendaraan,2023-07-25,9584360,Rusak Berat,7,2
+INV-496,BRG-ELE-496,Elektronik - adipisci,Elektronik,2022-07-03,9342480,Rusak Ringan,4,2
+INV-497,BRG-KEN-497,Kendaraan - sed,Kendaraan,2021-12-01,5638467,Rusak Ringan,7,10
+INV-498,BRG-ALA-498,Alat Tulis - mollitia,Alat Tulis,2024-02-02,1933902,Baik,5,12
+INV-499,BRG-KEN-499,Kendaraan - perspiciatis,Kendaraan,2022-08-21,1353560,Rusak Ringan,10,11
