@@ -1,0 +1,16 @@
+id_unit,kode_unit,nama_unit,level,parent_unit_id,kepala_unit_nip,email_unit
+1,REK,Rektorat,1,1,,rek@itera.ac.id
+2,BAU,Biro Akademik Umum,2,1,,bau@itera.ac.id
+3,BUPK,Biro Umum dan Keuangan,2,1,,bupk@itera.ac.id
+4,FSAINS,Fakultas Sains,2,1,,fsains@itera.ac.id
+5,FTI,Fakultas Teknologi Industri,2,1,,fti@itera.ac.id
+6,JTIK,Jurusan Teknologi Produksi dan Industri,3,1,,jtik@itera.ac.id
+7,JSTP,Jurusan Sains,3,1,,jstp@itera.ac.id
+8,PRODI-SD,Prodi Sains Data,4,1,,prodi-sd@itera.ac.id
+9,PRODI-IF,Prodi Informatika,4,1,,prodi-if@itera.ac.id
+10,UPT-TIK,UPT TIK,3,1,,upt-tik@itera.ac.id
+11,UNIT11,Unit Kerja 11,4,1,,unit11@itera.ac.id
+12,UNIT12,Unit Kerja 12,4,1,,unit12@itera.ac.id
+13,UNIT13,Unit Kerja 13,4,1,,unit13@itera.ac.id
+14,UNIT14,Unit Kerja 14,4,1,,unit14@itera.ac.id
+15,UNIT15,Unit Kerja 15,4,1,,unit15@itera.ac.id
